@@ -61,6 +61,7 @@ const Main = () => {
           spaceBetween={30}
           navigation={true}
           modules={[Navigation]}
+          loop={true}
           className="mySwiper"
           breakpoints={{
             768: {

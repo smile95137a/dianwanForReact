@@ -1,0 +1,107 @@
+$root-block-name: '.product3';
+
+#{$root-block-name} {
+  $p: &;
+  $p__text: #{$p}__text;
+
+  &__title {
+    @include flex(center, center);
+    #{$p__text} {
+      font-size: 60px;
+      font-weight: 400;
+      position: relative;
+      background: linear-gradient(272.26deg, #e5d36a -1.05%, #cf8046 98.1%);
+      -webkit-background-clip: text;
+      color: transparent;
+      &::after {
+        content: attr(data-text);
+        left: 0;
+        position: absolute;
+        text-shadow: -2px 0 1px #000, 0 2px 1px #000, 2px 0 1px #000,
+          0 -2px 1px #000;
+        top: 0;
+        z-index: -1; /* this slides the shadow behind its parent (the actual text) */
+      }
+
+      @include screen(md) {
+        font-size: 30px;
+        font-weight: 400;
+      }
+    }
+  }
+  &__btns {
+    @include flex(center, center);
+    gap: 16px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+  }
+  &__btn {
+    width: 170px;
+    height: 53px;
+    border-radius: 50px;
+    border: 2px solid #000000;
+    @include flex(center, center);
+
+    font-size: 25px;
+    font-weight: 400;
+
+    @include screen(md) {
+      width: 157px;
+      height: 34px;
+      border: 1.5px solid #000000;
+      font-family: Noto Sans;
+      font-size: 15px;
+      font-weight: 400;
+    }
+    &--active {
+      background: #fed706;
+    }
+  }
+
+  &__list {
+    &-title {
+      position: relative;
+      margin: 48px 0 48px 0;
+      #{$p__text} {
+        font-size: 35px;
+        font-weight: 400;
+        @include flex(center, center);
+        color: #eb9838;
+        @include screen(md) {
+          font-size: 20px;
+          font-weight: 400;
+        }
+      }
+    }
+
+    &-filter {
+      position: absolute;
+      top: 50%;
+      right: 24px;
+      transform: translateY(-50%);
+      width: 65px;
+      height: 59px;
+      border-radius: 15px;
+      border: 2px solid #000;
+      background: #eb9838;
+      color: #fff;
+      @include flex(center, center);
+      font-size: 24px;
+    }
+    &-products {
+      padding: 24px 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 32px;
+
+      @include screen(lg) {
+        grid-template-columns: 1fr 1fr;
+      }
+      @include screen(md) {
+        grid-template-columns: 1fr;
+        padding: 8px;
+        gap: 64px;
+      }
+    }
+  }
+}

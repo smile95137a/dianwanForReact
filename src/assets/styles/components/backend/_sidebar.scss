@@ -1,0 +1,40 @@
+$root-block-name: '.bsidebar';
+
+#{$root-block-name} {
+  $p: &;
+  $p__text: #{$p}__text;
+
+  @include w_h(200px, 100%);
+  padding: 12px;
+  &__main {
+  }
+
+  &__items {
+    @include flex(center, start, column);
+    gap: 24px;
+  }
+
+  &__item {
+    @include flex;
+    gap: 16px;
+    width: 100%;
+    color: #28dfdf;
+    font-size: 18px;
+    &:first-child {
+      margin-top: 24px;
+    }
+
+    &--active {
+      color: #3bcccc;
+    }
+
+    &-icon {
+      @include flex(center, center);
+    }
+
+    &-text {
+      @include flex(center, center);
+      letter-spacing: 0.5px;
+    }
+  }
+}

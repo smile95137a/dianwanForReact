@@ -1,0 +1,286 @@
+import { getDrawStatus } from '@/services/frontend/drawService';
+import { getProductDetailById } from '@/services/frontend/productDetailService';
+import { getProductById } from '@/services/frontend/productService';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import TitleBar from './TitleBar';
+import { BsHandbag } from 'react-icons/bs';
+import { getImageUrl } from '@/utils/ImageUtils';
+import boxClose from '@/assets/image/box-close.png';
+import boxOpen from '@/assets/image/box-open.png';
+import btnIcon from '@/assets/image/btn-icon.png';
+import ticketImg from '@/assets/image/ticket.png';
+import ticketImgA from '@/assets/image/ticket_A.png';
+import ticketImgB from '@/assets/image/ticket_B.png';
+import ticketImgC from '@/assets/image/ticket_C.png';
+import ticketImgD from '@/assets/image/ticket_D.png';
+import ticketImgE from '@/assets/image/ticket_E.png';
+import ticketImgF from '@/assets/image/ticket_F.png';
+import ticketImgG from '@/assets/image/ticket_G.png';
+import ticketImgH from '@/assets/image/ticket_H.png';
+import ticketImgI from '@/assets/image/ticket_I.png';
+import ticketImgJ from '@/assets/image/ticket_J.png';
+import ticketImgK from '@/assets/image/ticket_K.png';
+import ticketImgL from '@/assets/image/ticket_L.png';
+import ticketImgM from '@/assets/image/ticket_M.png';
+import ticketImgN from '@/assets/image/ticket_N.png';
+import ticketImgO from '@/assets/image/ticket_O.png';
+import ticketImgP from '@/assets/image/ticket_P.png';
+import ticketImgQ from '@/assets/image/ticket_Q.png';
+import ticketImgR from '@/assets/image/ticket_R.png';
+import ticketImgS from '@/assets/image/ticket_S.png';
+import ticketImgT from '@/assets/image/ticket_T.png';
+import ticketImgU from '@/assets/image/ticket_U.png';
+import ticketImgV from '@/assets/image/ticket_V.png';
+import ticketImgW from '@/assets/image/ticket_W.png';
+import ticketImgX from '@/assets/image/ticket_X.png';
+import ticketImgY from '@/assets/image/ticket_Y.png';
+import ticketImgZ from '@/assets/image/ticket_Z.png';
+import ticketImgBlank from '@/assets/image/ticket_blank.png';
+import { FaCheck, FaChevronDown, FaThumbtack, FaTimes } from 'react-icons/fa';
+import { MdChecklistRtl } from 'react-icons/md';
+import { useFrontendDialog } from '@/context/frontend/useFrontedDialog';
+
+const ProductDetail = () => {
+  const { id } = useParams();
+  const [product, setProduct] = useState(null);
+  const [productDetail, setProductDetail] = useState([]);
+  const [ticketList, setTicketList] = useState([]);
+  const [activeTickets, setActiveTickets] = useState([]);
+  const [showOption, setShowOption] = useState(false);
+
+  const { openConfirmDialog } = useFrontendDialog();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [productRes, productDetailRes, drawStatusRes] = await Promise.all(
+          [getProductById(id), getProductDetailById(id), getDrawStatus(id)]
+        );
+
+        if (productRes.success) {
+          setProduct(productRes.data);
+        }
+
+        if (productDetailRes.success) {
+          setProductDetail(productDetailRes.data);
+        }
+
+        if (drawStatusRes.success) {
+          setTicketList(drawStatusRes.data.prizeNumberList);
+        }
+      } catch (error) {
+        alert('Error fetching product data');
+      }
+    };
+    fetchData();
+  }, [id]);
+
+  const handleCheckboxChange = (ticket) => {
+    setShowOption(true);
+    setActiveTickets((prev) => {
+      const isActive = prev.some(
+        (t) => t.prizeNumberId === ticket.prizeNumberId
+      );
+      return isActive
+        ? prev.filter((t) => t.prizeNumberId !== ticket.prizeNumberId)
+        : [...prev, ticket];
+    });
+  };
+
+  const getTicketImg = (ticket: any) => {
+    const { productType } = product;
+    const { level, isDrawn } = ticket;
+
+    if (productType === 'PRIZE') {
+      const ticketImages: Record<string, string> = {
+        A: ticketImgA,
+        B: ticketImgB,
+        C: ticketImgC,
+        D: ticketImgD,
+        E: ticketImgE,
+        F: ticketImgF,
+        G: ticketImgG,
+        H: ticketImgH,
+        I: ticketImgI,
+        J: ticketImgJ,
+        K: ticketImgK,
+        L: ticketImgL,
+        M: ticketImgM,
+        N: ticketImgN,
+        O: ticketImgO,
+        P: ticketImgP,
+        Q: ticketImgQ,
+        R: ticketImgR,
+        S: ticketImgS,
+        T: ticketImgT,
+        U: ticketImgU,
+        V: ticketImgV,
+        W: ticketImgW,
+        X: ticketImgX,
+        Y: ticketImgY,
+        Z: ticketImgZ,
+      };
+
+      return isDrawn ? ticketImages[level] || ticketImgBlank : ticketImg;
+    } else {
+      return isDrawn ? boxOpen : boxClose;
+    }
+  };
+  const [expanded, setExpanded] = useState(false);
+  const toggleExpand = () => setExpanded(!expanded);
+
+  const handleSelectAll = () => {
+    const selectableTickets = ticketList.filter((ticket) => !ticket.isDrawn);
+    setActiveTickets(selectableTickets);
+    setShowOption(true);
+  };
+
+  const handleReset = () => {
+    setActiveTickets([]);
+    setShowOption(false);
+  };
+
+  const handleConfirm = async () => {
+    const result = await openConfirmDialog();
+    console.log(result);
+  };
+
+  return (
+    <div className="productDetail">
+      <div className="productDetail__infos">
+        <div className="productDetail__infoHeader">
+          <div className="productDetail__infoHeader-item productDetail__infoHeader-item--status">
+            <div className="productDetail__status">
+              <div className="productDetail__icon"></div>
+              <p className="productDetail__text">急單！</p>
+            </div>
+            <p className="productDetail__text">
+              <span>NT</span>
+              <span className="productDetail__text productDetail__text--money">
+                {product?.price}
+              </span>
+            </p>
+          </div>
+          <div className="productDetail__infoHeader-item">
+            <p className="productDetail__text productDetail__text--productName">
+              {product?.productName}
+            </p>
+          </div>
+        </div>
+        <div className="productDetail__infoImgs">
+          <img src={getImageUrl(product?.imageUrls[0])} />
+        </div>
+        <div className="productDetail__infoOther">
+          <div className="productDetail__infoOther-item">
+            <p className="productDetail__icon">
+              <MdChecklistRtl />
+            </p>
+            <p className="productDetail__text">遊戲規則</p>
+          </div>
+          <div className="productDetail__infoOther-item">
+            <p className="productDetail__icon">
+              <FaThumbtack />
+            </p>
+            <p className="productDetail__text">關於本店</p>
+          </div>
+        </div>
+      </div>
+      <TitleBar icon={BsHandbag} titleText="獎項" showMore={false} />
+      <div className="productDetail__awards">
+        {productDetail.length > 0 ? (
+          productDetail.map((detail, index) => (
+            <div key={index} className="productDetail__awardItem">
+              <div className="productDetail__awardItem-img">
+                <img src={getImageUrl(detail.imageUrls[0])} alt="" />
+              </div>
+              <div className="productDetail__awardItem-grade">
+                <p className="productDetail__text">{detail.grade}賞</p>
+              </div>
+              <div className="productDetail__awardItem-name">
+                <p className="productDetail__text">{detail.productName}</p>
+              </div>
+              <div className="productDetail__awardItem-num">
+                <p className="productDetail__text">
+                  {detail.quantity}/{detail.stockQuantity}
+                </p>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p>No product details available.</p>
+        )}
+      </div>
+      <TitleBar icon={BsHandbag} titleText="籤桶" showMore={false} />
+      <div
+        className="productDetail__sign"
+        style={{
+          height: expanded ? 'auto' : '500px',
+          overflow: expanded ? 'visible' : 'hidden',
+        }}
+      >
+        {ticketList.map((ticket, index) => (
+          <label
+            key={index}
+            className={`productDetail__ticket ${
+              activeTickets.some(
+                (t) => t.prizeNumberId === ticket.prizeNumberId
+              )
+                ? 'productDetail__ticket--active'
+                : ''
+            }`}
+          >
+            <input
+              type="checkbox"
+              className="productDetail__ticket-check"
+              checked={activeTickets.some(
+                (t) => t.prizeNumberId === ticket.prizeNumberId
+              )}
+              onChange={() => handleCheckboxChange(ticket)}
+              disabled={ticket.isDrawn}
+            />
+            <img
+              src={getTicketImg(ticket)}
+              className="productDetail__ticket-img"
+            />
+            <p className="productDetail__text">{ticket.number}</p>
+          </label>
+        ))}
+      </div>
+      {!expanded && (
+        <div className="productDetail__more" onClick={toggleExpand}>
+          <div className="productDetail__more-btn">
+            <span>展開</span>
+            <FaChevronDown />
+          </div>
+        </div>
+      )}
+
+      <div className="productDetail__action">
+        <div
+          className="productDetail__action-btn productDetail__action-btn--confirm"
+          onClick={handleConfirm}
+        >
+          <FaCheck />
+          確認
+        </div>
+        <div
+          className="productDetail__action-btn productDetail__action-btn--all"
+          onClick={handleSelectAll}
+        >
+          <FaCheck />
+          全選
+        </div>
+        <div
+          className="productDetail__action-btn productDetail__action-btn--rest"
+          onClick={handleReset}
+        >
+          <FaTimes />
+          重選
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProductDetail;

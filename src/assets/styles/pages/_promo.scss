@@ -1,0 +1,11 @@
+$root-block-name: '.promo';
+
+#{$root-block-name} {
+  $p: &;
+  $p__text: #{$p}__text;
+  padding: 48px;
+  @include flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}

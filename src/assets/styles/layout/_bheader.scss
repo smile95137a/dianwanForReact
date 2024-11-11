@@ -1,0 +1,61 @@
+$root-block-name: '.bheader';
+
+#{$root-block-name} {
+  $p: &;
+  $p__text: #{$p}__text;
+
+  @include flex(center, space-between, row);
+
+  height: 72px;
+  z-index: 2;
+  box-shadow: 0 4px 12px hsla(270, 30%, 3%, 0.2);
+  padding: 0 8px;
+  &__logo {
+    width: 100px;
+    @include flex(center, center, row);
+    color: #ec6ab1;
+
+    &-img {
+      width: 100%;
+    }
+  }
+
+  &__options {
+    width: 320px;
+    column-gap: 4px;
+    @include flex(center, end, row);
+  }
+
+  &__others {
+    @include flex(center, center, row);
+  }
+
+  &__other {
+    &-icon {
+      @include w_h(36px, 36px);
+      padding: 8px;
+      color: #ec6ab1;
+    }
+  }
+  &__user {
+    @include w_h(auto, 38px);
+    @include flex(center, null, row);
+    column-gap: 4px;
+    &-info {
+      flex: 1;
+      @include flex(end, null, column);
+      font-size: 14px;
+      color: #ec6ab1;
+      #{$p__text} {
+      }
+    }
+    &-logo {
+      @include w_h(38px, 100%);
+      @include flex(center, center, column);
+      border-radius: 50%;
+      color: #ec6ab1;
+      background: hsla(270, 30%, 95%, 0.4);
+      cursor: pointer;
+    }
+  }
+}

@@ -1,0 +1,22 @@
+$root-block-name: '.dashboard';
+
+#{$root-block-name} {
+  @include flex(null, null, column);
+  width: 100%;
+  max-width: 1280px;
+  margin: 40px auto;
+  min-height: 100vh;
+  background: #f6fdfd;
+
+  &__layout {
+    @include flex;
+    flex: 1;
+  }
+
+  &__main {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 24px;
+    flex: 1;
+  }
+}

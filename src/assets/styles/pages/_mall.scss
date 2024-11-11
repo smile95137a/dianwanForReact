@@ -1,0 +1,90 @@
+$root-block-name: '.mall';
+
+#{$root-block-name} {
+  $p: &;
+  $p__text: #{$p}__text;
+  #{$p__text} {
+    &--bold {
+      font-weight: 900;
+    }
+  }
+  &__title {
+    @include flex(center, center);
+    #{$p__text} {
+      font-size: 60px;
+      font-weight: 400;
+      position: relative;
+      background: linear-gradient(272.26deg, #e5d36a -1.05%, #cf8046 98.1%);
+      -webkit-background-clip: text;
+      color: transparent;
+      &::after {
+        content: attr(data-text);
+        left: 0;
+        position: absolute;
+        text-shadow: -2px 0 1px #000, 0 2px 1px #000, 2px 0 1px #000,
+          0 -2px 1px #000;
+        top: 0;
+        z-index: -1;
+      }
+
+      @include screen(md) {
+        font-size: 30px;
+        font-weight: 400;
+      }
+    }
+  }
+  &__btns {
+    @include flex(center);
+    gap: 16px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+  }
+  &__btn {
+    padding: 0 24px;
+    height: 53px;
+    border-radius: 50px;
+    border: 2px solid #000000;
+    @include flex(center, center);
+    cursor: pointer;
+    input {
+      display: none;
+    }
+    font-size: 18px;
+    font-weight: 400;
+
+    @include screen(md) {
+      width: 157px;
+      height: 34px;
+      border: 1.5px solid #000000;
+      font-family: Noto Sans;
+      font-size: 15px;
+      font-weight: 400;
+    }
+    &--active {
+      background: #fed706;
+    }
+  }
+
+  &__sort {
+    width: 100%;
+    @include flex(center, end);
+    gap: 24px;
+    padding: 0 48px;
+    @include screen(md) {
+      gap: 8px;
+      padding: 0 20px;
+    }
+    &-btn {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      &.active {
+        color: #ffeb82;
+      }
+      @include screen(md) {
+        font-size: 10px;
+      }
+    }
+  }
+}

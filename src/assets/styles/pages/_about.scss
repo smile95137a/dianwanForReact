@@ -1,0 +1,52 @@
+$root-block-name: '.about';
+
+#{$root-block-name} {
+  $p: &;
+  $p__text: #{$p}__text;
+  padding: 48px;
+  @include flex;
+  flex-direction: column;
+  gap: 24px;
+
+  #{$p__text} {
+    font-weight: bold;
+    color: #7c7c7c;
+    font-size: 24px;
+    &--highlight {
+      color: #eb9838;
+    }
+  }
+  &__title {
+    #{$p__text} {
+    }
+  }
+
+  &__content {
+    @include flex(null, null, column);
+    gap: 6px;
+    #{$p__text} {
+      font-size: 24px;
+      &--title {
+        font-weight: bold;
+        margin: 24px 0;
+      }
+    }
+  }
+
+  &__company {
+    @include flex(center, center, column);
+    flex-wrap: wrap;
+    &-logo {
+      @include w_h(200px, 200px);
+      img {
+        width: 100%;
+      }
+    }
+    #{$p__text} {
+    }
+
+    &-info {
+      @include flex(null, center, column);
+    }
+  }
+}

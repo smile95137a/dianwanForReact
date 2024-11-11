@@ -1,0 +1,74 @@
+$root-block-name: '.fheader';
+
+#{$root-block-name} {
+  $p: &;
+  $p__text: #{$p}__text;
+  $p__logo-img: #{$p}__logo-img;
+
+  width: 100%;
+  padding: 24px 0;
+  @include flex(null, null, column);
+  position: relative;
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 600px;
+    background: linear-gradient(180deg, #d8ffff 0%, #ffffff 99%);
+    z-index: -1;
+  }
+
+  &__logo {
+    margin: 0 auto;
+    width: 128px;
+    height: 11opx;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__nav {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+
+    &--open {
+      @include screen(md) {
+        transform: translateX(0);
+      }
+    }
+    &-items {
+      @include flex(center);
+      gap: 32px;
+    }
+
+    &-item {
+      min-height: 31px;
+      font-size: 20px;
+      @include flex(center);
+      gap: 12px;
+      &-icon {
+        @include flex(center);
+        font-size: 26px;
+      }
+    }
+  }
+  &__btns {
+    @include flex(center);
+    position: absolute;
+    right: 200px;
+    bottom: 24px;
+  }
+  &__btn {
+    @include flex(center, center);
+    width: 100px;
+    height: 36px;
+    border-radius: 50px;
+    border: 1px solid;
+  }
+}

@@ -1,0 +1,132 @@
+$root-block-name: '.orderSuccess';
+
+#{$root-block-name} {
+  $p: &;
+  $p__text: #{$p}__text;
+  $p__item: #{$p}__item;
+
+  max-width: 1280px;
+  margin: 0 auto;
+
+  @include screen(lg) {
+    margin: 0 24px;
+  }
+
+  &__title {
+    @include flex(center, null, column);
+    gap: 48px;
+    margin-bottom: 24px;
+    #{$p__text} {
+      font-size: 36px;
+      font-weight: 400;
+      color: #2a88cb;
+
+      &--subTitle {
+        font-size: 18px;
+        font-weight: 700;
+      }
+    }
+  }
+
+  &__main {
+    width: 100%;
+    padding: 32px;
+    border-radius: 30px;
+    background: #f1f1f1;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    &-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    &-title {
+      width: 80px;
+
+      #{$p__text} {
+        font-size: 20px;
+        font-weight: 700;
+      }
+    }
+    &-content {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+    }
+
+    &-total {
+      border-top: 1px solid #2a88cb;
+      display: flex;
+      align-items: center;
+      justify-content: end;
+      padding: 24px 0;
+      #{$p__text} {
+        &--title {
+          font-size: 20px;
+          font-weight: 400;
+        }
+
+        &--money {
+          font-size: 32px;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+
+  &__content {
+    width: 100%;
+    display: flex;
+    &-main {
+      flex: 1;
+      display: flex;
+      gap: 24px;
+      #{$p__text} {
+        font-size: 20px;
+        font-weight: 400;
+      }
+    }
+    &-other {
+      width: 100px;
+    }
+
+    &-img {
+      width: 80px;
+      height: 80px;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+  }
+
+  &__btns {
+    @include flex(null, center);
+    margin: 48px 0;
+    gap: 24px;
+    @include screen(md) {
+      @include flex(center, center, column);
+    }
+  }
+
+  &__btn {
+    width: 100%;
+    height: 60px;
+    border-radius: 90px;
+    font-size: 24px;
+    font-weight: 900;
+    @include flex(center, center);
+    &--backHome {
+      max-width: 182px;
+      border: 1px solid #fe4206;
+      color: #fe4206;
+    }
+    &--continue {
+      background: #fe4206;
+      color: #fff;
+      max-width: 249px;
+    }
+  }
+}

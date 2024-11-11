@@ -1,0 +1,679 @@
+$root-block-name: '.memberCenter';
+
+#{$root-block-name} {
+  $p: &;
+  $p__text: #{$p}__text;
+  @include flex;
+  @include screen(md) {
+    @include flex(null, null, column);
+  }
+  &__profileEdit,
+  &__rewards,
+  &__orderHistory,
+  &__purchaseHistory {
+    padding: 32px;
+    width: 100%;
+    margin: 0 auto;
+    @include screen(md) {
+      padding: 64px;
+    }
+  }
+
+  &__nav {
+    @include flex(null, null, column);
+    gap: 24px;
+    width: 210px;
+    margin-right: 64px;
+    @include screen(md) {
+      @include flex(null, null, row);
+      width: 100%;
+      margin-right: 0;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    &-item {
+      @include flex(null, null);
+      width: 100%;
+      height: 58px;
+      border-bottom: 1px solid #cf8046;
+      @include screen(md) {
+        width: auto;
+        flex: calc(50% - 24px);
+        height: 40px;
+      }
+      #{$p__text} {
+        font-size: 24px;
+        font-weight: 400;
+        @include screen(md) {
+          font-size: 18px;
+        }
+      }
+    }
+
+    &-link {
+      @include flex;
+
+      &--active {
+        #{$p__text} {
+          color: #cf8046;
+        }
+      }
+    }
+    &-icon {
+      color: #cf8046;
+      font-size: 24px;
+      margin-right: 20px;
+      @include screen(md) {
+        font-size: 25px;
+      }
+    }
+  }
+
+  &__main {
+    flex: 1;
+  }
+
+  &__coins {
+    @include flex(null, center);
+    gap: 24px;
+    position: relative;
+    padding-bottom: 64px;
+    @include screen(sm) {
+      @include flex(center, center, column);
+      gap: 24px;
+      padding-bottom: 32px;
+    }
+    &-item {
+      flex: 33.3%;
+      max-width: 360px;
+      @include flex;
+      gap: 12px;
+    }
+
+    &-icon {
+      width: 100%;
+      height: 100%;
+      min-width: 60px;
+      min-height: 60px;
+      max-width: 120px;
+      max-height: 120px;
+      @include flex(end, center);
+      @include screen(md) {
+        width: 60px;
+        height: 60px;
+      }
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    &-info {
+      @include flex(null, center, column);
+      gap: 8px;
+    }
+
+    &-title {
+      #{$p__text} {
+        font-size: 20px;
+        font-weight: 400;
+
+        @include screen(md) {
+          font-size: 14px;
+        }
+      }
+    }
+
+    &-num {
+      #{$p__text} {
+        font-size: 24px;
+        font-weight: 900;
+        @include screen(md) {
+          font-size: 30px;
+        }
+      }
+    }
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 1px;
+      background: #7c7c7c;
+    }
+  }
+
+  &__profileEditForm {
+    padding: 32px 16px;
+    position: relative;
+    &-title {
+      @include screen(md) {
+        @include flex(null, center);
+      }
+      #{$p__text} {
+        font-size: 24px;
+        font-weight: 900;
+      }
+
+      &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 1px;
+        background: #7c7c7c;
+      }
+    }
+
+    &-main {
+      @include flex(null);
+
+      @include screen(md) {
+        @include flex(null, null, column);
+      }
+    }
+
+    &-form {
+      flex: 50%;
+      max-width: 342px;
+      @include screen(md) {
+        flex: 100%;
+        max-width: none;
+      }
+      &--other {
+        margin-left: 80px;
+        @include screen(md) {
+          margin-left: 0;
+        }
+      }
+      &-inputs {
+      }
+      #{$p__text} {
+        min-height: 22px;
+        color: #212121;
+        @include flex(end);
+        &--required {
+          &::after {
+            content: '*';
+            color: #fe4206;
+            display: block;
+            margin-left: 4px;
+          }
+        }
+        &--error {
+          color: #fe4206;
+        }
+        margin-bottom: 4px;
+      }
+
+      &-input {
+        @include w_h(100%, 50px);
+        padding: 14px 20px;
+        border-radius: 8px;
+        border: 1px solid #d4d4d4;
+        &--error {
+          border: 1px solid #fe4206;
+        }
+      }
+    }
+
+    &-btns {
+      margin: 48px 0 0 0;
+      @include flex(center, center);
+    }
+    &-btn {
+      @include flex(center, center);
+      width: 100%;
+      max-width: 226px;
+      height: 48px;
+      border-radius: 90px;
+      background: #fe4206;
+      #{$p__text} {
+        font-size: 20px;
+        font-weight: 900;
+        color: #fff;
+      }
+    }
+  }
+
+  &__profileEditInvoiceForm {
+    padding: 32px 16px;
+    position: relative;
+    &-title {
+      @include screen(md) {
+        @include flex(null, center);
+      }
+      #{$p__text} {
+        font-size: 24px;
+        font-weight: 900;
+      }
+    }
+
+    &-main {
+      @include flex(null);
+      @include screen(md) {
+        @include flex(null, null, column);
+      }
+    }
+
+    &-form {
+      flex: 50%;
+      max-width: 342px;
+      @include screen(md) {
+        flex: 100%;
+        max-width: none;
+      }
+      &--other {
+        margin-left: 80px;
+        @include screen(md) {
+          margin: 0;
+        }
+      }
+      &-inputs {
+      }
+      #{$p__text} {
+        min-height: 22px;
+        color: #212121;
+        @include flex(end);
+        &--required {
+          &::after {
+            content: '*';
+            color: #fe4206;
+            display: block;
+            margin-left: 4px;
+          }
+        }
+        margin-bottom: 4px;
+      }
+
+      &-input {
+        @include w_h(100%, 50px);
+        padding: 14px 20px;
+        border-radius: 8px;
+        border: 1px solid #d4d4d4;
+      }
+    }
+
+    &-btns {
+      margin: 48px 0 0 0;
+      @include flex(center, center);
+    }
+    &-btn {
+      @include flex(center, center);
+      width: 100%;
+      max-width: 226px;
+      height: 48px;
+      border-radius: 90px;
+      background: #fe4206;
+      #{$p__text} {
+        font-size: 20px;
+        font-weight: 900;
+        color: #fff;
+      }
+    }
+  }
+
+  //
+  &__rewards {
+    &Consume {
+      padding: 42px 0;
+      position: relative;
+      &-title {
+        @include screen(md) {
+          @include flex(null, center);
+        }
+        #{$p__text} {
+          font-size: 24px;
+          font-weight: 900;
+          @include screen(md) {
+            font-size: 18px;
+            font-weight: 900;
+          }
+        }
+      }
+
+      &-subTitle {
+        margin: 24px 0;
+        #{$p__text} {
+          font-size: 18px;
+          font-weight: 400;
+        }
+      }
+
+      &-info {
+        width: 100%;
+        max-width: 590px;
+        #{$p__text} {
+          font-size: 18px;
+          font-weight: 400;
+        }
+      }
+      &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 1px;
+        background: #7c7c7c;
+      }
+    }
+
+    &Account {
+      position: relative;
+      padding: 24px 0;
+      #{$p__text} {
+        font-size: 24px;
+        font-weight: 700;
+
+        &--red {
+          color: #eb4335;
+        }
+      }
+      &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 1px;
+        background: #7c7c7c;
+      }
+    }
+
+    &Coins {
+      position: relative;
+      padding: 32px;
+      @include flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      &-item {
+        flex: calc(25% - 32px);
+        max-width: 150px;
+        @include flex(center, null, column);
+        @include screen(md) {
+          flex: calc(50% - 32px);
+          max-width: none;
+        }
+      }
+
+      &-icon {
+        width: 100%;
+        height: 100%;
+        max-width: 80px;
+        max-height: 80px;
+        @include flex(center, center);
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+      }
+
+      &-title {
+        @include flex(null, center);
+        margin-top: 8px;
+        #{$p__text} {
+          font-size: 18px;
+          font-weight: 400;
+
+          &--red {
+            font-weight: 700;
+            color: #eb4335;
+          }
+        }
+      }
+
+      &-subTitle {
+        @include flex(null, center);
+        margin-top: 8px;
+        #{$p__text} {
+          font-size: 18px;
+          font-weight: 400;
+
+          &--red {
+            color: #eb4335;
+            font-family: Noto Sans TC;
+            font-weight: 700;
+          }
+        }
+      }
+      &-btns {
+        margin-top: 8px;
+        @include flex(null, center);
+      }
+      &-btn {
+        @include flex(center, center);
+        width: 94px;
+        height: 25px;
+        border-radius: 12px;
+        color: #fff;
+        background: #cf8046;
+        font-size: 14px;
+        font-weight: 400;
+      }
+    }
+  }
+
+  //
+
+  &__orderHistoryForm {
+    padding: 32px 16px;
+    position: relative;
+    &-title {
+      @include screen(md) {
+        @include flex(null, center);
+      }
+      #{$p__text} {
+        font-size: 24px;
+        font-weight: 900;
+      }
+    }
+
+    &-main {
+      @include flex(null);
+      gap: 24px;
+      @include screen(md) {
+        @include flex(null, null, column);
+      }
+    }
+
+    &-box {
+      width: 100%;
+      @include flex(end);
+      max-width: 342px;
+      @include screen(md) {
+        max-width: none;
+      }
+      &--btns {
+        max-width: 92px;
+        @include screen(md) {
+          max-width: none;
+          justify-content: center;
+        }
+      }
+    }
+
+    &-form {
+      @include screen(md) {
+        flex: 100%;
+        max-width: none;
+      }
+      &--other {
+        margin-left: 80px;
+        @include screen(md) {
+          margin-left: 0;
+        }
+      }
+      &-inputs {
+        width: 100%;
+      }
+      #{$p__text} {
+        min-height: 22px;
+        color: #212121;
+        @include flex(end);
+        &--required {
+          &::after {
+            content: '*';
+            color: #fe4206;
+            display: block;
+            margin-left: 4px;
+          }
+        }
+        margin-bottom: 4px;
+      }
+
+      &-input {
+        @include w_h(100%, 50px);
+        padding: 14px 20px;
+        border-radius: 8px;
+        border: 1px solid #d4d4d4;
+      }
+    }
+
+    &-btns {
+      width: 100%;
+      @include flex(center, center);
+      @include screen(md) {
+        max-width: 92px;
+      }
+    }
+    &-btn {
+      @include flex(center, center);
+      width: 100%;
+      max-width: 226px;
+      height: 48px;
+      border-radius: 90px;
+      background: #fe4206;
+      #{$p__text} {
+        font-size: 20px;
+        font-weight: 900;
+        color: #fff;
+      }
+    }
+  }
+
+  &__purchaseHistory {
+    padding: 32px 16px;
+    position: relative;
+    &-title {
+      @include screen(md) {
+        @include flex(null, center);
+      }
+      #{$p__text} {
+        font-size: 24px;
+        font-weight: 900;
+      }
+    }
+
+    &-main {
+      @include flex(null);
+      gap: 24px;
+      @include screen(md) {
+        @include flex(null, null, column);
+      }
+    }
+
+    &-box {
+      width: 100%;
+      @include flex(end);
+      max-width: 342px;
+      @include screen(md) {
+        max-width: none;
+      }
+      &--btns {
+        max-width: 92px;
+        @include screen(md) {
+          max-width: none;
+          justify-content: center;
+        }
+      }
+    }
+
+    &-form {
+      @include screen(md) {
+        flex: 100%;
+        max-width: none;
+      }
+      &--other {
+        margin-left: 80px;
+        @include screen(md) {
+          margin-left: 0;
+        }
+      }
+      &-inputs {
+        width: 100%;
+      }
+      #{$p__text} {
+        min-height: 22px;
+        color: #212121;
+        @include flex(end);
+        &--required {
+          &::after {
+            content: '*';
+            color: #fe4206;
+            display: block;
+            margin-left: 4px;
+          }
+        }
+        margin-bottom: 4px;
+      }
+
+      &-input {
+        @include w_h(100%, 50px);
+        padding: 13px 20px 0px 20px;
+        border-radius: 8px;
+        border: 1px solid #d4d4d4;
+      }
+    }
+
+    &-btns {
+      width: 100%;
+      @include flex(center, center);
+      @include screen(md) {
+        max-width: 92px;
+      }
+    }
+    &-btn {
+      @include flex(center, center);
+      width: 100%;
+      max-width: 226px;
+      height: 48px;
+      border-radius: 90px;
+      background: #fe4206;
+      #{$p__text} {
+        font-size: 20px;
+        font-weight: 900;
+        color: #fff;
+      }
+    }
+  }
+
+  &__table {
+    overflow: auto;
+    @include flex(null, null, column);
+    gap: 12px;
+    overflow-x: auto;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      table-layout: fixed;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      height: 40px;
+    }
+    th {
+      border-bottom: 1px solid #7c7c7c;
+      text-align: left;
+    }
+    td {
+    }
+  }
+}

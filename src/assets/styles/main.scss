@@ -1,0 +1,349 @@
+// Abstracts
+@import 'abstracts/breakpoints';
+@import 'abstracts/functions';
+@import 'abstracts/variables';
+@import 'abstracts/mixins';
+
+// Base
+@import 'base/base';
+@import 'base/animations';
+@import 'base/typography';
+@import 'base/utilities';
+// Components
+@import 'components/m-card';
+@import 'components/product-card';
+@import 'components/product-card2';
+@import 'components/slider';
+@import 'components/breadcrumbs';
+@import 'components/m-select';
+@import 'components/m-input';
+@import 'components/c-table';
+@import 'components/section-header';
+@import 'components/menu-flip';
+
+@import 'components/backend/sidebar';
+@import 'components/backend/b-card';
+@import 'components/backend/b-table';
+@import 'components/backend/b-pagination';
+@import 'components/backend/dialog/dialog';
+@import 'components/backend/dialog/confirm-dialog';
+@import 'components/backend/dialog/info-dialog';
+@import 'components/backend/dialog/add-banner-dialog';
+@import 'components/backend/b-input';
+@import 'components/backend/b-select';
+
+@import 'components/frontend/dialog/dialog';
+@import 'components/frontend/dialog/confirm-dialog';
+// Layout
+@import 'layout/bheader';
+@import 'layout/fheader';
+@import 'layout/footer';
+
+// Pages
+@import 'pages/fhome';
+
+@import 'pages/login';
+@import 'pages/register';
+@import 'pages/product';
+@import 'pages/product2';
+@import 'pages/product3';
+@import 'pages/product-detail';
+@import 'pages/product-detail-one';
+@import 'pages/memberCenter';
+@import 'pages/loader';
+@import 'pages/mall';
+@import 'pages/mall-product';
+@import 'pages/mallCheckout';
+@import 'pages/mallOrderSuccess';
+@import 'pages/no-data';
+@import 'pages/about';
+@import 'pages/transaction';
+@import 'pages/privacy';
+@import 'pages/policy';
+@import 'pages/news';
+@import 'pages/news-detail';
+@import 'pages/deposit';
+@import 'pages/promo';
+
+@import 'pages/backend/blogin';
+@import 'pages/backend/dashboard';
+@import 'pages/backend/memberManagement';
+
+// themes
+// ec6ab1 f29bcb f8cde5
+//
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap');
+
+* {
+  font-family: 'Noto Sans', sans-serif;
+}
+
+.text {
+  &-center {
+    text-align: center;
+  }
+  &-right {
+    text-align: right;
+  }
+  &-left {
+    text-align: left;
+  }
+}
+
+.flex {
+  display: flex;
+}
+.flex-auto {
+  flex: auto;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-around {
+  justify-content: space-around;
+}
+
+.justify-evenly {
+  justify-content: space-evenly;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.items-end {
+  align-items: flex-end;
+}
+
+.items-baseline {
+  align-items: baseline;
+}
+
+.items-stretch {
+  align-items: stretch;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+.flex-wrap-reverse {
+  flex-wrap: wrap-reverse;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.flex-grow-0 {
+  flex-grow: 0;
+}
+
+.flex-shrink {
+  flex-shrink: 1;
+}
+
+.flex-shrink-0 {
+  flex-shrink: 0;
+}
+
+@for $i from 1 through 100 {
+  .flex-basis-#{$i} {
+    flex-basis: #{$i}#{'%'};
+  }
+  .p-#{$i} {
+    padding: #{$i}#{'px'};
+  }
+  .p-x-#{$i} {
+    padding-left: #{$i}#{'px'};
+    padding-right: #{$i}#{'px'};
+  }
+  .p-y-#{$i} {
+    padding-top: #{$i}#{'px'};
+    padding-bottom: #{$i}#{'px'};
+  }
+  .p-t-#{$i} {
+    padding-top: #{$i}#{'px'};
+  }
+  .p-r-#{$i} {
+    padding-right: #{$i}#{'px'};
+  }
+  .p-b-#{$i} {
+    padding-bottom: #{$i}#{'px'};
+  }
+  .p-l-#{$i} {
+    padding-left: #{$i}#{'px'};
+  }
+
+  .m-#{$i} {
+    margin: #{$i}#{'px'};
+  }
+  .m-x-#{$i} {
+    margin-left: #{$i}#{'px'};
+    margin-right: #{$i}#{'px'};
+  }
+  .m-y-#{$i} {
+    margin-top: #{$i}#{'px'};
+    margin-bottom: #{$i}#{'px'};
+  }
+  .m-t-#{$i} {
+    margin-top: #{$i}#{'px'};
+  }
+  .m-r-#{$i} {
+    margin-right: #{$i}#{'px'};
+  }
+  .m-b-#{$i} {
+    margin-bottom: #{$i}#{'px'};
+  }
+  .m-l-#{$i} {
+    margin-left: #{$i}#{'px'};
+  }
+
+  .w-#{$i} {
+    width: #{$i}#{'%'};
+  }
+
+  .gap-#{$i} {
+    column-gap: #{$i}#{'px'};
+    row-gap: #{$i}#{'px'};
+  }
+
+  .gap-x-#{$i} {
+    column-gap: #{$i}#{'px'};
+  }
+
+  .gap-y-#{$i} {
+    row-gap: #{$i}#{'px'};
+  }
+
+  .font-size-#{$i} {
+    font-size: #{$i}#{'px'};
+  }
+
+  .letter-spacing-#{$i} {
+    letter-spacing: #{$i}#{'px'};
+  }
+
+  // Small screen (sm) styles
+  @media (max-width: 768px) {
+    .w-sm-#{$i} {
+      width: #{$i}#{'%'};
+    }
+
+    .gap-sm-#{$i} {
+      column-gap: #{$i}#{'px'};
+      row-gap: #{$i}#{'px'};
+    }
+
+    .gap-sm-x-#{$i} {
+      column-gap: #{$i}#{'px'};
+    }
+
+    .gap-sm-y-#{$i} {
+      row-gap: #{$i}#{'px'};
+    }
+
+    .font-size-sm-#{$i} {
+      font-size: #{$i}#{'px'};
+    }
+
+    .letter-spacing-sm-#{$i} {
+      letter-spacing: #{$i}#{'px'};
+    }
+  }
+
+  @media (max-width: 992px) {
+    .w-md-#{$i} {
+      width: #{$i}#{'%'};
+    }
+
+    .gap-md-#{$i} {
+      column-gap: #{$i}#{'px'};
+      row-gap: #{$i}#{'px'};
+    }
+
+    .gap-md-x-#{$i} {
+      column-gap: #{$i}#{'px'};
+    }
+
+    .gap-md-y-#{$i} {
+      row-gap: #{$i}#{'px'};
+    }
+
+    .font-size-md-#{$i} {
+      font-size: #{$i}#{'px'};
+    }
+
+    .letter-spacing-md-#{$i} {
+      letter-spacing: #{$i}#{'px'};
+    }
+  }
+
+  @media (max-width: 1200px) {
+    .w-lg-#{$i} {
+      width: #{$i}#{'%'};
+    }
+
+    .gap-lg-#{$i} {
+      column-gap: #{$i}#{'px'};
+      row-gap: #{$i}#{'px'};
+    }
+
+    .gap-lg-x-#{$i} {
+      column-gap: #{$i}#{'px'};
+    }
+
+    .gap-lg-y-#{$i} {
+      row-gap: #{$i}#{'px'};
+    }
+
+    .font-size-lg-#{$i} {
+      font-size: #{$i}#{'px'};
+    }
+
+    .letter-spacing-lg-#{$i} {
+      letter-spacing: #{$i}#{'px'};
+    }
+  }
+}
+
+///
+.frontLayout {
+  &__main {
+    min-height: 100vh;
+  }
+}

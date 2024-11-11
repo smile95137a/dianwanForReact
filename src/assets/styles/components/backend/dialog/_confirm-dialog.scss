@@ -1,0 +1,72 @@
+$root-block-name: '.bconfirmDialog';
+
+#{$root-block-name} {
+  $p: &;
+  $p__text: #{$p}__text;
+  @include flex;
+  padding: 36px;
+  flex: 1;
+  &__text {
+    color: #ec6ab1;
+    letter-spacing: 0.5px;
+    font-size: 16px;
+  }
+  &__icon {
+    flex-basis: 100px;
+
+    &-icon {
+      @include w_h(60px, 60px);
+      @include flex(center, center);
+      border-radius: 50%;
+      font-size: 36px;
+      color: #fff;
+      background-color: #b4d8f3;
+    }
+  }
+
+  &__info {
+    flex: 1;
+    @include flex(null, null, column);
+    &-title {
+      min-height: 24px;
+      #{$p__text} {
+        font-size: 20px;
+        font-weight: bold;
+      }
+    }
+    &-content {
+      flex: 1;
+      #{$p__text} {
+        color: #333;
+      }
+    }
+    &-btns {
+      @include flex(null, end);
+      gap: 12px;
+    }
+    &-btn {
+      width: 120px;
+      height: 48px;
+      background: #f079b5;
+
+      border: none;
+      outline: none;
+      border-radius: 4px;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.5s;
+      letter-spacing: 2px;
+      &--confirm {
+        border: 1px solid #f079b5;
+        background: #f079b5;
+        color: #fff;
+      }
+      &--cancel {
+        border: 1px solid #f079b5;
+        background: #fff;
+        color: #f079b5;
+      }
+    }
+  }
+}

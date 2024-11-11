@@ -1,0 +1,52 @@
+$root-block-name: '.bdialog';
+$root-block-style: '.downDialog';
+
+#{$root-block-name} {
+  position: fixed;
+  inset: 0;
+  z-index: 99999998;
+  $p: &;
+  $p__main: #{$p}__main;
+
+  &--lg {
+    #{$p__main} {
+      max-width: 1440px;
+    }
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 10;
+  }
+  &__main {
+    @include abs-center;
+    @include flex;
+    @include w_h(calc(100% - 36px), fit-content);
+    width: 95vw;
+    height: 80%;
+    border-radius: 6px;
+    background: #fff;
+    box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.12);
+    z-index: 11;
+    overflow: hidden;
+  }
+
+  &#{#{$root-block-style}} {
+    #{$p__main} {
+      max-height: 100vh;
+      max-width: 800px;
+      width: 95vw;
+      height: 80%;
+      top: auto;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: pull-up-center 0.3s ease-out both;
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+      border-radius: 48px;
+      padding: 36px;
+    }
+  }
+}

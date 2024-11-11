@@ -1,0 +1,87 @@
+$root-block-name: '.footer';
+
+#{$root-block-name} {
+  $p: &;
+  $p__text: #{$p}__text;
+  height: 308px;
+  padding: 72px 0;
+  background: #c2f6f6;
+  @include w_h(100%, 100%);
+
+  &__container {
+    @include w_h(100%, 100%);
+    max-width: 780px;
+    margin: 0 auto;
+    display: flex;
+  }
+
+  &__logo {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    &-img {
+      @include w_h(135px, 115px);
+
+      img {
+        width: 100%;
+        height: 100%;
+        @include screen(md) {
+          @include w_h(164px, 164px);
+        }
+        object-fit: contain;
+      }
+    }
+
+    #{$p__text} {
+      margin-top: -16px;
+      font-size: 16px;
+      font-weight: 400;
+      @include screen(md) {
+        font-size: 12px;
+        font-weight: 400;
+      }
+    }
+  }
+
+  &__main {
+    flex: 1;
+    margin-left: 48px;
+  }
+
+  &__nav {
+    @include flex;
+    column-gap: 32px;
+    font-size: 16px;
+    font-weight: 500;
+
+    @include screen(md) {
+      flex-wrap: wrap;
+      font-size: 14px;
+      font-weight: 400;
+    }
+  }
+
+  &__infos {
+    margin-top: 32px;
+    @include flex(null, null, column);
+    font-size: 18px;
+    font-weight: 500;
+    gap: 4px;
+
+    @include screen(md) {
+      margin-top: 8px;
+      font-size: 13px;
+      font-weight: 400;
+    }
+  }
+
+  &__info {
+    @include flex;
+
+    &-text {
+      color: #7c7c7c;
+    }
+  }
+}

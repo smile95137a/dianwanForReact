@@ -1,0 +1,56 @@
+$root-block-name: '.news';
+
+#{$root-block-name} {
+  $p: &;
+  $p__text: #{$p}__text;
+
+  &__title {
+    @include flex(center, center);
+    #{$p__text} {
+      font-size: 60px;
+      font-weight: 400;
+      position: relative;
+      background: linear-gradient(272.26deg, #e5d36a -1.05%, #cf8046 98.1%);
+      -webkit-background-clip: text;
+      color: transparent;
+      &::after {
+        content: attr(data-text);
+        left: 0;
+        position: absolute;
+        text-shadow: -2px 0 1px #000, 0 2px 1px #000, 2px 0 1px #000,
+          0 -2px 1px #000;
+        top: 0;
+        z-index: -1; /* this slides the shadow behind its parent (the actual text) */
+      }
+
+      @include screen(md) {
+        font-size: 30px;
+        font-weight: 400;
+      }
+    }
+  }
+
+  &__list {
+    @include flex(null, null, column);
+    gap: 24px;
+
+    &-item {
+      padding: 24px 0;
+      border-bottom: 1px solid #aeaeb2;
+
+      #{$p__text} {
+        &--title {
+          font-size: 18px;
+          font-weight: 800;
+        }
+
+        &--preview {
+          margin-top: 24px;
+          font-size: 16px;
+          font-weight: 400;
+          color: #515151;
+        }
+      }
+    }
+  }
+}

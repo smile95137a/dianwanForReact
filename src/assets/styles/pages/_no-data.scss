@@ -1,0 +1,22 @@
+$root-block-name: '.fnoData';
+
+#{$root-block-name} {
+  @include flex(center, null, column);
+  padding: 72px 16px;
+  &__img {
+    width: 160px;
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  &__text {
+    letter-spacing: 0.5px;
+    color: #2a88cb;
+    font-weight: bold;
+    margin-top: 4px;
+    font-size: 18px;
+    letter-spacing: 2px;
+  }
+}

@@ -1,0 +1,238 @@
+$root-block-name: '.productDetail';
+
+#{$root-block-name} {
+  $p: &;
+  $p__text: #{$p}__text;
+  $p__icon: #{$p}__icon;
+  padding: 0 0 64px 0;
+  max-width: 1280px;
+  margin: 0 auto;
+
+  @include screen(lg) {
+    margin: 0 24px;
+  }
+
+  &__status {
+    display: flex;
+    align-items: center;
+    #{$p__icon} {
+      width: 66px;
+      height: 66px;
+    }
+    #{$p__text} {
+      font-size: 24px !important;
+      font-weight: 700 !important;
+      color: #85ffff !important;
+    }
+  }
+
+  &__infos {
+    width: 100%;
+    height: 860px;
+    background: #000;
+    border-radius: 20px;
+    margin: 48px 0;
+  }
+
+  &__infoHeader {
+    padding: 0 24px;
+    min-height: 78px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &-item {
+      display: flex;
+      justify-content: space-between;
+      &--status {
+        width: 320px;
+      }
+      #{$p__text} {
+        font-size: 20px;
+        font-weight: 700;
+        color: #85ffff;
+        &--money {
+          font-size: 36px;
+          font-weight: 700;
+        }
+        &--productName {
+          font-size: 24px;
+          font-weight: 400;
+          color: #fff;
+        }
+      }
+    }
+  }
+  &__infoImgs {
+    width: 100%;
+    height: 630px;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  &__infoOther {
+    padding-top: 24px;
+    @include flex(center, center);
+    gap: 48px;
+    &-item {
+      @include flex(center, center);
+      gap: 12px;
+      #{$p__icon} {
+        width: 34px;
+        height: 34px;
+        background: #fff;
+        border-radius: 50%;
+        @include flex(center, center);
+      }
+      #{$p__text} {
+        font-size: 20px;
+        font-weight: 500;
+        color: #ffffff;
+      }
+    }
+  }
+  //
+  &__awards {
+    padding: 60px 120px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    @include screen(lg) {
+      padding: 6px 0;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+  }
+  &__awardItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    &-img {
+      width: 84px;
+      height: 60px;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+    &-grade {
+      min-width: 38px;
+      #{$p__text} {
+        font-size: 16px;
+        font-weight: 500;
+        color: #2a88cb;
+      }
+    }
+    &-name {
+      @include screen(lg) {
+        flex: 1;
+      }
+      #{$p__text} {
+        font-size: 24px;
+        font-weight: 500;
+      }
+    }
+    &-num {
+      #{$p__text} {
+        font-size: 16px;
+        font-weight: 500;
+      }
+    }
+  }
+
+  //
+  &__sign {
+    padding-top: 72px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    column-gap: 24px;
+    row-gap: 48px;
+    @include screen(lg) {
+      padding-top: 24px;
+      grid-template-columns: 1fr 1fr 1fr;
+      column-gap: 24px;
+      row-gap: 2px;
+    }
+  }
+
+  &__ticket {
+    &--active {
+      border: 2px solid #2a88cb;
+      padding: 6px;
+    }
+    &-check {
+      display: none;
+    }
+
+    &-img {
+      img {
+        width: 100%;
+        height: auto;
+      }
+    }
+    #{$p__text} {
+      text-align: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: #2a88cb;
+    }
+  }
+
+  &__more {
+    @include flex(center, center);
+    cursor: pointer;
+    color: #2a88cb;
+    position: relative;
+    height: 36px;
+    &::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 1px;
+      background: #2a88cb;
+    }
+    &-btn {
+      font-size: 24px;
+      font-weight: 400;
+      padding: 0 24px;
+      background: #fff;
+      z-index: 1;
+      @include flex(center, center);
+      gap: 12px;
+      letter-spacing: 1px;
+    }
+  }
+
+  &__action {
+    margin: 120px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    &-btn {
+      width: 104px;
+      height: 50px;
+      border-radius: 20px;
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      &--confirm {
+        background: #f74343;
+      }
+      &--all {
+        background: #ff7f35;
+      }
+      &--rest {
+        background: #2a88cb;
+      }
+    }
+  }
+}

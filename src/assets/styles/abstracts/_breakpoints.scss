@@ -1,0 +1,35 @@
+$breakpoint-xsmall: 576px;
+$breakpoint-small: 767px;
+$breakpoint-medium: 991px;
+$breakpoint-large: 1199px;
+$breakpoint-extra-large: 1400px;
+
+$breakpoints: (
+  xs: (
+    max-width: $breakpoint-xsmall,
+  ),
+  sm: (
+    max-width: $breakpoint-small,
+  ),
+  md: (
+    max-width: $breakpoint-medium,
+  ),
+  lg: (
+    max-width: $breakpoint-large,
+  ),
+  xl: (
+    min-width: $breakpoint-extra-large,
+  ),
+) !default;
+
+@mixin screen($sizes...) {
+  @each $value in $sizes {
+    @if map-has-key($breakpoints, $value) {
+      @media #{inspect(map-get($breakpoints, $value))} {
+        @content;
+      }
+    } @else {
+      @warn "Unknown value `#{$value}`.";
+    }
+  }
+}

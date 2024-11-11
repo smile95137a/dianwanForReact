@@ -1,0 +1,33 @@
+$root-block-name: '.breadcrumbs';
+
+#{$root-block-name} {
+  $p: &;
+  $p__text: #{$p}__text;
+  margin-bottom: 24px;
+
+  @include screen(md) {
+    display: none;
+  }
+  &__items {
+    @include flex;
+  }
+
+  &__item {
+    font-size: 16px;
+    font-weight: 400;
+    color: #7c7c7c;
+    &--active {
+      color: #000000;
+    }
+    &::after {
+      content: '/';
+      color: #7c7c7c;
+    }
+
+    &:last-child {
+      &::after {
+        content: '';
+      }
+    }
+  }
+}

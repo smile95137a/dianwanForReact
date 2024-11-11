@@ -1,0 +1,181 @@
+$root-block-name: '.confirmDialog';
+
+#{$root-block-name} {
+  $p: &;
+  $p__text: #{$p}__text;
+
+  @include w_h(100%, 100%);
+  @include flex(null, null, column);
+
+  &__header {
+    display: flex;
+    justify-content: center;
+    padding: 24px 0;
+  }
+
+  &__logo {
+    &-img {
+      @include w_h(196px, 168px);
+    }
+  }
+
+  &__title {
+    display: flex;
+    justify-content: center;
+    #{$p__text} {
+      font-size: 25px;
+      font-weight: 400;
+      color: #2a88cb;
+    }
+  }
+
+  &__close {
+    position: absolute;
+    top: 50%;
+    right: 24px;
+    z-index: 9;
+    transform: translateY(-50%);
+    &-img {
+      @include w_h(255px, 255px);
+    }
+  }
+
+  &__footer {
+    width: 100%;
+    height: 198px;
+    background: #c2f6f6;
+    border-radius: 0 0 18px 18px;
+    @include flex(null, null, column);
+    padding: 12px 0 24px 0;
+
+    @include screen(lg) {
+      height: 224px;
+      padding: 16px 0;
+    }
+    &-content {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+
+      @include screen(lg) {
+        grid-template-columns: 1fr 1fr;
+        grid-auto-rows: auto;
+      }
+    }
+
+    &-btns {
+      @include flex(center, center);
+      gap: 24px;
+    }
+
+    &-btn {
+      @include flex(center, center);
+      width: 168px;
+      height: 54px;
+      border-radius: 50px;
+      border: 3px solid #2a88cb;
+      font-size: 25px;
+      font-weight: 400;
+      cursor: pointer;
+      &--cancel {
+        color: #2a88cb;
+      }
+      &--confirm {
+        color: #fff;
+        background: #2a88cb;
+      }
+    }
+
+    &-balance {
+      @include flex(center, center);
+      @include screen(lg) {
+        height: fit-content;
+        #{$p__text} {
+          font-size: 20px;
+          font-weight: 400;
+          &--red {
+            font-size: 36px;
+          }
+        }
+      }
+    }
+
+    &-count {
+      @include flex(center, center);
+      @include screen(lg) {
+        height: fit-content;
+        #{$p__text} {
+          font-size: 20px;
+          font-weight: 400;
+          &--red {
+            font-size: 36px;
+          }
+        }
+      }
+    }
+    &-total {
+      @include flex(center, center);
+      @include screen(lg) {
+        grid-column: 1/-1;
+        height: fit-content;
+        #{$p__text} {
+          font-size: 20px;
+          font-weight: 400;
+          &--red {
+            font-size: 36px;
+          }
+        }
+      }
+    }
+  }
+
+  &__text {
+    font-size: 25px;
+    font-weight: 400;
+    &--red {
+      font-size: 64px;
+      font-weight: 400;
+      color: #fe4206;
+    }
+
+    &--num {
+      font-size: 20px;
+      font-weight: 400;
+      color: #cf8046;
+    }
+
+    &--bold {
+      font-weight: 800;
+    }
+  }
+
+  &__main {
+    flex: 1;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    overflow: auto;
+    @include screen(lg) {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+  }
+
+  &__item {
+    display: flex;
+    gap: 12px;
+    &-img {
+      width: 99px;
+      height: 99px;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    &-name {
+      flex: 1;
+    }
+  }
+}

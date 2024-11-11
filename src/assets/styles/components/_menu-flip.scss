@@ -1,0 +1,82 @@
+$root-block-name: '.menu-flip';
+
+#{$root-block-name} {
+  $p: &;
+  $p__label: #{$p}__label;
+  $p__text: #{$p}__text;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  min-width: 500px;
+  &--active {
+    border: 2px solid #eb9838;
+  }
+
+  &__text {
+    letter-spacing: 0.5px;
+    font-size: 14px;
+    &--shutdown {
+      color: #3e423a;
+    }
+  }
+  &__header {
+    &-title {
+      color: #000;
+      letter-spacing: 1px;
+      font-weight: 900;
+      border-bottom: 1px solid #3e423a;
+    }
+
+    &-info {
+      margin-top: 12px;
+      img {
+        object-fit: contain;
+      }
+      #{ $p__text} {
+        word-break: break-all;
+      }
+    }
+  }
+  &__panel {
+    display: none;
+    width: 100%;
+    min-height: 80px;
+    padding: 6px;
+    border-top: 1px solid #eb9838;
+
+    &--active {
+      display: block;
+    }
+
+    &-items {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 6px;
+      @include screen(lg) {
+        // grid-template-columns: 1fr 1fr;
+      }
+    }
+  }
+
+  &__actions {
+    @include flex(end, space-between, column);
+    gap: 6px;
+  }
+
+  &__btn {
+    width: 100px;
+    border: 1px solid #f079b5;
+    background: #fff;
+    color: #f079b5;
+    font-size: 14px;
+
+    &--shutdown {
+      border: 1px solid #3e423a;
+      color: #3e423a;
+    }
+
+    &--start {
+      border: 1px solid #90c060;
+      color: #90c060;
+    }
+  }
+}

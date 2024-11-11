@@ -1,0 +1,57 @@
+$root-block-name: '.mcard';
+
+#{$root-block-name} {
+  $p: &;
+  $p__text: #{$p}__text;
+  $p__header: #{$p}__header;
+
+  @include flex(null, null, column);
+  border-radius: 30px;
+  overflow: hidden;
+  width: 100%;
+
+  &--ichiban {
+    #{ $p__header} {
+      padding: 0;
+      align-items: end;
+    }
+  }
+  &--login,
+  &--register,
+  &--mainpage,
+  &--product-detail-one {
+    min-height: 636px;
+  }
+
+  &--memberCenter {
+    min-height: 1315px;
+  }
+
+  &--login {
+    @include screen(xs) {
+      min-height: 478px;
+    }
+  }
+
+  &__header {
+    padding: 16px 0;
+    height: 74px;
+    background: linear-gradient(270.06deg, #e2b64b 0.06%, #eb9838 99.98%);
+    @include flex(center);
+
+    #{$p__text} {
+      font-size: 26px;
+      font-weight: 400;
+
+      color: #fff;
+      text-shadow: -2px 0 1px #000, 0 2px 1px #000, 2px 0 1px #000,
+        0 -2px 1px #000;
+    }
+  }
+
+  &__content {
+    flex: 1;
+    background: #ffe7cc;
+    @include flex(null, null, column);
+  }
+}

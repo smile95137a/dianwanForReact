@@ -1,0 +1,122 @@
+$root-block-name: '.blogin';
+
+#{$root-block-name} {
+  @include flex(center, center);
+  @include w_h(100%, 600px);
+  min-height: 100vh;
+
+  // login__container
+  &__container {
+    @include flex;
+    @include w_h(100%, 600px);
+    max-width: 1024px;
+    background: linear-gradient(
+      90deg,
+      rgba(246, 246, 246, 0.2) 0%,
+      rgba(246, 246, 246, 0.6) 50%,
+      rgba(248, 205, 229, 0.8) 100%
+    );
+    border-radius: 8px;
+    box-shadow: 4px 4px 30px hsla(270, 30%, 10%, 0.4);
+    overflow: hidden;
+    margin: 0 48px;
+  }
+
+  // login__other
+  &__other {
+    position: relative;
+    width: 608px;
+    overflow: hidden;
+
+    @include screen(sm) {
+      display: none;
+    }
+
+    // login__other-img
+    &-img {
+      width: 300px;
+      height: 300px;
+      position: absolute;
+      opacity: 0.2;
+      left: 0;
+      bottom: 0;
+    }
+    &:before {
+      content: '';
+      position: absolute;
+      width: 850px;
+      height: 850px;
+      background: #f8cde5;
+      bottom: -200px;
+      right: 90px;
+      transform: rotate(48deg);
+      border-radius: 300px;
+      z-index: -1;
+    }
+    &:after {
+      content: '';
+      position: absolute;
+      width: 900px;
+      height: 700px;
+      background: #ec6ab1;
+      bottom: -100px;
+      right: 80px;
+      transform: rotate(40deg);
+      border-radius: 200px;
+      z-index: -1;
+    }
+  }
+
+  // login__form
+  &__form {
+    $p: &;
+    $p-text: #{$p}-text;
+
+    @include flex('', end, column);
+
+    flex-basis: 50%;
+    padding: 24px 56px;
+
+    @include screen(sm) {
+      flex-basis: 100%;
+    }
+
+    //login__form-title
+    &-title {
+      @include flex(center, '', column);
+      margin-bottom: 24px;
+
+      #{$p-text} {
+        color: #ec6ab1;
+        letter-spacing: 0.5px;
+        font-size: 32px;
+      }
+    }
+
+    //login__form-items
+    &-items {
+      @include flex(null, center, column);
+      flex: 1;
+      gap: 8px;
+    }
+
+    //login__form-btns
+    &-btns {
+      @include flex(end, '', column);
+    }
+
+    //login__form-other
+    &-other {
+      @include flex(end, end, column);
+
+      #{$p-text} {
+        color: #ec6ab1;
+        letter-spacing: 0.5px;
+        font-size: 14px;
+        &--restPwd {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

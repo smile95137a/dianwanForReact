@@ -1,0 +1,58 @@
+$root-block-name: '.bTable';
+
+#{$root-block-name} {
+  $p: &;
+  $p__header: #{$p}__header;
+  $p__cell: #{$p}__cell;
+  display: table;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  @include screen(md) {
+    @include flex(null, null, column);
+    gap: 12px;
+  }
+  &__row {
+    display: table-row;
+    background: #fff;
+    &:not(#{$p__header}):nth-of-type(odd) {
+      background: #fff;
+    }
+    @include screen(md) {
+      @include flex(null, null, column);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+  }
+
+  &__header {
+    color: #000;
+    background-color: #c2f6f6;
+    font-weight: 900;
+    #{$p__cell} {
+      text-align: center;
+    }
+    @include screen(md) {
+      display: none;
+    }
+  }
+
+  &__cell {
+    display: table-cell;
+    text-align: center;
+    word-break: break-all;
+    padding: 24px;
+    @include screen(md) {
+      width: 100% !important;
+      @include flex(null, space-between);
+      padding: 16px;
+      &::before {
+        content: attr(data-title);
+        color: #f079b5;
+        font-weight: 900;
+        min-width: 48px;
+        margin-right: 16px;
+      }
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { getImageUrl } from '@/utils/ImageUtils';
+import { MdOutlineOfflineBolt } from 'react-icons/md';
 
 const ProductCard = ({ product, className = '' }: any) => {
   return (
@@ -12,7 +13,9 @@ const ProductCard = ({ product, className = '' }: any) => {
       </div>
       <div className="productCard__infos">
         <div className="productCard__infos-status productCard__infos-status--active">
-          <p className="productCard__text productCard__text--icon"></p>
+          <p className="productCard__icon">
+            <MdOutlineOfflineBolt />
+          </p>
           <p className="productCard__text productCard__text--subtitle">
             開抽中
           </p>

@@ -86,33 +86,15 @@ const Main = () => {
         <TitleBar icon={BsHandbag} titleText="電玩賞" moreText="更多" />
         <div className="fhome__list">
           {products.length > 0 ? (
-            products.slice(0, 6).map((product) => (
-              <div
-                key={product.productId}
-                className="productCard"
-                onClick={handleProductClick(product.productId)}
-              >
-                <div className="productCard__img">
-                  <img src={getImageUrl(product.imageUrls[0])} />
-                </div>
-                <div className="productCard__infos">
-                  <div className="productCard__infos-status productCard__infos-status--active">
-                    <p className="productCard__text productCard__text--icon"></p>
-                    <p className="productCard__text productCard__text--subtitle">
-                      開抽中
-                    </p>
-                  </div>
-                  <div className="productCard__infos-data">
-                    <p className="productCard__text productCard__text--title">
-                      {product.productName}
-                    </p>
-                    <p className="productCard__text productCard__text--subtitle">
-                      {product.productName}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))
+            products
+              .slice(0, 6)
+              .map((product, index) => (
+                <ProductCard
+                  key={product.productId}
+                  product={product}
+                  className="prouctCard--mall"
+                />
+              ))
           ) : (
             <>
               <NoData />

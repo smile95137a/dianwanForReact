@@ -3,6 +3,7 @@ $root-block-name: '.productCard';
 #{$root-block-name} {
   $p: &;
   $p__text: #{$p}__text;
+  $p__icon: #{$p}__icon;
   $p__img: #{$p}__img;
   $p__infos: #{$p}__infos;
   border-radius: 10px;
@@ -34,16 +35,21 @@ $root-block-name: '.productCard';
     height: 87.54px;
 
     &-status {
-      padding: 20px;
+      padding: 10px 20px;
+
       &--active {
         width: 100%;
         max-width: 192px;
         background: #2a88cb;
         display: flex;
         align-items: center;
+        #{$p__icon} {
+          display: flex;
+          align-items: center;
+          font-size: 58px;
+          color: #ffffff;
+        }
         #{$p__text} {
-          &--icon {
-          }
           color: #ffffff;
           font-size: 20px;
           font-weight: 700;
@@ -51,7 +57,7 @@ $root-block-name: '.productCard';
       }
     }
     &-data {
-      padding: 20px;
+      padding: 10px 20px;
       flex: 1;
       display: flex;
       flex-direction: column;

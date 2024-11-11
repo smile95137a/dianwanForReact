@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build-force": "vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -29,10 +30,13 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.13",
     "@types/moment": "^2.13.0",
     "@types/node": "^20.12.12",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
+    "@types/react-flatpickr": "^3.8.11",
+    "@types/slick-carousel": "^1.6.40",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react-swc": "^3.5.0",

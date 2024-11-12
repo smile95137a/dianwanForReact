@@ -6,6 +6,13 @@ $root-block-name: '.login';
   $p__btn: #{$p}__btn;
   @include flex(center, center);
   height: 100%;
+  padding: 0 0 64px 0;
+  max-width: 1280px;
+  margin: 0 auto;
+
+  @include screen(lg) {
+    margin: 0 24px;
+  }
 
   &__container {
     @include w_h(100%, 100%);
@@ -75,7 +82,7 @@ $root-block-name: '.login';
     @include flex(center, center);
     @include w_h(100%, 48px);
     border-radius: 90px;
-    background: #fe4206;
+    background: #4285f4;
     color: #fff;
 
     font-size: 20px;
@@ -87,7 +94,12 @@ $root-block-name: '.login';
     max-width: 365px;
     @include flex(null, null, column);
     &-img {
+      flex: 1;
       width: 100%;
+      @include flex(center, center);
+      img {
+        max-width: 249px;
+      }
     }
 
     &-info {
@@ -122,7 +134,7 @@ $root-block-name: '.login';
     &-text {
       @include abs-center;
       color: #949494;
-      background-color: #fee7cc;
+      background-color: #fff;
       padding: 0 24px;
       font-family: Noto Sans TC;
       font-size: 15px;

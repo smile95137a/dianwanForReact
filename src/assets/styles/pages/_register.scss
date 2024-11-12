@@ -6,6 +6,13 @@ $root-block-name: '.register';
   $p__btn: #{$p}__btn;
   @include flex(center, center);
   height: 100%;
+  padding: 0 0 64px 0;
+  max-width: 1280px;
+  margin: 0 auto;
+
+  @include screen(lg) {
+    margin: 0 24px;
+  }
 
   &__container {
     @include w_h(100%, 100%);
@@ -111,7 +118,7 @@ $root-block-name: '.register';
     @include flex(center, center);
     @include w_h(100%, 48px);
     border-radius: 90px;
-    background: #fe4206;
+    background: #2a88cb;
     color: #fff;
 
     font-size: 20px;

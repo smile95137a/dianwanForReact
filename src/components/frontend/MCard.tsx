@@ -1,13 +1,13 @@
-import { FC, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 
 interface ICardProps {
-  title?: string;
-  content: ReactNode;
   customClass?: string;
+  title?: string;
+  children?: ReactNode;
 }
 
-const Card: FC<ICardProps> = ({ title, content, customClass }) => {
-  const cardClass = `mcard ${customClass || ''}`.trim();
+const Card: React.FC<ICardProps> = ({ customClass = '', title, children }) => {
+  const cardClass = `mcard ${customClass}`.trim();
 
   return (
     <div className={cardClass}>
@@ -16,7 +16,7 @@ const Card: FC<ICardProps> = ({ title, content, customClass }) => {
           <p className="mcard__text">{title}</p>
         </div>
       )}
-      <div className="mcard__content">{content}</div>
+      <div className="mcard__content">{children}</div>
     </div>
   );
 };

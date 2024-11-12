@@ -1,13 +1,19 @@
+import React from 'react';
 import moment from 'moment';
 
 interface DateFormatterProps {
-  date: string | Date;
+  date: string | Date | null;
+  format?: string;
 }
 
-const DateFormatter: React.FC<DateFormatterProps> = ({ date }) => {
-  const formattedDate = moment(date).isValid()
-    ? moment(date).format('YYYY-MM-DD HH:mm')
-    : '';
+const DateFormatter: React.FC<DateFormatterProps> = ({
+  date,
+  format = 'YYYY-MM-DD HH:mm',
+}) => {
+  const formattedDate =
+    date && moment(date).isValid()
+      ? moment(date).format(format)
+      : 'Invalid Date';
 
   return <>{formattedDate}</>;
 };

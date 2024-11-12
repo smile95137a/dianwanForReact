@@ -3,7 +3,7 @@ import { getProductDetailById } from '@/services/frontend/productDetailService';
 import { getProductById } from '@/services/frontend/productService';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import TitleBar from './TitleBar';
+import TitleBar from '../../components/frontend/TitleBar';
 import { BsHandbag } from 'react-icons/bs';
 import { getImageUrl } from '@/utils/ImageUtils';
 import boxClose from '@/assets/image/box-close.png';

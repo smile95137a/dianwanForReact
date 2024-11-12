@@ -3,29 +3,44 @@ $root-block-name: '.news';
 #{$root-block-name} {
   $p: &;
   $p__text: #{$p}__text;
+  $p__icon: #{$p}__icon;
+  @include flex(null, null, column);
+  gap: 36px;
+  padding: 0 0 64px 0;
+  max-width: 1280px;
+  margin: 0 auto;
 
-  &__title {
-    @include flex(center, center);
-    #{$p__text} {
-      font-size: 60px;
-      font-weight: 400;
-      position: relative;
-      background: linear-gradient(272.26deg, #e5d36a -1.05%, #cf8046 98.1%);
-      -webkit-background-clip: text;
-      color: transparent;
-      &::after {
-        content: attr(data-text);
-        left: 0;
-        position: absolute;
-        text-shadow: -2px 0 1px #000, 0 2px 1px #000, 2px 0 1px #000,
-          0 -2px 1px #000;
-        top: 0;
-        z-index: -1; /* this slides the shadow behind its parent (the actual text) */
+  @include screen(lg) {
+    margin: 0 24px;
+  }
+
+  &__header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 96px 0;
+    padding: 48px 0;
+    border-bottom: 1px solid #2a88cb;
+    position: relative;
+
+    &-title {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      #{$p__icon} {
+        width: 60px;
+        height: 60px;
+        font-size: 32px;
       }
-
-      @include screen(md) {
-        font-size: 30px;
-        font-weight: 400;
+      #{$p__text} {
+        font-size: 36px;
+        font-weight: 700;
+        color: #2a88cb;
       }
     }
   }
@@ -33,11 +48,21 @@ $root-block-name: '.news';
   &__list {
     @include flex(null, null, column);
     gap: 24px;
+  }
 
-    &-item {
-      padding: 24px 0;
-      border-bottom: 1px solid #aeaeb2;
-
+  &__item {
+    padding: 24px 0;
+    border-bottom: 1px solid #aeaeb2;
+    display: flex;
+    gap: 24px;
+    &-img {
+      width: 100%;
+      height: 100%;
+      max-width: 250px;
+      max-height: 250px;
+    }
+    &-content {
+      flex: 1;
       #{$p__text} {
         &--title {
           font-size: 18px;

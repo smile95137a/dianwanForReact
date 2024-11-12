@@ -4,6 +4,7 @@ $root-block-name: '.mcard';
   $p: &;
   $p__text: #{$p}__text;
   $p__header: #{$p}__header;
+  $p__content: #{$p}__content;
 
   @include flex(null, null, column);
   border-radius: 30px;
@@ -26,6 +27,16 @@ $root-block-name: '.mcard';
 
   &--memberCenter {
     min-height: 1315px;
+    #{$p__content} {
+      padding: 24px;
+
+      @include screen(lg) {
+        padding: 12px;
+      }
+      @include screen(md) {
+        padding: 6px;
+      }
+    }
   }
 
   &--login {

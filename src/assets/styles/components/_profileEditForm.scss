@@ -1,0 +1,98 @@
+$root-block-name: '.profileEditForm';
+
+#{$root-block-name} {
+  $p: &;
+  $p__text: #{$p}__text;
+
+  padding: 32px 16px;
+  position: relative;
+  &__title {
+    @include screen(md) {
+      @include flex(null, center);
+    }
+    #{$p__text} {
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 1px;
+      background: #7c7c7c;
+    }
+  }
+
+  &__main {
+    @include flex(null);
+
+    @include screen(md) {
+      @include flex(null, null, column);
+    }
+  }
+
+  &__form {
+    flex: 50%;
+    max-width: 342px;
+    @include screen(md) {
+      flex: 100%;
+      max-width: none;
+    }
+    &--other {
+      margin-left: 80px;
+      @include screen(md) {
+        margin-left: 0;
+      }
+    }
+    &-inputs {
+    }
+    #{$p__text} {
+      min-height: 22px;
+      color: #212121;
+      @include flex(end);
+      &--required {
+        &::after {
+          content: '*';
+          color: #fe4206;
+          display: block;
+          margin-left: 4px;
+        }
+      }
+      &--error {
+        color: #fe4206;
+      }
+      margin-bottom: 4px;
+    }
+
+    &-input {
+      @include w_h(100%, 50px);
+      padding: 14px 20px;
+      border-radius: 8px;
+      border: 1px solid #d4d4d4;
+      &--error {
+        border: 1px solid #fe4206;
+      }
+    }
+  }
+
+  &__btns {
+    margin: 48px 0 0 0;
+    @include flex(center, center);
+  }
+  &__btn {
+    @include flex(center, center);
+    width: 100%;
+    max-width: 226px;
+    height: 48px;
+    border-radius: 90px;
+    background: #2a88cb;
+    #{$p__text} {
+      font-size: 20px;
+      font-weight: 900;
+      color: #fff;
+    }
+  }
+}

@@ -26,6 +26,13 @@ import MallProductDetail from '@/pages/frontend/MallProductDetail';
 import { FrontendDialogProvider } from '@/context/frontend/FrontendDialogProvider';
 import Cart from '@/pages/frontend/Cart';
 import OrderSuccess from '@/pages/frontend/OrderSuccess';
+import MemberCenter from '@/pages/frontend/memberCenter/MemberCenter';
+import OrderHistory from '@/pages/frontend/memberCenter/OrderHistory';
+import Rewards from '@/pages/frontend/memberCenter/Rewards';
+import ProfileEdit from '@/pages/frontend/memberCenter/ProfileEdit';
+import PurchaseHistory from '@/pages/frontend/memberCenter/PurchaseHistory';
+import NewsDetail from '@/pages/frontend/NewsDetail';
+import News from '@/pages/frontend/News';
 
 const FrontendRoutes: RouteObject[] = [
   {
@@ -45,6 +52,19 @@ const FrontendRoutes: RouteObject[] = [
       { path: 'mallProduct/:id', element: <MallProductDetail /> },
       { path: 'cart', element: <Cart /> },
       { path: 'orderSuccess', element: <OrderSuccess /> },
+      {
+        path: 'member-center',
+        element: <MemberCenter />,
+        children: [
+          { path: '', element: <Navigate to="profile-edit" /> },
+          { path: 'order-history', element: <OrderHistory /> },
+          { path: 'profile-edit', element: <ProfileEdit /> },
+          { path: 'purchase-history', element: <PurchaseHistory /> },
+          { path: 'rewards', element: <Rewards /> },
+        ],
+      },
+      { path: 'news', element: <News /> },
+      { path: 'news/:newsUid', element: <NewsDetail /> },
       { path: 'notfound', element: <NotFound /> },
       { path: '', element: <Navigate to="main" /> },
     ],

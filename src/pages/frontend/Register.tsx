@@ -2,8 +2,11 @@ import { MSelect } from '@/components/frontend/FormSelect';
 import MCard from '@/components/frontend/MCard';
 import { getAllCityNames } from '@/services/frontend/taiwanCitiesService';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
+  const navigate = useNavigate();
+
   const [cityOptions, setCityOptions] = useState<
     { value: string; label: string }[]
   >([]);
@@ -18,6 +21,10 @@ const Register = () => {
       ...cities.map((city) => ({ value: city, label: city })),
     ]);
   }, []);
+
+  const handleRegisterClick = () => {
+    navigate('/member-center');
+  };
 
   return (
     <div className="register">
@@ -121,7 +128,11 @@ const Register = () => {
             </div>
             <p className="register__text register__text--error"></p>
             <div className="register__other-btn">
-              <button type="submit" className="register__btn">
+              <button
+                type="button"
+                onClick={handleRegisterClick}
+                className="register__btn"
+              >
                 註冊成為會員
               </button>
             </div>

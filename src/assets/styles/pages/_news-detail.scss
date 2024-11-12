@@ -3,7 +3,13 @@ $root-block-name: '.newsDetail';
 #{$root-block-name} {
   $p: &;
   $p__text: #{$p}__text;
+  padding: 0 0 64px 0;
+  max-width: 1280px;
+  margin: 0 auto;
 
+  @include screen(lg) {
+    margin: 0 24px;
+  }
   &__title {
     @include flex(center, space-between);
     #{$p__text} {

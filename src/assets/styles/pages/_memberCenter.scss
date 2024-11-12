@@ -3,7 +3,17 @@ $root-block-name: '.memberCenter';
 #{$root-block-name} {
   $p: &;
   $p__text: #{$p}__text;
+  $p__btn: #{$p}__btn;
   @include flex;
+  height: 100%;
+  padding: 0 0 64px 0;
+  max-width: 1280px;
+  margin: 0 auto;
+
+  @include screen(lg) {
+    margin: 0 24px;
+  }
+
   @include screen(md) {
     @include flex(null, null, column);
   }
@@ -35,7 +45,7 @@ $root-block-name: '.memberCenter';
       @include flex(null, null);
       width: 100%;
       height: 58px;
-      border-bottom: 1px solid #cf8046;
+      border-bottom: 1px solid #2a88cb;
       @include screen(md) {
         width: auto;
         flex: calc(50% - 24px);
@@ -55,12 +65,12 @@ $root-block-name: '.memberCenter';
 
       &--active {
         #{$p__text} {
-          color: #cf8046;
+          color: #2a88cb;
         }
       }
     }
     &-icon {
-      color: #cf8046;
+      color: #2a88cb;
       font-size: 24px;
       margin-right: 20px;
       @include screen(md) {
@@ -91,22 +101,14 @@ $root-block-name: '.memberCenter';
     }
 
     &-icon {
-      width: 100%;
-      height: 100%;
-      min-width: 60px;
-      min-height: 60px;
-      max-width: 120px;
-      max-height: 120px;
+      width: 95px;
+      height: 95px;
+      border-radius: 50%;
+      padding: 12px;
+      font-size: 76px;
+      background-color: #2a88cb;
+      color: #fff;
       @include flex(end, center);
-      @include screen(md) {
-        width: 60px;
-        height: 60px;
-      }
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
     }
 
     &-info {
@@ -142,177 +144,6 @@ $root-block-name: '.memberCenter';
       width: 100%;
       height: 1px;
       background: #7c7c7c;
-    }
-  }
-
-  &__profileEditForm {
-    padding: 32px 16px;
-    position: relative;
-    &-title {
-      @include screen(md) {
-        @include flex(null, center);
-      }
-      #{$p__text} {
-        font-size: 24px;
-        font-weight: 900;
-      }
-
-      &::after {
-        content: '';
-        display: block;
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        height: 1px;
-        background: #7c7c7c;
-      }
-    }
-
-    &-main {
-      @include flex(null);
-
-      @include screen(md) {
-        @include flex(null, null, column);
-      }
-    }
-
-    &-form {
-      flex: 50%;
-      max-width: 342px;
-      @include screen(md) {
-        flex: 100%;
-        max-width: none;
-      }
-      &--other {
-        margin-left: 80px;
-        @include screen(md) {
-          margin-left: 0;
-        }
-      }
-      &-inputs {
-      }
-      #{$p__text} {
-        min-height: 22px;
-        color: #212121;
-        @include flex(end);
-        &--required {
-          &::after {
-            content: '*';
-            color: #fe4206;
-            display: block;
-            margin-left: 4px;
-          }
-        }
-        &--error {
-          color: #fe4206;
-        }
-        margin-bottom: 4px;
-      }
-
-      &-input {
-        @include w_h(100%, 50px);
-        padding: 14px 20px;
-        border-radius: 8px;
-        border: 1px solid #d4d4d4;
-        &--error {
-          border: 1px solid #fe4206;
-        }
-      }
-    }
-
-    &-btns {
-      margin: 48px 0 0 0;
-      @include flex(center, center);
-    }
-    &-btn {
-      @include flex(center, center);
-      width: 100%;
-      max-width: 226px;
-      height: 48px;
-      border-radius: 90px;
-      background: #fe4206;
-      #{$p__text} {
-        font-size: 20px;
-        font-weight: 900;
-        color: #fff;
-      }
-    }
-  }
-
-  &__profileEditInvoiceForm {
-    padding: 32px 16px;
-    position: relative;
-    &-title {
-      @include screen(md) {
-        @include flex(null, center);
-      }
-      #{$p__text} {
-        font-size: 24px;
-        font-weight: 900;
-      }
-    }
-
-    &-main {
-      @include flex(null);
-      @include screen(md) {
-        @include flex(null, null, column);
-      }
-    }
-
-    &-form {
-      flex: 50%;
-      max-width: 342px;
-      @include screen(md) {
-        flex: 100%;
-        max-width: none;
-      }
-      &--other {
-        margin-left: 80px;
-        @include screen(md) {
-          margin: 0;
-        }
-      }
-      &-inputs {
-      }
-      #{$p__text} {
-        min-height: 22px;
-        color: #212121;
-        @include flex(end);
-        &--required {
-          &::after {
-            content: '*';
-            color: #fe4206;
-            display: block;
-            margin-left: 4px;
-          }
-        }
-        margin-bottom: 4px;
-      }
-
-      &-input {
-        @include w_h(100%, 50px);
-        padding: 14px 20px;
-        border-radius: 8px;
-        border: 1px solid #d4d4d4;
-      }
-    }
-
-    &-btns {
-      margin: 48px 0 0 0;
-      @include flex(center, center);
-    }
-    &-btn {
-      @include flex(center, center);
-      width: 100%;
-      max-width: 226px;
-      height: 48px;
-      border-radius: 90px;
-      background: #fe4206;
-      #{$p__text} {
-        font-size: 20px;
-        font-weight: 900;
-        color: #fff;
-      }
     }
   }
 
@@ -451,7 +282,7 @@ $root-block-name: '.memberCenter';
         height: 25px;
         border-radius: 12px;
         color: #fff;
-        background: #cf8046;
+        background: #2a88cb;
         font-size: 14px;
         font-weight: 400;
       }
@@ -547,7 +378,7 @@ $root-block-name: '.memberCenter';
       max-width: 226px;
       height: 48px;
       border-radius: 90px;
-      background: #fe4206;
+      background: #2a88cb;
       #{$p__text} {
         font-size: 20px;
         font-weight: 900;
@@ -643,7 +474,7 @@ $root-block-name: '.memberCenter';
       max-width: 226px;
       height: 48px;
       border-radius: 90px;
-      background: #fe4206;
+      background: #2a88cb;
       #{$p__text} {
         font-size: 20px;
         font-weight: 900;

@@ -8,7 +8,7 @@ import { getImageUrl } from '@/utils/ImageUtils';
 import React, { useEffect, useState } from 'react';
 import { BsHandbag } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
-import TitleBar from './TitleBar';
+import TitleBar from '../../components/frontend/TitleBar';
 import bg from '@/assets/image/bg1.jpeg';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';

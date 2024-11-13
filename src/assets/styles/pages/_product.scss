@@ -106,9 +106,21 @@ $root-block-name: '.fproduct';
   &__item {
     display: flex;
     gap: 12px;
+    position: relative;
+    @include screen(lg) {
+      flex-direction: column;
+    }
     &-main {
       flex: 1;
       height: 100%;
+      @include screen(lg) {
+        max-width: 192px;
+        max-height: 125px;
+        position: absolute;
+        top: 0;
+        z-index: 1;
+        overflow: hidden;
+      }
     }
     &-detail {
       width: 100%;
@@ -126,7 +138,9 @@ $root-block-name: '.fproduct';
       padding: 12px 0;
       @include screen(lg) {
         flex-direction: column;
-        height: auto;
+        height: 125px;
+        position: absolute;
+        top: 0;
       }
     }
     &-infoDetail {
@@ -139,6 +153,8 @@ $root-block-name: '.fproduct';
         border-right: 1px solid #fff;
       }
       @include screen(lg) {
+        width: 100%;
+        text-align: right;
         &:first-child {
           border: 0;
         }
@@ -150,6 +166,9 @@ $root-block-name: '.fproduct';
       }
     }
     &-list {
+      @include screen(lg) {
+        margin-top: 125px;
+      }
     }
     &-listItem {
       display: flex;

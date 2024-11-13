@@ -14,7 +14,7 @@ const navItems = [
   { to: '/news', icon: <FaBullhorn />, label: '最新消息' },
   { to: '/mallProduct', icon: <RiShoppingBagLine />, label: '商城' },
   { to: '/product2', icon: <FaToolbox />, label: '賞品盒' },
-  { to: '/memberCenter', icon: <RiUserLine />, label: '會員中心' },
+  { to: '/member-center', icon: <RiUserLine />, label: '會員中心' },
   { to: '/cart', icon: <IoCartOutline />, label: '購物車' },
 ];
 

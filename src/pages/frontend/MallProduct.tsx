@@ -104,7 +104,7 @@ const MallProduct = () => {
         </div>
       </div>
       <div className="fMallProduct__list">
-        {products.length > 0 ? (
+        {products.length > 0 &&
           pagination.currentPageItems.map((product) => (
             <div
               className="fMallProduct__item"
@@ -118,14 +118,19 @@ const MallProduct = () => {
                 />
               </div>
             </div>
-          ))
-        ) : (
-          <>
-            <NoData />
-          </>
-        )}
+          ))}
       </div>
-      <Pagination {...pagination} />
+      {products.length > 0 && (
+        <>
+          <Pagination {...pagination} />
+        </>
+      )}
+
+      {products.length === 0 && (
+        <>
+          <NoData />
+        </>
+      )}
     </div>
   );
 };

@@ -24,9 +24,8 @@ const MemberManagement = () => {
 
   const pagination = usePagination({
     list: users,
-    pageLimitSize: 10,
+    pageLimitSize: 3,
     initialPage: 1,
-    showPaginationPageNum: 5,
   });
 
   useEffect(() => {

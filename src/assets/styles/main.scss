@@ -36,6 +36,7 @@
 
 @import 'components/frontend/dialog/dialog';
 @import 'components/frontend/dialog/confirm-dialog';
+@import 'components/frontend/f-pagination';
 // Layout
 @import 'layout/bheader';
 @import 'layout/fheader';
@@ -47,7 +48,7 @@
 @import 'pages/login';
 @import 'pages/register';
 @import 'pages/product';
-@import 'pages/product2';
+@import 'pages/fMallProduct';
 @import 'pages/product3';
 @import 'pages/product-detail';
 @import 'pages/product-detail-one';

@@ -24,10 +24,10 @@ const Pagination = ({
 }: IPaginationComponentProps) => {
   return (
     <>
-      <div className="bPagination">
+      <div className="fPagination">
         <button
           type="button"
-          className="bPagination__btn"
+          className="fPagination__btn"
           onClick={() => goToPage(1)}
           disabled={currentPage === 1}
         >
@@ -36,29 +36,29 @@ const Pagination = ({
 
         <button
           type="button"
-          className="bPagination__btn"
+          className="fPagination__btn"
           onClick={previousPage}
           disabled={currentPage === 1}
         >
           <FaAngleLeft />
         </button>
 
-        <div className="bPagination__items">
+        <div className="fPagination__items">
           {renderPaginationNums.map((pageNum, index) =>
             pageNum === '...' ? (
-              <span key={`ellipsis-${index}`} className="bPagination__ellipsis">
+              <span key={`ellipsis-${index}`} className="fPagination__ellipsis">
                 ...
               </span>
             ) : (
               <div
                 key={pageNum}
                 onClick={() => goToPage(pageNum as number)}
-                className="bPagination__item"
+                className="fPagination__item"
               >
                 <button
                   type="button"
-                  className={`bPagination__btn ${
-                    pageNum === currentPage ? 'bPagination__btn--active' : ''
+                  className={`fPagination__btn ${
+                    pageNum === currentPage ? 'fPagination__btn--active' : ''
                   }`}
                 >
                   {pageNum}
@@ -70,7 +70,7 @@ const Pagination = ({
 
         <button
           type="button"
-          className="bPagination__btn"
+          className="fPagination__btn"
           onClick={nextPage}
           disabled={currentPage === totalPages}
         >
@@ -79,7 +79,7 @@ const Pagination = ({
 
         <button
           type="button"
-          className="bPagination__btn"
+          className="fPagination__btn"
           onClick={() => goToPage(totalPages)}
           disabled={currentPage === totalPages}
         >

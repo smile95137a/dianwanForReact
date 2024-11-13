@@ -8,13 +8,11 @@ const NewsDetail: React.FC = () => {
   const { newsUid } = useParams<{ newsUid: string }>(); // Get newsUid from URL
   const [newsItem, setNewsItem] = useState<any | null>(null);
 
-  // Breadcrumb items
   const [breadcrumbItems, setBreadcrumbItems] = useState([
     { name: '首頁', path: '/' },
     { name: '最新消息', path: '/news' },
   ]);
 
-  // Fetch news detail
   const fetchNewsDetail = async (uid: string) => {
     try {
       const { success, data, message } = await getNewsById(uid);
@@ -36,10 +34,10 @@ const NewsDetail: React.FC = () => {
   }, [newsUid]);
 
   return (
-    <div>
+    <div className="newsDetail">
       <Breadcrumbs items={breadcrumbItems} />
       {newsItem ? (
-        <div className="newsDetail">
+        <>
           <div className="newsDetail__title">
             <div className="newsDetail__title-title">
               <p className="newsDetail__text">{newsItem.title}</p>
@@ -61,7 +59,7 @@ const NewsDetail: React.FC = () => {
             className="newsDetail__fullContent"
             dangerouslySetInnerHTML={{ __html: newsItem.content }}
           ></div>
-        </div>
+        </>
       ) : (
         <p>Loading...</p>
       )}

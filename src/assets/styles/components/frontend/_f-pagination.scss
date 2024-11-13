@@ -1,0 +1,38 @@
+$root-block-name: '.fPagination';
+
+#{$root-block-name} {
+  $p: &;
+  $p__item: #{$p}__item;
+  $p__btn: #{$p}__btn;
+  @include flex(center, center);
+
+  &__btn {
+    @include w_h(26px, 26px);
+    @include flex(center, center);
+    border-radius: 10px;
+    color: #2a88cb;
+    background: #fff;
+    &:hover:not(#{$p__btn}--active):not(:disabled) {
+    }
+
+    &:disabled {
+      color: #a0a0a0;
+      cursor: not-allowed;
+    }
+  }
+
+  &__items {
+    @include flex(center, center);
+    margin: 0 10px;
+    gap: 10px;
+    #{$p__item} {
+      @include w_h(32px, 32px);
+      @include flex(center, center);
+
+      #{$p__btn} {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}

@@ -1,6 +1,8 @@
 import CircleIcon from '@/components/frontend/CircleIcon';
 import NoData from '@/components/frontend/NoData';
+import Pagination from '@/components/frontend/Pagination';
 import ProductCard from '@/components/frontend/ProductCard';
+import { usePagination } from '@/hooks/usePagination';
 import {
   IProduct,
   getAllProductList,
@@ -16,6 +18,12 @@ const Product = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
 
   const navigate = useNavigate();
+
+  const pagination = usePagination({
+    list: products,
+    pageLimitSize: 10,
+    initialPage: 1,
+  });
 
   const fetchProducts = async () => {
     try {
@@ -96,78 +104,47 @@ const Product = () => {
       </div>
       <div className="fproduct__list">
         {products.length > 0 ? (
-          products.map((product) => (
-            <div
-              className="fproduct__item"
-              onClick={handleProductClick(product.productId)}
-            >
-              <div className="fproduct__item-main">
-                <ProductCard key={product.productId} product={product} />
-              </div>
-              <div className="fproduct__item-detail">
-                <div className="fproduct__item-info">
-                  <div className="fproduct__item-infoDetail">
-                    <p className="fproduct__text">箱號：12298</p>
-                    <p className="fproduct__text">剩 511 抽</p>
-                  </div>
-                  <div className="fproduct__item-infoDetail">
-                    <p className="fproduct__text">每抽：350 元</p>
-                    <p className="fproduct__text">10 抽 3000 元</p>
-                  </div>
-                </div>
-                <div className="fproduct__item-list">
-                  <p className="fproduct__item-listItem">
-                    <span className="fproduct__text">SP賞</span>
-                    <span className="fproduct__text">
-                      Switch oled版顏色隨機
-                    </span>
-                    <span className="fproduct__text">1/1</span>
-                  </p>{' '}
-                  <p className="fproduct__item-listItem">
-                    <span className="fproduct__text">SP賞</span>
-                    <span className="fproduct__text">
-                      Switch oled版顏色隨機
-                    </span>
-                    <span className="fproduct__text">1/1</span>
-                  </p>{' '}
-                  <p className="fproduct__item-listItem">
-                    <span className="fproduct__text">SP賞</span>
-                    <span className="fproduct__text">
-                      Switch oled版顏色隨機
-                    </span>
-                    <span className="fproduct__text">1/1</span>
-                  </p>{' '}
-                  <p className="fproduct__item-listItem">
-                    <span className="fproduct__text">SP賞</span>
-                    <span className="fproduct__text">
-                      Switch oled版顏色隨機
-                    </span>
-                    <span className="fproduct__text">1/1</span>
-                  </p>{' '}
-                  <p className="fproduct__item-listItem">
-                    <span className="fproduct__text">SP賞</span>
-                    <span className="fproduct__text">
-                      Switch oled版顏色隨機
-                    </span>
-                    <span className="fproduct__text">1/1</span>
-                  </p>{' '}
-                  <p className="fproduct__item-listItem">
-                    <span className="fproduct__text">SP賞</span>
-                    <span className="fproduct__text">
-                      Switch oled版顏色隨機
-                    </span>
-                    <span className="fproduct__text">1/1</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))
-        ) : (
           <>
-            <NoData />
+            {pagination.currentPageItems.map((product) => (
+              <div
+                key={product.productId}
+                className="fproduct__item"
+                onClick={handleProductClick(product.productId)}
+              >
+                <div className="fproduct__item-main">
+                  <ProductCard product={product} />
+                </div>
+                <div className="fproduct__item-detail">
+                  <div className="fproduct__item-info">
+                    <div className="fproduct__item-infoDetail">
+                      <p className="fproduct__text">箱號：12298</p>
+                      <p className="fproduct__text">剩 511 抽</p>
+                    </div>
+                    <div className="fproduct__item-infoDetail">
+                      <p className="fproduct__text">每抽：350 元</p>
+                      <p className="fproduct__text">10 抽 3000 元</p>
+                    </div>
+                  </div>
+                  <div className="fproduct__item-list">
+                    {[...Array(5)].map((_, index) => (
+                      <p key={index} className="fproduct__item-listItem">
+                        <span className="fproduct__text">SP賞</span>
+                        <span className="fproduct__text">
+                          Switch oled版顏色隨機
+                        </span>
+                        <span className="fproduct__text">1/1</span>
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
           </>
+        ) : (
+          <NoData />
         )}
       </div>
+      <Pagination {...pagination} />
     </div>
   );
 };

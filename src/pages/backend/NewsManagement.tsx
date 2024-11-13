@@ -15,7 +15,6 @@ const NewsManagement = () => {
     list: newsList,
     pageLimitSize: 10,
     initialPage: 1,
-    showPaginationPageNum: 5,
   });
 
   useEffect(() => {

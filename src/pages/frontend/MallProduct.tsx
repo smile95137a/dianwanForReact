@@ -1,6 +1,8 @@
 import CircleIcon from '@/components/frontend/CircleIcon';
 import NoData from '@/components/frontend/NoData';
+import Pagination from '@/components/frontend/Pagination';
 import ProductCard from '@/components/frontend/ProductCard';
+import { usePagination } from '@/hooks/usePagination';
 import { getPagedStoreProducts } from '@/services/frontend/storeProductService';
 import React, { useEffect, useState } from 'react';
 import { BsHandbag } from 'react-icons/bs';
@@ -10,6 +12,11 @@ import { useNavigate } from 'react-router-dom';
 const MallProduct = () => {
   const [sortOrder, setSortOrder] = useState('newest');
   const [products, setProducts] = useState<any[]>([]);
+  const pagination = usePagination({
+    list: products,
+    pageLimitSize: 10,
+    initialPage: 1,
+  });
 
   const navigate = useNavigate();
 
@@ -98,7 +105,7 @@ const MallProduct = () => {
       </div>
       <div className="fMallProduct__list">
         {products.length > 0 ? (
-          products.map((product) => (
+          pagination.currentPageItems.map((product) => (
             <div
               className="fMallProduct__item"
               onClick={handleProductClick(product.productCode)}
@@ -118,6 +125,7 @@ const MallProduct = () => {
           </>
         )}
       </div>
+      <Pagination {...pagination} />
     </div>
   );
 };

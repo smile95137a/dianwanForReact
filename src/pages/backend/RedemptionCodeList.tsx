@@ -18,7 +18,6 @@ const RedemptionCodeList = () => {
     list: codeList,
     pageLimitSize: 10,
     initialPage: 1,
-    showPaginationPageNum: 5,
   });
 
   useEffect(() => {

@@ -1,18 +1,15 @@
 import { useMemo, useState } from 'react';
 
-const DEFAULT_SHOW_PAGINATION_PAGE_NUM = 3;
-
 export interface PaginationProps<T> {
   list: T[];
   pageLimitSize: number;
   initialPage?: number;
-  showPaginationPageNum?: number;
 }
 
 export interface PaginationRange<T> {
   totalPages: number;
   currentPageItems: T[];
-  renderPaginationNums: number[];
+  renderPaginationNums: (number | '...')[];
   currentPage: number;
   nextPage: () => void;
   previousPage: () => void;
@@ -23,7 +20,6 @@ export const usePagination = <T>({
   list,
   pageLimitSize,
   initialPage = 1,
-  showPaginationPageNum = DEFAULT_SHOW_PAGINATION_PAGE_NUM,
 }: PaginationProps<T>): PaginationRange<T> => {
   const initialPosition = (initialPage - 1) * pageLimitSize;
   const [position, setPosition] = useState(initialPosition);
@@ -49,21 +45,38 @@ export const usePagination = <T>({
         ? totalPages
         : Math.floor(position / pageLimitSize) + 1;
 
-    const showPageNum =
-      showPaginationPageNum > totalPages ? totalPages : showPaginationPageNum;
-    const centerIndex = Math.ceil(showPageNum / 2);
-    const diff = showPageNum - centerIndex;
-    const firstIndex =
-      centerIndex >= currentPage
-        ? 1
-        : currentPage + diff >= totalPages
-        ? totalPages - showPageNum + 1
-        : currentPage - diff;
+    const generatePaginationNums = (): (number | '...')[] => {
+      const paginationNums: (number | '...')[] = [];
 
-    const renderPaginationNums = Array.from(
-      { length: showPageNum },
-      (_, i) => i + firstIndex
-    );
+      if (totalPages <= 5) {
+        for (let i = 1; i <= totalPages; i++) {
+          paginationNums.push(i);
+        }
+      } else {
+        const leftSide = Math.max(2, currentPage - 1);
+        const rightSide = Math.min(totalPages - 1, currentPage + 1);
+
+        paginationNums.push(1);
+
+        if (leftSide > 2) {
+          paginationNums.push('...');
+        }
+
+        for (let i = leftSide; i <= rightSide; i++) {
+          paginationNums.push(i);
+        }
+
+        if (rightSide < totalPages - 1) {
+          paginationNums.push('...');
+        }
+
+        paginationNums.push(totalPages);
+      }
+
+      return paginationNums;
+    };
+
+    const renderPaginationNums = generatePaginationNums();
 
     const start = (currentPage - 1) * pageLimitSize;
     const end = start + pageLimitSize;
@@ -95,7 +108,7 @@ export const usePagination = <T>({
       previousPage,
       goToPage,
     };
-  }, [list, pageLimitSize, position, showPaginationPageNum]);
+  }, [list, pageLimitSize, position]);
 
   return paginationRange;
 };

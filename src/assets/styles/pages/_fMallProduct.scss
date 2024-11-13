@@ -8,6 +8,11 @@ $root-block-name: '.fMallProduct';
   padding: 0 0 64px 0;
   max-width: 1280px;
   margin: 0 auto;
+
+  @include screen(lg) {
+    margin: 0 24px;
+  }
+
   // fproduct__header
 
   &__header {
@@ -19,6 +24,10 @@ $root-block-name: '.fMallProduct';
     padding: 48px 0;
     border-bottom: 1px solid #2a88cb;
     position: relative;
+    @include screen(lg) {
+      flex-direction: column;
+      gap: 24px;
+    }
     &-search {
       width: 228px;
       height: 40px;
@@ -45,6 +54,10 @@ $root-block-name: '.fMallProduct';
           font-size: 16px;
         }
       }
+      @include screen(lg) {
+        width: 100%;
+        order: 2;
+      }
     }
 
     &-title {
@@ -65,9 +78,28 @@ $root-block-name: '.fMallProduct';
         font-weight: 700;
         color: #2a88cb;
       }
+
+      @include screen(lg) {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        width: 100%;
+        order: 1;
+        &::after {
+          content: '';
+          display: block;
+          flex: 1;
+          height: 1px; // Adjust height as needed
+          background-color: #2a88cb; // Adjust color as needed
+        }
+      }
     }
 
     &-nav {
+      @include screen(lg) {
+        order: 3;
+      }
     }
   }
   &__sort {
@@ -81,6 +113,13 @@ $root-block-name: '.fMallProduct';
       &--active {
         color: #7c7c7c;
       }
+      @include screen(lg) {
+        order: 3;
+        font-size: 12px;
+      }
+    }
+    @include screen(lg) {
+      gap: 12px;
     }
   }
 

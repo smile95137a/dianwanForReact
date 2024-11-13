@@ -24,6 +24,10 @@ $root-block-name: '.fproduct';
     padding: 48px 0;
     border-bottom: 1px solid #2a88cb;
     position: relative;
+    @include screen(lg) {
+      flex-direction: column;
+      gap: 24px;
+    }
     &-search {
       width: 228px;
       height: 40px;
@@ -50,6 +54,10 @@ $root-block-name: '.fproduct';
           font-size: 16px;
         }
       }
+      @include screen(lg) {
+        width: 100%;
+        order: 2;
+      }
     }
 
     &-title {
@@ -70,9 +78,28 @@ $root-block-name: '.fproduct';
         font-weight: 700;
         color: #2a88cb;
       }
+
+      @include screen(lg) {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        width: 100%;
+        order: 1;
+        &::after {
+          content: '';
+          display: block;
+          flex: 1;
+          height: 1px; // Adjust height as needed
+          background-color: #2a88cb; // Adjust color as needed
+        }
+      }
     }
 
     &-nav {
+      @include screen(lg) {
+        order: 3;
+      }
     }
   }
   &__sort {
@@ -86,6 +113,13 @@ $root-block-name: '.fproduct';
       &--active {
         color: #7c7c7c;
       }
+      @include screen(lg) {
+        order: 3;
+        font-size: 12px;
+      }
+    }
+    @include screen(lg) {
+      gap: 12px;
     }
   }
 

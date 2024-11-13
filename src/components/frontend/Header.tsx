@@ -43,6 +43,12 @@ const Header = () => {
           登入/註冊
         </Link>
       </div>
+
+      <div className="fheader__marquee">
+        <p className="fheader__text">
+          電玩賞通知跑馬燈電玩賞通知跑馬燈電玩賞通知跑馬燈電玩賞通知跑馬燈電玩賞通知跑馬燈電玩賞通知跑馬燈電玩賞通知跑馬燈電玩賞通知跑馬燈電玩賞通知跑馬燈
+        </p>
+      </div>
     </div>
   );
 };

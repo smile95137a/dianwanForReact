@@ -11,7 +11,6 @@ $root-block-name: '.fheader';
   position: relative;
 
   @include screen(lg) {
-    padding: 24px;
   }
   &::after {
     content: '';
@@ -72,8 +71,8 @@ $root-block-name: '.fheader';
   &__btns {
     @include flex(center);
     position: absolute;
+    top: 140px;
     right: 100px;
-    bottom: 24px;
     @include screen(lg) {
       top: 24px;
       right: 20px;
@@ -86,5 +85,30 @@ $root-block-name: '.fheader';
     height: 36px;
     border-radius: 50px;
     border: 1px solid;
+  }
+
+  &__marquee {
+    @include w_h(100%, 61px);
+    @include flex(center, center);
+    background: #85ffff;
+    overflow: hidden;
+    padding: 0 38px;
+    margin-top: 20px;
+
+    #{$p__text} {
+      font-size: 18px;
+      font-weight: 400;
+      word-break: keep-all;
+      animation: marquee 20s linear infinite;
+    }
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(150%);
+  }
+  to {
+    transform: translateX(-150%);
   }
 }

@@ -31,6 +31,7 @@ const Main = () => {
       setLoading(true);
       const allProductList = await getAllProductList();
       const pagedStoreProducts = await getPagedStoreProducts(0, 200);
+      setLoading(false);
       if (allProductList.success) {
         setProducts(allProductList.data);
       } else {
@@ -43,6 +44,7 @@ const Main = () => {
         console.log(pagedStoreProducts.message);
       }
     } catch (err) {
+      setLoading(false);
       console.error('Error fetching products:', err);
     }
   };

@@ -30,7 +30,9 @@ $root-block-name: '.footer';
         @include screen(md) {
           @include w_h(164px, 164px);
         }
-        object-fit: contain;
+        & {
+          object-fit: contain;
+        }
       }
     }
 

@@ -17,17 +17,20 @@ import { Pagination, Navigation } from 'swiper/modules';
 import { FaAngleRight, FaAngleLeft } from 'react-icons/fa';
 import { getPagedStoreProducts } from '@/services/frontend/storeProductService';
 import NoData from '@/components/frontend/NoData';
+import { useLoading } from '@/context/frontend/LoadingContext';
 
 const Main = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState<IProduct[]>([]);
   const [mallProducts, setMallProducts] = useState<any[]>([]);
 
+  const { setLoading } = useLoading();
+
   const fetchProducts = async () => {
     try {
+      setLoading(true);
       const allProductList = await getAllProductList();
       const pagedStoreProducts = await getPagedStoreProducts(0, 200);
-
       if (allProductList.success) {
         setProducts(allProductList.data);
       } else {

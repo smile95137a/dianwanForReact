@@ -27,12 +27,13 @@ $root-block-name: '.cart';
     border-radius: 30px;
     @include flex(center);
     padding: 24px 48px;
+    gap: 24px;
+
     @include screen(md) {
       padding: 12px;
       @include flex(center, null, column);
     }
 
-    gap: 24px;
     &-item {
       @include flex(center);
       &--selected {

@@ -38,14 +38,17 @@ import Faq from '@/pages/frontend/Faq';
 import Policy from '@/pages/frontend/Policy';
 import Privacy from '@/pages/frontend/Privacy';
 import ScrollToTop from '@/components/common/ScrollToTop';
+import { LoadingProvider } from '@/context/frontend/LoadingContext';
 
 const FrontendRoutes: RouteObject[] = [
   {
     path: '/',
     element: (
-      <FrontendDialogProvider>
-        <FrontendLayout />
-      </FrontendDialogProvider>
+      <LoadingProvider>
+        <FrontendDialogProvider>
+          <FrontendLayout />
+        </FrontendDialogProvider>
+      </LoadingProvider>
     ),
     children: [
       { path: 'login', element: <FLogin /> },

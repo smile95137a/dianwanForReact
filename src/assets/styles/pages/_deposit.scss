@@ -87,6 +87,7 @@ $root-block-name: '.deposit';
     font-size: 25px;
     font-weight: 400;
     transition: opacity 0.3s ease, transform 0.3s ease;
+    background: #fed706;
     @include screen(md) {
       width: 157px;
       height: 34px;
@@ -95,7 +96,6 @@ $root-block-name: '.deposit';
       font-size: 15px;
       font-weight: 400;
     }
-    background: #fed706;
     &:hover {
       transform: scale(1.05);
     }

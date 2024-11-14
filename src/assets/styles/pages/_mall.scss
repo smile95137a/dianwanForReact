@@ -46,11 +46,11 @@ $root-block-name: '.mall';
     border: 2px solid #000000;
     @include flex(center, center);
     cursor: pointer;
+    font-size: 18px;
+    font-weight: 400;
     input {
       display: none;
     }
-    font-size: 18px;
-    font-weight: 400;
 
     @include screen(md) {
       width: 157px;

@@ -8,15 +8,15 @@ $root-block-name: '.memberManagement';
   &__info {
     text-align: center;
     #{$p__text} {
+      font-size: 24px;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-top: 5px;
       &--title {
         font-size: 14px;
         color: #7f8c8d;
         font-weight: 500;
       }
-      font-size: 24px;
-      font-weight: 700;
-      color: #2c3e50;
-      margin-top: 5px;
     }
   }
 }

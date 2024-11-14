@@ -41,6 +41,7 @@ $root-block-name: '.profileEditInvoiceForm';
     #{$p__text} {
       min-height: 22px;
       color: #212121;
+      margin-bottom: 4px;
       @include flex(end);
       &--required {
         &::after {
@@ -50,7 +51,6 @@ $root-block-name: '.profileEditInvoiceForm';
           margin-left: 4px;
         }
       }
-      margin-bottom: 4px;
     }
 
     &-input {

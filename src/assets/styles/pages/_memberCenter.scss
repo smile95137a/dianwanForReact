@@ -346,6 +346,7 @@ $root-block-name: '.memberCenter';
         min-height: 22px;
         color: #212121;
         @include flex(end);
+        margin-bottom: 4px;
         &--required {
           &::after {
             content: '*';
@@ -354,7 +355,6 @@ $root-block-name: '.memberCenter';
             margin-left: 4px;
           }
         }
-        margin-bottom: 4px;
       }
 
       &-input {
@@ -442,6 +442,8 @@ $root-block-name: '.memberCenter';
         min-height: 22px;
         color: #212121;
         @include flex(end);
+        margin-bottom: 4px;
+
         &--required {
           &::after {
             content: '*';
@@ -450,7 +452,6 @@ $root-block-name: '.memberCenter';
             margin-left: 4px;
           }
         }
-        margin-bottom: 4px;
       }
 
       &-input {

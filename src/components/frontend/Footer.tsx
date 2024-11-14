@@ -1,5 +1,6 @@
 import React from 'react';
 import logoImg from '@/assets/image/logo.png';
+import { Link } from 'react-router-dom';
 const Footer = () => {
   return (
     <div className="footer">
@@ -14,10 +15,18 @@ const Footer = () => {
         </div>
         <div className="footer__main">
           <div className="footer__nav">
-            <div className="footer__link">關於我們</div>
-            <div className="footer__link">常見問題</div>
-            <div className="footer__link">服務條款</div>
-            <div className="footer__link">隱私權政策</div>
+            <Link to="/about" className="footer__link">
+              關於我們
+            </Link>
+            <Link to="/faq" className="footer__link">
+              常見問題
+            </Link>
+            <Link to="/policy" className="footer__link">
+              服務條款
+            </Link>
+            <Link to="/privacy" className="footer__link">
+              隱私權政策
+            </Link>
           </div>
 
           <div className="footer__infos">

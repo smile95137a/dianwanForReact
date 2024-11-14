@@ -33,6 +33,11 @@ import ProfileEdit from '@/pages/frontend/memberCenter/ProfileEdit';
 import PurchaseHistory from '@/pages/frontend/memberCenter/PurchaseHistory';
 import NewsDetail from '@/pages/frontend/NewsDetail';
 import News from '@/pages/frontend/News';
+import About from '@/pages/frontend/About';
+import Faq from '@/pages/frontend/Faq';
+import Policy from '@/pages/frontend/Policy';
+import Privacy from '@/pages/frontend/Privacy';
+import ScrollToTop from '@/components/common/ScrollToTop';
 
 const FrontendRoutes: RouteObject[] = [
   {
@@ -65,6 +70,10 @@ const FrontendRoutes: RouteObject[] = [
       },
       { path: 'news', element: <News /> },
       { path: 'news/:newsUid', element: <NewsDetail /> },
+      { path: 'about', element: <About /> },
+      { path: 'faq', element: <Faq /> },
+      { path: 'policy', element: <Policy /> },
+      { path: 'privacy', element: <Privacy /> },
       { path: 'notfound', element: <NotFound /> },
       { path: '', element: <Navigate to="main" /> },
     ],
@@ -110,7 +119,6 @@ const BackendRoutes: RouteObject[] = [
   { path: '/admin/*', element: <Navigate to="/notfound" /> },
 ];
 
-// Combine Routes
 const GlobalRoutes: FC = () => {
   const routes = [
     ...FrontendRoutes,
@@ -118,8 +126,11 @@ const GlobalRoutes: FC = () => {
     { path: '*', element: <Navigate to="/notfound" /> },
   ];
 
-  const routing = useRoutes(routes);
-  return routing;
+  return (
+    <>
+      <ScrollToTop />
+      {useRoutes(routes)}
+    </>
+  );
 };
-
 export default GlobalRoutes;

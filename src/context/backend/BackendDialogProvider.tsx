@@ -9,8 +9,11 @@ import ConfirmDialog from '@/components/backend/dialog/ConfirmDialog';
 import AddBannerDialog from '@/components/backend/dialog/AddBannerDialog';
 import AddProductRecommendationDialog from '@/components/backend/dialog/AddProductRecommendationDialog';
 import { useAddProductRecommendationDialog } from './AddProductRecommendationDialogProvider';
+import { useAddRedemptionCodeDialog } from './AddRedemptionCodeDialogProvider';
 import { useAddMemberDialog } from './AddMemberDialogProvider';
 import AddMemberDialog from '@/components/backend/dialog/AddMemberDialog';
+import { useAddShipmentDialog } from './AddShipmentDialogProvider';
+import AddRedemptionCodeDialog from '@/components/backend/dialog/AddRedemptionCodeDialog';
 
 interface DialogProviderProps {
   children: ReactNode;
@@ -63,6 +66,22 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
     confirmAddProductRecommendationDialog,
   } = useAddProductRecommendationDialog();
 
+  const {
+    addShipmentDialogOpen,
+    customClass: addShipmentDialogCustomClass,
+    openAddShipmentDialog,
+    closeAddShipmentDialog,
+    confirmAddShipmentDialog,
+  } = useAddShipmentDialog();
+
+  const {
+    addRedemptionCodeDialogOpen,
+    customClass: addRedemptionCodeCustomClass,
+    openAddRedemptionCodeDialog,
+    closeAddRedemptionCodeDialog,
+    confirmAddRedemptionCodeDialog,
+  } = useAddRedemptionCodeDialog();
+
   return (
     <BackendDialogContext.Provider
       value={{
@@ -71,31 +90,13 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
         openAddBannerDialog,
         openAddProductRecommendationDialog,
         openAddMemberDialog,
+        openAddShipmentDialog,
+        openAddRedemptionCodeDialog,
       }}
     >
       {children}
       {ReactDOM.createPortal(
         <>
-          {confirmDialogOpen && (
-            <ConfirmDialog
-              isOpen={confirmDialogOpen}
-              onClose={closeConfirmDialog}
-              onConfirm={confirmDialog}
-              title={confirmTitle}
-              content={confirmContent}
-              customClass={confirmCustomClass}
-            />
-          )}
-          {infoDialogOpen && (
-            <InfoDialog
-              isOpen={infoDialogOpen}
-              onClose={closeInfoDialog}
-              title={infoTitle}
-              content={infoContent}
-              customClass={infoCustomClass}
-            />
-          )}
-
           {addMemberDialogOpen && (
             <AddMemberDialog
               member={member}
@@ -121,6 +122,35 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
               onClose={closeAddProductRecommendationDialog}
               onConfirm={confirmAddProductRecommendationDialog}
               customClass={addProductRecommendationCustomClass}
+            />
+          )}
+
+          {addRedemptionCodeDialogOpen && (
+            <AddRedemptionCodeDialog
+              isOpen={addRedemptionCodeDialogOpen}
+              onClose={closeAddRedemptionCodeDialog}
+              onConfirm={confirmAddRedemptionCodeDialog}
+              customClass={addProductRecommendationCustomClass}
+            />
+          )}
+
+          {confirmDialogOpen && (
+            <ConfirmDialog
+              isOpen={confirmDialogOpen}
+              onClose={closeConfirmDialog}
+              onConfirm={confirmDialog}
+              title={confirmTitle}
+              content={confirmContent}
+              customClass={confirmCustomClass}
+            />
+          )}
+          {infoDialogOpen && (
+            <InfoDialog
+              isOpen={infoDialogOpen}
+              onClose={closeInfoDialog}
+              title={infoTitle}
+              content={infoContent}
+              customClass={infoCustomClass}
             />
           )}
         </>,

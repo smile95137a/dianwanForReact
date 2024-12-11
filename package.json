@@ -27,6 +27,7 @@
     "sass": "^1.77.2",
     "slick-carousel": "^1.8.1",
     "swiper": "^11.1.5",
+    "yup": "^1.5.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
@@ -37,6 +38,7 @@
     "@types/react-dom": "^18.2.22",
     "@types/react-flatpickr": "^3.8.11",
     "@types/slick-carousel": "^1.6.40",
+    "@types/yup": "^0.32.0",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react-swc": "^3.5.0",

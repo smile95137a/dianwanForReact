@@ -10,10 +10,10 @@ $root-block-name: '.bPagination';
     @include w_h(26px, 26px);
     @include flex(center, center);
     border-radius: 10px;
-    background: #c2f6f6;
+    background: #4787c7;
     color: #fff;
     &:hover:not(#{$p__btn}--active):not(:disabled) {
-      background: #6de9e9;
+      background: #b5cfe8;
     }
 
     &:disabled {
@@ -37,7 +37,7 @@ $root-block-name: '.bPagination';
 
         &--active {
           color: #f3f6fb;
-          background: #f079b5;
+          background: #b5cfe8;
         }
       }
     }

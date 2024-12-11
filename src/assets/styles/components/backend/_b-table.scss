@@ -27,7 +27,7 @@ $root-block-name: '.bTable';
 
   &__header {
     color: #000;
-    background-color: #c2f6f6;
+    background-color: #6b9fd2;
     font-weight: 900;
     #{$p__cell} {
       text-align: center;
@@ -48,7 +48,7 @@ $root-block-name: '.bTable';
       padding: 16px;
       &::before {
         content: attr(data-title);
-        color: #f079b5;
+        color: #6b9fd2;
         font-weight: 900;
         min-width: 48px;
         margin-right: 16px;

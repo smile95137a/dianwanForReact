@@ -44,11 +44,9 @@ const FrontendRoutes: RouteObject[] = [
   {
     path: '/',
     element: (
-      <LoadingProvider>
-        <FrontendDialogProvider>
-          <FrontendLayout />
-        </FrontendDialogProvider>
-      </LoadingProvider>
+      <FrontendDialogProvider>
+        <FrontendLayout />
+      </FrontendDialogProvider>
     ),
     children: [
       { path: 'login', element: <FLogin /> },
@@ -131,8 +129,10 @@ const GlobalRoutes: FC = () => {
 
   return (
     <>
-      <ScrollToTop />
-      {useRoutes(routes)}
+      <LoadingProvider>
+        <ScrollToTop />
+        {useRoutes(routes)}
+      </LoadingProvider>
     </>
   );
 };

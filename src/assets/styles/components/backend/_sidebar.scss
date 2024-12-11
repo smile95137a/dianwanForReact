@@ -18,14 +18,14 @@ $root-block-name: '.bsidebar';
     @include flex;
     gap: 16px;
     width: 100%;
-    color: #28dfdf;
+    color: #6b9fd2;
     font-size: 18px;
     &:first-child {
       margin-top: 24px;
     }
 
     &--active {
-      color: #3bcccc;
+      color: #4787c7;
     }
 
     &-icon {

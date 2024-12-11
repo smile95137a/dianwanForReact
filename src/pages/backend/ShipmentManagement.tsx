@@ -37,7 +37,7 @@ const ShipmentManagement = () => {
   return (
     <div className="shipmentManagement">
       <p className="shipmentManagement__title">運輸方式管理</p>
-
+      <button className="shipmentManagement__btn m-b-12">新增運輸方式</button>
       <div className="shipmentManagement__list">
         {shippingMethodList.length > 0 && (
           <div className="shipmentManagement__list-content">

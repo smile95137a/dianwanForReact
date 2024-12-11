@@ -15,12 +15,14 @@ import { useNavigate } from 'react-router-dom';
 
 const Product = () => {
   const [sortOrder, setSortOrder] = useState('newest');
+  const [searchTerm, setSearchTerm] = useState('');
   const [products, setProducts] = useState<IProduct[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
 
   const navigate = useNavigate();
 
   const pagination = usePagination({
-    list: products,
+    list: filteredProducts,
     pageLimitSize: 10,
     initialPage: 1,
   });
@@ -42,6 +44,42 @@ const Product = () => {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    let updatedProducts = [...products];
+
+    // 搜尋過濾
+    if (searchTerm) {
+      updatedProducts = updatedProducts.filter((product) =>
+        product.productName.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // 排序處理
+    if (sortOrder === 'newest') {
+      updatedProducts.sort(
+        (a: any, b: any) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+    } else if (sortOrder === 'bestseller') {
+      updatedProducts.sort((a: any, b: any) => ~~b.popularity - ~~a.popularity);
+    } else if (sortOrder === 'price-asc') {
+      updatedProducts.sort((a: any, b: any) => {
+        const priceA = a.isSpecialPrice ? a.specialPrice : a.price;
+        const priceB = b.isSpecialPrice ? b.specialPrice : b.price;
+        return priceA - priceB;
+      });
+    } else if (sortOrder === 'price-desc') {
+      updatedProducts.sort((a: any, b: any) => {
+        const priceA = a.isSpecialPrice ? a.specialPrice : a.price;
+        const priceB = b.isSpecialPrice ? b.specialPrice : b.price;
+        return priceB - priceA;
+      });
+    }
+
+    setFilteredProducts(updatedProducts);
+    pagination.goToPage(1);
+  }, [searchTerm, sortOrder, products]);
+
   const handleProductClick = (productId) => () => {
     navigate(`/product/${productId}`);
   };
@@ -54,7 +92,12 @@ const Product = () => {
             <FaSearch />
           </div>
 
-          <input type="text" placeholder="搜尋" />
+          <input
+            type="text"
+            placeholder="搜尋"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
         <div className="fproduct__header-title">
           <div className="fproduct__icon">
@@ -103,7 +146,7 @@ const Product = () => {
         </div>
       </div>
       <div className="fproduct__list">
-        {products.length > 0 && (
+        {filteredProducts.length > 0 && (
           <>
             {pagination.currentPageItems.map((product) => (
               <div
@@ -142,13 +185,13 @@ const Product = () => {
           </>
         )}
       </div>
-      {products.length > 0 && (
+      {filteredProducts.length > 0 && (
         <>
           <Pagination {...pagination} />
         </>
       )}
 
-      {products.length === 0 && (
+      {filteredProducts.length === 0 && (
         <>
           <NoData />
         </>

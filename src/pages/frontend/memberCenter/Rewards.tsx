@@ -2,32 +2,28 @@ import React, { useState, useEffect } from 'react';
 import MemberCenterCoins from '@/components/frontend/memberCenter/MemberCenterCoins';
 import NumberFormatter from '@/components/common/NumberFormatter';
 import c1 from '@/assets/image/coin-1.png'; // Path to your image
-
-interface Reward {
-  threshold: number;
-  sliver: number;
-  achieved: boolean;
-}
-
-const mockCumulative = 15000; // Mock cumulative amount for the month
-const mockRewards: Reward[] = [
-  { threshold: 5000, sliver: 100, achieved: true },
-  { threshold: 10000, sliver: 200, achieved: true },
-  { threshold: 20000, sliver: 500, achieved: false },
-];
+import { useLoading } from '@/context/frontend/LoadingContext';
+import { getTotalConsumeAmount } from '@/services/frontend/paymentService';
 
 const Rewards: React.FC = () => {
-  const [cumulative, setCumulative] = useState<number>(0);
-  const [rewards, setRewards] = useState<Reward[]>([]);
+  const [cumulative, setCumulative] = useState(0);
+  const [rewards, setRewards] = useState<any[]>([]);
+  const { setLoading } = useLoading();
 
-  // Mock fetch function to simulate an API call
   const fetchTotalAmount = async () => {
     try {
-      // Simulate a delay for fetching data
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      setCumulative(mockCumulative);
-      setRewards(mockRewards);
+      setLoading(true);
+      const { success, data, message } = await getTotalConsumeAmount();
+      setLoading(false);
+
+      if (success) {
+        setCumulative(data.cumulative);
+        setRewards(data.rewardStatusList);
+      } else {
+        console.error(message);
+      }
     } catch (error) {
+      setLoading(false);
       console.error('Error fetching total consume amount:', error);
     }
   };

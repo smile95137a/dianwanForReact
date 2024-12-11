@@ -14,6 +14,17 @@ import {
 import React, { useEffect, useState } from 'react';
 
 const BannerManagement = () => {
+  const statusOptions = [
+    { value: 'AVAILABLE', label: '啟用' },
+    { value: 'UNAVAILABLE', label: '停用' },
+  ];
+
+  const productTypeOptions = [
+    { value: 'PRIZE', label: '一番賞' },
+    { value: 'GACHA', label: '扭蛋' },
+    { value: 'BLIND_BOX', label: '盲盒' },
+  ];
+
   const [bannerList, setBannerList] = useState<Banner[]>([]);
 
   const { openAddBannerDialog } = useBackendDialog();
@@ -44,12 +55,24 @@ const BannerManagement = () => {
     console.log(result);
   };
 
+  const getStatusLabel = (status: any) => {
+    return (
+      statusOptions.find((option) => option.value === status)?.label || status
+    );
+  };
+
+  const getProductTypeLabel = (type: any) => {
+    return (
+      productTypeOptions.find((option) => option.value === type)?.label || type
+    );
+  };
+
   return (
     <div className="bannerManagement">
       <p className="bannerManagement__title">橫幅管理</p>
 
       <button
-        className="bannerManagement__addButton"
+        className="bannerManagement__btn m-b-12"
         onClick={openBannerDialog}
       >
         新增 Banner
@@ -59,10 +82,10 @@ const BannerManagement = () => {
           <div className="bannerManagement__list-content">
             <BTable
               headers={[
-                { text: '標題', className: '' },
-                { text: '預覽', className: '' },
-                { text: '發布日期', className: '' },
+                { text: 'ID', className: '' },
                 { text: '狀態', className: '' },
+                { text: '發布日期', className: '' },
+                { text: '產品 ID', className: '' },
                 { text: '操作', className: '' },
               ]}
             >
@@ -70,32 +93,22 @@ const BannerManagement = () => {
                 <BTableRow
                   key={index}
                   data={[
-                    { content: <>{banner.title}</>, dataTitle: '標題' },
+                    { content: <>{banner.bannerId}</>, dataTitle: 'ID' },
                     {
-                      content: <>{banner.preview || '無預覽'}</>,
+                      content: <>{getStatusLabel(banner.status)}</>,
                       dataTitle: '預覽',
                     },
                     {
-                      content: (
-                        <>
-                          <DateFormatter date={banner.publishDate} />
-                        </>
-                      ),
+                      content: <>{getProductTypeLabel(banner.productType)}</>,
                       dataTitle: '發布日期',
                     },
                     {
-                      content: (
-                        <>
-                          {banner.status === BannerStatus.AVAILABLE
-                            ? '已發布'
-                            : '未發布'}
-                        </>
-                      ),
+                      content: <>{banner.productId}</>,
                       dataTitle: '狀態',
                     },
                     {
                       content: (
-                        <button className="bannerManagement__btn">編輯</button>
+                        <button className="bannerManagement__btn">刪除</button>
                       ),
                       dataTitle: '操作',
                     },

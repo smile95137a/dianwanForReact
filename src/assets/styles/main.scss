@@ -24,6 +24,7 @@
 @import 'components/profileEditInvoiceForm';
 
 @import 'components/backend/sidebar';
+@import 'components/backend/b-btn';
 @import 'components/backend/b-card';
 @import 'components/backend/b-table';
 @import 'components/backend/b-pagination';
@@ -31,12 +32,16 @@
 @import 'components/backend/dialog/confirm-dialog';
 @import 'components/backend/dialog/info-dialog';
 @import 'components/backend/dialog/add-banner-dialog';
+@import 'components/backend/dialog/add-redemption-code-dialog';
 @import 'components/backend/b-input';
 @import 'components/backend/b-select';
 
 @import 'components/frontend/dialog/dialog';
 @import 'components/frontend/dialog/confirm-dialog';
+@import 'components/frontend/dialog/confirm-dialog';
+@import 'components/frontend/dialog/info-dialog';
 @import 'components/frontend/f-pagination';
+
 // Layout
 @import 'layout/bheader';
 @import 'layout/fheader';
@@ -71,6 +76,10 @@
 @import 'pages/backend/blogin';
 @import 'pages/backend/dashboard';
 @import 'pages/backend/memberManagement';
+@import 'pages/backend/shipmentManagement';
+@import 'pages/backend/bannerManagement';
+@import 'pages/backend//productRecommendation';
+@import 'pages/backend/redemptionCodeManagement';
 
 // themes
 // ec6ab1 f29bcb f8cde5

@@ -4,6 +4,10 @@ import MemberCenterCoins from '@/components/frontend/memberCenter/MemberCenterCo
 import DateFormatter from '@/components/common/DateFormatter';
 import NumberFormatter from '@/components/common/NumberFormatter';
 import NoData from '@/components/frontend/NoData';
+import { useLoading } from '@/context/frontend/LoadingContext';
+import { usePagination } from '@/hooks/usePagination';
+import { queryOrder } from '@/services/frontend/orderService';
+import Pagination from '@/components/frontend/Pagination';
 
 const transactionTypeMapping: { [key: string]: string } = {
   DEPOSIT: '儲值',
@@ -14,54 +18,44 @@ const mapTransactionType = (type: string) => {
   return transactionTypeMapping[type] || type;
 };
 
-// Inline mock data for testing
-const mockTransactions = [
-  {
-    id: '1',
-    transactionDate: '2023-01-15',
-    transactionType: 'DEPOSIT',
-    amount: 1000,
-  },
-  {
-    id: '2',
-    transactionDate: '2023-02-20',
-    transactionType: 'CONSUME',
-    amount: -500,
-  },
-  {
-    id: '3',
-    transactionDate: '2023-03-10',
-    transactionType: 'DEPOSIT',
-    amount: 2000,
-  },
-  {
-    id: '4',
-    transactionDate: '2023-04-05',
-    transactionType: 'CONSUME',
-    amount: -100,
-  },
-];
-
-interface TransactionRecord {
-  id: string;
-  transactionDate: string;
-  transactionType: string;
-  amount: number;
-}
-
 const OrderHistory: React.FC = () => {
-  const { register, handleSubmit } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       startDate: '',
       endDate: '',
     },
   });
 
-  const [records, setRecords] = useState<TransactionRecord[]>(mockTransactions); // Use mock data initially
+  const { setLoading } = useLoading();
+  const [records, setRecords] = useState<any>([]);
+  const pagination = usePagination({
+    list: records,
+    pageLimitSize: 10,
+    initialPage: 1,
+  });
+  const onSubmit = async (values: any) => {
+    try {
+      setLoading(true);
+      const { success, data } = await queryOrder(values);
+      setLoading(false);
+      if (success) {
+        setRecords(data);
+      } else {
+        console.error('Failed to fetch transactions');
+        setRecords([]);
+      }
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+      setRecords([]);
+    }
+  };
 
-  const onSubmit = (values: { startDate: string; endDate: string }) => {
-    // For testing purposes, we skip the API call and use mock data
-    setRecords(mockTransactions);
+  const handleDetailClick = (order: any) => {
+    console.log('Order Detail:', order);
   };
 
   return (
@@ -77,24 +71,41 @@ const OrderHistory: React.FC = () => {
         >
           <div className="memberCenter__orderHistoryForm-box">
             <div className="memberCenter__orderHistoryForm-form-inputs m-t-20">
-              <p className="memberCenter__text">起始時間</p>
+              <label className="memberCenter__text" htmlFor="startDate">
+                起始時間
+              </label>
               <input
+                id="startDate"
                 type="date"
                 {...register('startDate')}
-                className="memberCenter__orderHistoryForm-form-input"
+                className={`memberCenter__orderHistoryForm-form-input ${
+                  errors.startDate ? 'input-error' : ''
+                }`}
               />
+              {errors.startDate && (
+                <span className="error-text">{errors.startDate.message}</span>
+              )}
             </div>
           </div>
           <div className="memberCenter__orderHistoryForm-box">
             <div className="memberCenter__orderHistoryForm-form-inputs m-t-20">
-              <p className="memberCenter__text memberCenter__text--required">
+              <label
+                className="memberCenter__text memberCenter__text--required"
+                htmlFor="endDate"
+              >
                 結束時間
-              </p>
+              </label>
               <input
+                id="endDate"
                 type="date"
                 {...register('endDate')}
-                className="memberCenter__orderHistoryForm-form-input"
+                className={`memberCenter__orderHistoryForm-form-input ${
+                  errors.endDate ? 'input-error' : ''
+                }`}
               />
+              {errors.endDate && (
+                <span className="error-text">{errors.endDate.message}</span>
+              )}
             </div>
           </div>
           <div className="memberCenter__orderHistoryForm-box memberCenter__orderHistoryForm-box--btns">
@@ -113,33 +124,50 @@ const OrderHistory: React.FC = () => {
       {records.length === 0 ? (
         <NoData />
       ) : (
-        <div className="memberCenter__table">
-          <table>
-            <thead>
-              <tr>
-                <th className="w-30">交易時間</th>
-                <th className="w-40">項目</th>
-                <th className="w-30">交易金額</th>
-              </tr>
-            </thead>
-            <tbody>
-              {records.map((order) => (
-                <tr key={order.id}>
-                  <td>
-                    <DateFormatter
-                      date={order.transactionDate}
-                      format="YYYY/MM/DD"
-                    />
-                  </td>
-                  <td>{mapTransactionType(order.transactionType)}</td>
-                  <td>
-                    <NumberFormatter number={order.amount ?? 0} />
-                  </td>
+        <>
+          <div className="memberCenter__table">
+            <table>
+              <thead>
+                <tr>
+                  <th className="w-25">日期</th>
+                  <th className="w-25">訂單編號</th>
+                  <th className="w-25">內容</th>
+                  <th className="w-25">狀態</th>
+                  <th className="w-25">明細</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {pagination.currentPageItems.map((order: any) => (
+                  <tr key={order.id}>
+                    <td>
+                      <DateFormatter
+                        date={order.createdAt}
+                        format="YYYY/MM/DD"
+                      />
+                    </td>
+                    <td>{order.orderNumber}</td>
+                    <td>{order.content}</td>
+                    <td>{order.resultStatus}</td>
+
+                    <td>
+                      <button
+                        className="detail-btn"
+                        onClick={() => handleDetailClick(order)}
+                      >
+                        明細
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {records.length > 0 && (
+            <>
+              <Pagination {...pagination} />
+            </>
+          )}
+        </>
       )}
     </div>
   );

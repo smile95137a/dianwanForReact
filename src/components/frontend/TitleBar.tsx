@@ -7,6 +7,7 @@ interface TitleBarProps {
   titleText: string;
   moreText?: string;
   showMore?: boolean;
+  moreTextClick?: () => void; // Function to handle moreText click
 }
 
 const TitleBar: React.FC<TitleBarProps> = ({
@@ -14,6 +15,7 @@ const TitleBar: React.FC<TitleBarProps> = ({
   titleText,
   moreText = '',
   showMore = true,
+  moreTextClick,
 }) => {
   return (
     <div className="titleBar__title">
@@ -24,7 +26,11 @@ const TitleBar: React.FC<TitleBarProps> = ({
         <span className="titleBar__text">{titleText}</span>
       </div>
       {showMore && (
-        <div className="titleBar__title-more">
+        <div
+          className="titleBar__title-more"
+          onClick={moreTextClick}
+          style={{ cursor: moreTextClick ? 'pointer' : 'default' }}
+        >
           <span className="titleBar__text">{moreText}</span>
         </div>
       )}

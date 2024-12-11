@@ -44,7 +44,7 @@ const ProductRecommendation = () => {
     <div className="recommendationMappingManagement">
       <p className="recommendationMappingManagement__title">推薦系列管理</p>
       <button
-        className="recommendationMappingManagement__addButton"
+        className="recommendationMappingManagement__btn m-b-12"
         onClick={openProductRecommendation}
       >
         新增推薦系列

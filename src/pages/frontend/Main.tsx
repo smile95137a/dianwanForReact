@@ -18,39 +18,55 @@ import { FaAngleRight, FaAngleLeft } from 'react-icons/fa';
 import { getPagedStoreProducts } from '@/services/frontend/storeProductService';
 import NoData from '@/components/frontend/NoData';
 import { useLoading } from '@/context/frontend/LoadingContext';
+import { getAllBanners } from '@/services/frontend/bannerService';
 
 const Main = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState<IProduct[]>([]);
   const [mallProducts, setMallProducts] = useState<any[]>([]);
-
+  const [banners, setBanners] = useState<any[]>([]);
   const { setLoading } = useLoading();
 
-  const fetchProducts = async () => {
+  const redirectToProductPage = () => {
+    navigate('/product');
+  };
+  const redirectToMallPage = () => {
+    navigate('/mallProduct');
+  };
+
+  const loadMainData = async () => {
     try {
       setLoading(true);
       const allProductList = await getAllProductList();
       const pagedStoreProducts = await getPagedStoreProducts(0, 200);
+      const bannerData = await getAllBanners(); // 獲取橫幅數據
       setLoading(false);
+
       if (allProductList.success) {
         setProducts(allProductList.data);
       } else {
-        console.log(allProductList.message);
+        console.error('獲取全部產品失敗:', allProductList.message);
       }
 
       if (pagedStoreProducts.success) {
         setMallProducts(pagedStoreProducts.data);
       } else {
-        console.log(pagedStoreProducts.message);
+        console.error('獲取商城產品失敗:', pagedStoreProducts.message);
+      }
+
+      if (bannerData.success) {
+        setBanners(bannerData.data);
+      } else {
+        console.error('獲取橫幅資料失敗:', bannerData.message);
       }
     } catch (err) {
       setLoading(false);
-      console.error('Error fetching products:', err);
+      console.error('Error loading main data:', err);
     }
   };
 
   useEffect(() => {
-    fetchProducts();
+    loadMainData();
   }, []);
 
   const handleProductClick = (productId) => () => {
@@ -59,37 +75,41 @@ const Main = () => {
 
   return (
     <>
-      <div className="slider">
-        <Swiper
-          slidesPerView={1} // Default to 1 for smaller screens
-          centeredSlides={true}
-          spaceBetween={30}
-          navigation={true}
-          modules={[Navigation]}
-          loop={true}
-          className="mySwiper"
-          breakpoints={{
-            768: {
-              slidesPerView: 3, // Show 3 slides for screens wider than 768px
-            },
-          }}
-        >
-          {[...Array(20)].map((_, index) => (
-            <SwiperSlide key={index}>
-              <div className="slider__item">
-                <img
-                  src={bg}
-                  className="slider__item-img"
-                  alt={`Slide ${index + 1}`}
-                />
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
+      {banners.length > 0 && (
+        <div className="slider">
+          <Swiper
+            slidesPerView={1}
+            centeredSlides={true}
+            spaceBetween={30}
+            navigation
+            modules={[Navigation]}
+            loop={true}
+            className="mySwiper"
+            breakpoints={{
+              768: { slidesPerView: 3 },
+            }}
+          >
+            {banners.map((banner, index) => (
+              <SwiperSlide key={index}>
+                <div className="slider__item">
+                  <img
+                    src={getImageUrl(banner.imageUrls[0])}
+                    className="slider__item-img"
+                  />
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      )}
 
       <div className="fhome">
-        <TitleBar icon={BsHandbag} titleText="電玩賞" moreText="更多" />
+        <TitleBar
+          icon={BsHandbag}
+          titleText="電玩賞"
+          moreText="更多"
+          moreTextClick={redirectToProductPage}
+        />
         <div className="fhome__list">
           {products.length > 0 ? (
             products
@@ -108,7 +128,12 @@ const Main = () => {
           )}
         </div>
 
-        <TitleBar icon={BsHandbag} titleText="商城" moreText="更多" />
+        <TitleBar
+          icon={BsHandbag}
+          titleText="商城"
+          moreText="更多"
+          moreTextClick={redirectToMallPage}
+        />
 
         <div className="fhome__list">
           {mallProducts.length > 0 ? (

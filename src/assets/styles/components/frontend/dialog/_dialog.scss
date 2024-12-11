@@ -13,6 +13,11 @@ $root-block-style: '.downDialog';
       max-width: 1440px;
     }
   }
+  &--info {
+    #{$p__main} {
+      height: auto;
+    }
+  }
 
   &__overlay {
     position: absolute;

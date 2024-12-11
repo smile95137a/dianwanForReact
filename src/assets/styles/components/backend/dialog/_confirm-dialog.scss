@@ -47,7 +47,7 @@ $root-block-name: '.bconfirmDialog';
     &-btn {
       width: 120px;
       height: 48px;
-      background: #f079b5;
+      background: #6b9fd2;
 
       border: none;
       outline: none;
@@ -58,14 +58,14 @@ $root-block-name: '.bconfirmDialog';
       transition: 0.5s;
       letter-spacing: 2px;
       &--confirm {
-        border: 1px solid #f079b5;
-        background: #f079b5;
+        border: 1px solid #6b9fd2;
+        background: #6b9fd2;
         color: #fff;
       }
       &--cancel {
-        border: 1px solid #f079b5;
+        border: 1px solid #6b9fd2;
         background: #fff;
-        color: #f079b5;
+        color: #6b9fd2;
       }
     }
   }

@@ -99,18 +99,11 @@ const Login = () => {
               </div>
 
               <div className="blogin__form-btns">
-                <MButton
-                  text="登入"
-                  type="submit"
-                  customClass="bletter-spacing-2"
-                />
+                <button className="blogin__btn" type="submit">
+                  <span className={`blogin__text `}>登入</span>
+                </button>
               </div>
             </form>
-          </div>
-          <div className="blogin__form-other">
-            <p className="blogin__form-text login__form-text--restPwd">
-              忘記密碼
-            </p>
           </div>
         </div>
       </div>

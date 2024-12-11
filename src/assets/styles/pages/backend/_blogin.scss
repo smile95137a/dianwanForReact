@@ -14,7 +14,7 @@ $root-block-name: '.blogin';
       90deg,
       rgba(246, 246, 246, 0.2) 0%,
       rgba(246, 246, 246, 0.6) 50%,
-      rgba(248, 205, 229, 0.8) 100%
+      rgba(218, 231, 243, 0.8) 100%
     );
     border-radius: 8px;
     box-shadow: 4px 4px 30px hsla(270, 30%, 10%, 0.4);
@@ -46,7 +46,7 @@ $root-block-name: '.blogin';
       position: absolute;
       width: 850px;
       height: 850px;
-      background: #f8cde5;
+      background: #dae7f3;
       bottom: -200px;
       right: 90px;
       transform: rotate(48deg);
@@ -58,7 +58,7 @@ $root-block-name: '.blogin';
       position: absolute;
       width: 900px;
       height: 700px;
-      background: #ec6ab1;
+      background: #4787c7;
       bottom: -100px;
       right: 80px;
       transform: rotate(40deg);
@@ -87,7 +87,7 @@ $root-block-name: '.blogin';
       margin-bottom: 24px;
 
       #{$p-text} {
-        color: #ec6ab1;
+        color: #6b9fd2;
         letter-spacing: 0.5px;
         font-size: 32px;
       }
@@ -117,6 +117,28 @@ $root-block-name: '.blogin';
           cursor: pointer;
         }
       }
+    }
+  }
+
+  &__btn {
+    width: 120px;
+    height: 40px;
+    background: #6b9fd2;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    color: #fff;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+
+    &:disabled {
+      border: 1px solid #b1b1b1;
+      background: #fff;
+      color: #7f7f7f;
+      font-size: 18px;
+      cursor: not-allowed;
+      opacity: 0.7;
     }
   }
 }

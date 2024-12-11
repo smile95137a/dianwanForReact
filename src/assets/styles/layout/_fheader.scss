@@ -38,7 +38,7 @@ $root-block-name: '.fheader';
     flex: 1;
     display: flex;
     align-items: center;
-    margin: 0 auto;
+    margin: 10px auto;
 
     &--open {
       @include screen(md) {
@@ -89,26 +89,36 @@ $root-block-name: '.fheader';
 
   &__marquee {
     @include w_h(100%, 61px);
-    @include flex(center, center);
-    background: #85ffff;
+    @include flex(center);
     overflow: hidden;
-    padding: 0 38px;
-    margin-top: 20px;
+    white-space: nowrap;
+    background: #85ffff;
+    position: relative;
 
     #{$p__text} {
       font-size: 18px;
       font-weight: 400;
-      word-break: keep-all;
-      animation: marquee 20s linear infinite;
+      position: absolute;
+      left: 100vw;
+      width: max-content;
+      animation-name: marquee;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    &--sticky {
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+      width: 100%;
     }
   }
 }
-
 @keyframes marquee {
   from {
-    transform: translateX(150%);
+    transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translateX(-150%);
+    transform: translate3d(calc(-100% - 100vw), 0, 0);
   }
 }

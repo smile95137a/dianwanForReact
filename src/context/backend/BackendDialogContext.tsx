@@ -13,7 +13,11 @@ export interface DialogContextType {
   ) => Promise<void>;
   openAddMemberDialog: (isEdit?: boolean, user?: any) => Promise<boolean>;
   openAddBannerDialog: (customClass?: string) => Promise<boolean>;
-  openAddShipmentDialog: (customClass?: string) => Promise<boolean>;
+  openAddShipmentDialog: (
+    isEdit?: boolean,
+    shipment?: any,
+    customClass?: string
+  ) => Promise<boolean>;
   openAddRedemptionCodeDialog: (customClass?: string) => Promise<boolean>;
   openAddProductRecommendationDialog: (
     customClass?: string

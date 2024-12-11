@@ -1,13 +1,21 @@
 import { useState } from 'react';
 
 export const useAddShipmentDialog = () => {
+  const [shipment, setShipment] = useState<any>(null);
+  const [isEdit, setIsEdit] = useState(false);
   const [addShipmentDialogOpen, setAddShipmentDialogOpen] = useState(false);
   const [customClass, setCustomClass] = useState<string | undefined>('');
   const [addShipmentResolve, setAddShipmentResolve] = useState<
     ((value: boolean) => void) | null
   >(null);
 
-  const openAddShipmentDialog = (customClass?: string): Promise<boolean> => {
+  const openAddShipmentDialog = (
+    isEdit = false,
+    shipment = null,
+    customClass?: string
+  ): Promise<boolean> => {
+    setIsEdit(isEdit);
+    setShipment(shipment);
     setCustomClass(customClass);
     setAddShipmentDialogOpen(true);
 
@@ -18,6 +26,8 @@ export const useAddShipmentDialog = () => {
 
   const closeAddShipmentDialog = (result: boolean) => {
     setAddShipmentDialogOpen(false);
+    setIsEdit(false);
+    setShipment(false);
     if (addShipmentResolve) addShipmentResolve(result);
   };
 
@@ -27,6 +37,8 @@ export const useAddShipmentDialog = () => {
   };
 
   return {
+    isEdit,
+    shipment,
     addShipmentDialogOpen,
     customClass,
     openAddShipmentDialog,

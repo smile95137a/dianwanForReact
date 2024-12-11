@@ -14,6 +14,7 @@ import { useAddMemberDialog } from './AddMemberDialogProvider';
 import AddMemberDialog from '@/components/backend/dialog/AddMemberDialog';
 import { useAddShipmentDialog } from './AddShipmentDialogProvider';
 import AddRedemptionCodeDialog from '@/components/backend/dialog/AddRedemptionCodeDialog';
+import AddShipmentDialog from '@/components/backend/dialog/AddShipmentDialog';
 
 interface DialogProviderProps {
   children: ReactNode;
@@ -67,6 +68,8 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
   } = useAddProductRecommendationDialog();
 
   const {
+    shipment,
+    isEdit: isShipmentEdit,
     addShipmentDialogOpen,
     customClass: addShipmentDialogCustomClass,
     openAddShipmentDialog,
@@ -130,6 +133,17 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
               isOpen={addRedemptionCodeDialogOpen}
               onClose={closeAddRedemptionCodeDialog}
               onConfirm={confirmAddRedemptionCodeDialog}
+              customClass={addProductRecommendationCustomClass}
+            />
+          )}
+
+          {addShipmentDialogOpen && (
+            <AddShipmentDialog
+              shipment={shipment}
+              isEdit={isShipmentEdit}
+              isOpen={addShipmentDialogOpen}
+              onClose={closeAddShipmentDialog}
+              onConfirm={confirmAddShipmentDialog}
               customClass={addProductRecommendationCustomClass}
             />
           )}

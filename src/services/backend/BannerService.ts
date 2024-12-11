@@ -13,7 +13,7 @@ export const getAllBanners = async (): Promise<ApiResponse<Banner[]>> => {
 };
 
 export const createBanner = async (
-  bannerData: BannerReq
+  bannerData: any
 ): Promise<ApiResponse<Banner>> => {
   try {
     const formData = new FormData();

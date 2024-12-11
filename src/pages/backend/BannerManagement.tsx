@@ -5,10 +5,12 @@ import Pagination from '@/components/backend/Pagination';
 import DateFormatter from '@/components/common/DateFormatter';
 import Card from '@/components/frontend/MCard';
 import { useBackendDialog } from '@/context/backend/useBackendDialog';
+import { useLoading } from '@/context/frontend/LoadingContext';
 import { usePagination } from '@/hooks/usePagination';
 import {
   Banner,
   BannerStatus,
+  deleteBanner,
   getAllBanners,
 } from '@/services/backend/BannerService';
 import React, { useEffect, useState } from 'react';
@@ -27,32 +29,62 @@ const BannerManagement = () => {
 
   const [bannerList, setBannerList] = useState<Banner[]>([]);
 
-  const { openAddBannerDialog } = useBackendDialog();
-
+  const { openInfoDialog, openAddBannerDialog, openConfirmDialog } =
+    useBackendDialog();
+  const { setLoading } = useLoading();
   const pagination = usePagination({
     list: bannerList,
     pageLimitSize: 10,
     initialPage: 1,
   });
 
-  useEffect(() => {
-    const fetchBanners = async () => {
-      try {
-        const { success, data } = await getAllBanners();
-        if (success) {
-          setBannerList(data);
-        }
-      } catch (err) {
-        console.error('Error fetching banners:', err);
+  const fetchBanners = async () => {
+    try {
+      setLoading(true);
+      const { success, data } = await getAllBanners();
+      setLoading(false);
+      if (success) {
+        setBannerList(data);
       }
-    };
+    } catch (err) {
+      setLoading(false);
+      console.error('Error fetching banners:', err);
+    }
+  };
 
+  useEffect(() => {
     fetchBanners();
   }, []);
 
   const openBannerDialog = async () => {
     const result = await openAddBannerDialog();
-    console.log(result);
+    if (result) {
+      fetchBanners();
+    }
+  };
+
+  const handleDelete = async (bannerId: number) => {
+    const result = await openConfirmDialog(
+      '系統提示',
+      '確定要刪除此 Banner 嗎？'
+    );
+    if (result) {
+      try {
+        setLoading(true);
+        const { success } = await deleteBanner(bannerId);
+        setLoading(false);
+        if (success) {
+          await openInfoDialog('系統提示', 'Banner 已成功刪除！');
+          fetchBanners();
+        } else {
+          await openInfoDialog('系統提示', '刪除失敗，請稍後再試！');
+        }
+      } catch (error) {
+        setLoading(false);
+        console.error('Error deleting banner:', error);
+        await openInfoDialog('系統提示', '刪除失敗，請稍後再試！');
+      }
+    }
   };
 
   const getStatusLabel = (status: any) => {
@@ -69,7 +101,7 @@ const BannerManagement = () => {
 
   return (
     <div className="bannerManagement">
-      <p className="bannerManagement__title">橫幅管理</p>
+      <p className="bannerManagement__title">Banner 管理</p>
 
       <button
         className="bannerManagement__btn m-b-12"
@@ -108,7 +140,12 @@ const BannerManagement = () => {
                     },
                     {
                       content: (
-                        <button className="bannerManagement__btn">刪除</button>
+                        <button
+                          className="bannerManagement__btn"
+                          onClick={() => handleDelete(banner.bannerId)}
+                        >
+                          刪除
+                        </button>
                       ),
                       dataTitle: '操作',
                     },
@@ -119,7 +156,9 @@ const BannerManagement = () => {
             <Pagination {...pagination} />
           </div>
         ) : (
-          <Card content={<NoData />} />
+          <Card>
+            <NoData />
+          </Card>
         )}
       </div>
     </div>

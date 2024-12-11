@@ -14,6 +14,14 @@ $root-block-style: '.downDialog';
     }
   }
 
+  &--bconfirmDialog,
+  &--binfoDialog {
+    #{$p__main} {
+      max-width: 400px;
+      height: auto;
+    }
+  }
+
   &__overlay {
     position: absolute;
     inset: 0;
@@ -25,6 +33,7 @@ $root-block-style: '.downDialog';
     @include flex;
     @include w_h(calc(100% - 36px), fit-content);
     width: 95vw;
+    height: 80%;
     border-radius: 6px;
     background: #fff;
     box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.12);

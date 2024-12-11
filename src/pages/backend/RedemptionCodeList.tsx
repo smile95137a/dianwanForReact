@@ -12,6 +12,7 @@ import {
 import DateFormatter from '@/components/common/DateFormatter';
 import { getAllProductsByType } from '@/services/backend/ProductService';
 import { useBackendDialog } from '@/context/backend/useBackendDialog';
+import { useLoading } from '@/context/frontend/LoadingContext';
 
 const RedemptionCodeList = () => {
   const [codeList, setCodeList] = useState<any[]>([]);
@@ -29,6 +30,7 @@ const RedemptionCodeList = () => {
   });
 
   const { openAddRedemptionCodeDialog } = useBackendDialog();
+  const { setLoading } = useLoading();
 
   useEffect(() => {
     fetchProductList();
@@ -41,9 +43,11 @@ const RedemptionCodeList = () => {
 
   const fetchProductList = async () => {
     try {
+      setLoading(true);
       const { success, data, message } = await getAllProductsByType(
         'CUSTMER_PRIZE'
       );
+      setLoading(false);
       if (success) {
         const filteredProducts = data.filter(
           (product) =>
@@ -55,17 +59,21 @@ const RedemptionCodeList = () => {
         console.log(message);
       }
     } catch (error) {
+      setLoading(false);
       console.error('獲取商品列表失敗：', error);
     }
   };
 
   const fetchCodes = async () => {
     try {
+      setLoading(true);
       const { success, data } = await getAllRedemptionCodes();
+      setLoading(false);
       if (success) {
         setCodeList(data);
       }
     } catch (err) {
+      setLoading(false);
       console.error('Error fetching redemption codes:', err);
     }
   };

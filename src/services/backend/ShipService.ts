@@ -29,7 +29,7 @@ export const getShippingMethodById = async (
 };
 
 export const createShippingMethod = async (
-  shippingMethod: ShippingMethodReq
+  shippingMethod: any
 ): Promise<ApiResponse<ShippingMethod>> => {
   try {
     const response = await api.post<ApiResponse<ShippingMethod>>(
@@ -45,7 +45,7 @@ export const createShippingMethod = async (
 
 export const updateShippingMethod = async (
   id: number,
-  shippingMethod: ShippingMethodReq
+  shippingMethod: any
 ): Promise<ApiResponse<ShippingMethod>> => {
   try {
     const response = await api.put<ApiResponse<ShippingMethod>>(

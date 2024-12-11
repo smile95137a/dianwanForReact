@@ -9,8 +9,6 @@ interface ApiResponse<T> {
 interface ShippingMethod {
   shippingMethodId: number;
   name: string;
-  description: string;
-  status: number;
   createDate: string;
   updateDate: string;
   minSize: number;

@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { FaQuestion } from 'react-icons/fa6';
 import BDialog from './BDialog';
+import MButton from '../MButton';
 
 interface ConfirmDialogProps {
   isOpen: boolean;
@@ -20,7 +21,11 @@ const ConfirmDialog: FC<ConfirmDialogProps> = ({
   customClass,
 }) => {
   return (
-    <BDialog isOpen={isOpen} onClose={onClose} className={customClass}>
+    <BDialog
+      isOpen={isOpen}
+      onClose={onClose}
+      className={`${customClass} bdialog--bconfirmDialog`}
+    >
       <div className="bconfirmDialog">
         <div className="bconfirmDialog__icon">
           <div className="bconfirmDialog__icon-icon">
@@ -37,7 +42,10 @@ const ConfirmDialog: FC<ConfirmDialogProps> = ({
           <div className="bconfirmDialog__info-content">
             <p className="bconfirmDialog__text">{content}</p>
           </div>
-          <div className="bconfirmDialog__info-btns"></div>
+          <div className="bconfirmDialog__info-btns">
+            <MButton text={'取消'} click={onClose} />
+            <MButton text={'確定'} click={onConfirm} />
+          </div>
         </div>
       </div>
     </BDialog>

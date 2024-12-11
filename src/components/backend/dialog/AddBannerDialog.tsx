@@ -4,6 +4,10 @@ import MButton from '../MButton';
 import { useForm } from 'react-hook-form';
 import { FormSelect } from '../FormSelect';
 import { getAllProductsByType } from '@/services/backend/ProductService';
+import { useBackendDialog } from '@/context/backend/useBackendDialog';
+import { useLoading } from '@/context/frontend/LoadingContext';
+import { generateRedemptionCode } from '@/services/backend/RedemptionService';
+import { createBanner } from '@/services/backend/BannerService';
 
 interface AddBannerDialogProps {
   isOpen: boolean;
@@ -45,6 +49,9 @@ const AddBannerDialog: FC<AddBannerDialogProps> = ({
   onConfirm,
   customClass,
 }) => {
+  const { openInfoDialog } = useBackendDialog();
+  const { setLoading } = useLoading();
+
   const { control, watch, reset, getValues } = useForm({
     defaultValues: {
       productType: '',
@@ -87,9 +94,59 @@ const AddBannerDialog: FC<AddBannerDialogProps> = ({
     fetchAvailableProducts();
   }, [selectedProductType]);
 
-  const addBanner = async () => {
-    console.log(getValues());
-    onClose(true);
+  const validateForm = () => {
+    const { productId, status, productType } = getValues();
+    try {
+      if (!productId) {
+        throw new Error('請選擇一個產品！');
+      }
+
+      if (!status) {
+        throw new Error('請選擇 Banner 的狀態！');
+      }
+
+      if (!productType) {
+        throw new Error('請選擇產品類型！');
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        openInfoDialog('系統提示', error.message);
+      } else {
+        openInfoDialog('系統提示', '未知錯誤，請稍後再試！');
+      }
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async () => {
+    if (validateForm()) {
+      const bannerData = {
+        productId: getValues('productId'),
+        status: getValues('status'),
+        productType: getValues('productType'),
+      };
+
+      try {
+        setLoading(true);
+        const { success, data, code, message } = await createBanner(bannerData);
+        setLoading(false);
+        if (success) {
+          await openInfoDialog('系統提示', 'Banner 創建成功！');
+          onClose(true);
+        } else {
+          const errorMessage = message || 'Banner 創建失敗，請稍後再試！';
+          await openInfoDialog('系統提示', errorMessage);
+        }
+      } catch (error) {
+        setLoading(false);
+        console.error('Banner 創建失敗:', error);
+        await openInfoDialog(
+          '系統提示',
+          '創建 Banner 過程中出現錯誤，請稍後再試！'
+        );
+      }
+    }
   };
 
   const productTypeOptions = [
@@ -122,7 +179,9 @@ const AddBannerDialog: FC<AddBannerDialogProps> = ({
       className={customClass}
     >
       <div className="addBannerDialog">
-        <p>新增 Banner</p>
+        <p className="addBannerDialog__text addBannerDialog__text--title">
+          新增 Banner
+        </p>
         <div className="addBannerDialog__main">
           <div className="flex">
             <div className="w-100">
@@ -169,16 +228,8 @@ const AddBannerDialog: FC<AddBannerDialogProps> = ({
           </div>
         </div>
         <div className="addBannerDialog__btns">
-          <MButton
-            text={'取消'}
-            customClass="addBannerDialog__btn"
-            click={() => onClose(false)}
-          />
-          <MButton
-            text={'儲存'}
-            customClass="addBannerDialog__btn"
-            click={addBanner}
-          />
+          <MButton text={'取消'} click={() => onClose(false)} />
+          <MButton text={'儲存'} click={handleSubmit} />
         </div>
       </div>
     </BDialog>

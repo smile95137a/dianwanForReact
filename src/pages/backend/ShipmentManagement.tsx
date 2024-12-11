@@ -98,8 +98,6 @@ const ShipmentManagement = () => {
               headers={[
                 { text: 'ID', className: '' },
                 { text: '名稱', className: '' },
-                { text: '描述', className: '' },
-                { text: '狀態', className: '' },
                 { text: '最小尺寸', className: '' },
                 { text: '最大尺寸', className: '' },
                 { text: '運費', className: '' },
@@ -112,21 +110,17 @@ const ShipmentManagement = () => {
                   data={[
                     {
                       content: <>{method.shippingMethodId}</>,
-                      dataTitle: '暱稱',
+                      dataTitle: 'ID',
                     },
-                    { content: <>{method.name}</>, dataTitle: '電話' },
-                    {
-                      content: <>{method.description}</>,
-                      dataTitle: '居住地址',
-                    },
-                    { content: <>{method.status}</>, dataTitle: '金幣' },
+                    { content: <>{method.name}</>, dataTitle: '名稱' },
+
                     {
                       content: (
                         <>
                           <NumberFormatter number={method.minSize} />
                         </>
                       ),
-                      dataTitle: '銀幣',
+                      dataTitle: '最小尺寸',
                     },
                     {
                       content: (
@@ -134,7 +128,7 @@ const ShipmentManagement = () => {
                           <NumberFormatter number={method.maxSize} />
                         </>
                       ),
-                      dataTitle: '紅利點數',
+                      dataTitle: '最大尺寸',
                     },
                     {
                       content: (
@@ -142,25 +136,27 @@ const ShipmentManagement = () => {
                           <NumberFormatter number={method.shippingPrice} />
                         </>
                       ),
-                      dataTitle: '紅利點數',
+                      dataTitle: '運費',
                     },
                     {
                       content: (
                         <>
-                          <button
-                            className="shipmentManagement__btn"
-                            onClick={handleEdit(method)}
-                          >
-                            編輯
-                          </button>
-                          <button
-                            className="shipmentManagement__btn"
-                            onClick={() =>
-                              handleDelete(method.shippingMethodId)
-                            }
-                          >
-                            刪除
-                          </button>
+                          <div className="shipmentManagement__btns">
+                            <button
+                              className="shipmentManagement__btn"
+                              onClick={handleEdit(method)}
+                            >
+                              編輯
+                            </button>
+                            <button
+                              className="shipmentManagement__btn"
+                              onClick={() =>
+                                handleDelete(method.shippingMethodId)
+                              }
+                            >
+                              刪除
+                            </button>
+                          </div>
                         </>
                       ),
                       dataTitle: '操作',

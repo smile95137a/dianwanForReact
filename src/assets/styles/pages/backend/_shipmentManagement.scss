@@ -49,6 +49,12 @@ $root-block-name: '.shipmentManagement';
     }
   }
 
+  &__btns {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+
   &__btn {
     min-width: 120px;
     height: 40px;

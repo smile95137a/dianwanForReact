@@ -48,8 +48,6 @@ const ShipmentManagement = () => {
   };
 
   const handleEdit = (data: any) => async () => {
-    console.log(data);
-
     const result = await openAddShipmentDialog(true, data);
     if (result) {
       fetchShippingMethods(); // 刷新列表

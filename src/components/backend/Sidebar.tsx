@@ -41,7 +41,7 @@ const sidebarItems = [
     text: '訂單狀態管理',
     path: '/admin/main/order-management',
   },
-  { icon: <FaTruck />, text: '配送狀態管理', path: '/admin/main/vendor' },
+  { icon: <FaTruck />, text: '報表金額管理', path: '/admin/main/vendor' },
   {
     icon: <FaGift />,
     text: '推薦商品管理',

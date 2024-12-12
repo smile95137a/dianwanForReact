@@ -1,6 +1,5 @@
 import Header from '@/components/backend/Header';
 import Sidebar from '@/components/backend/Sidebar';
-import { useBackendDialog } from '@/context/backend/useBackendDialog';
 import { Outlet } from 'react-router-dom';
 
 const Main = () => {

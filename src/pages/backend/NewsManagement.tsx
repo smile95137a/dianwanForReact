@@ -4,12 +4,18 @@ import NoData from '@/components/backend/NoData';
 import Pagination from '@/components/backend/Pagination';
 import DateFormatter from '@/components/common/DateFormatter';
 import Card from '@/components/frontend/MCard';
+import { useBackendDialog } from '@/context/backend/useBackendDialog';
+import { useLoading } from '@/context/frontend/LoadingContext';
 import { usePagination } from '@/hooks/usePagination';
 import { getAllNews, NewsStatus } from '@/services/backend/NewsService';
 import React, { useEffect, useState } from 'react';
 
 const NewsManagement = () => {
   const [newsList, setNewsList] = useState<News[]>([]);
+
+  const { openAddNewsDialog, openConfirmDialog, openInfoDialog } =
+    useBackendDialog();
+  const { setLoading } = useLoading();
 
   const pagination = usePagination({
     list: newsList,
@@ -32,10 +38,16 @@ const NewsManagement = () => {
     fetchNews();
   }, []);
 
+  const openNewsDialog = async () => {
+    const result = await openAddNewsDialog();
+  };
+
   return (
     <div className="newsManagement">
       <p className="newsManagement__title">最新消息管理</p>
-
+      <button className="newsManagement__btn m-b-12" onClick={openNewsDialog}>
+        新增 News
+      </button>
       <div className="newsManagement__list">
         {newsList.length > 0 ? (
           <div className="newsManagement__list-content">

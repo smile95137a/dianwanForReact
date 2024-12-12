@@ -15,6 +15,12 @@ import AddMemberDialog from '@/components/backend/dialog/AddMemberDialog';
 import { useAddShipmentDialog } from './AddShipmentDialogProvider';
 import AddRedemptionCodeDialog from '@/components/backend/dialog/AddRedemptionCodeDialog';
 import AddShipmentDialog from '@/components/backend/dialog/AddShipmentDialog';
+import { useGrantRewardDialog } from './GrantRewardDialogProvider';
+import GrantRewardDialog from '@/components/backend/dialog/GrantRewardDialog';
+import AddNewsDialog from '@/components/backend/dialog/AddNewsDialog';
+import { useAddNewsDialog } from './AddNewsDialogProvider';
+import { useAddStoreProductDialog } from './AddStoreProductDialogProvider';
+import AddStoreProductDialog from '@/components/backend/dialog/AddStoreProductDialog';
 
 interface DialogProviderProps {
   children: ReactNode;
@@ -85,6 +91,32 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
     confirmAddRedemptionCodeDialog,
   } = useAddRedemptionCodeDialog();
 
+  const {
+    memberList,
+    grantRewardDialogOpen,
+    openGrantRewardDialog,
+    closeGrantRewardDialog,
+    confirmGrantRewardDialog,
+  } = useGrantRewardDialog();
+
+  const {
+    news,
+    isNewsEdit,
+    addNewsDialogOpen,
+    openAddNewsDialog,
+    closeAddNewsDialog,
+    confirmAddNewsDialog,
+  } = useAddNewsDialog();
+
+  const {
+    storeProduct,
+    isEdit: isStoreProductEdit,
+    addStoreProductDialogOpen,
+    openAddStoreProductDialog,
+    closeAddStoreProductDialog,
+    confirmAddStoreProductDialog,
+  } = useAddStoreProductDialog();
+
   return (
     <BackendDialogContext.Provider
       value={{
@@ -95,11 +127,34 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
         openAddMemberDialog,
         openAddShipmentDialog,
         openAddRedemptionCodeDialog,
+        openGrantRewardDialog,
+        openAddNewsDialog,
+        openAddStoreProductDialog,
       }}
     >
       {children}
       {ReactDOM.createPortal(
         <>
+          {addStoreProductDialogOpen && (
+            <AddStoreProductDialog
+              storeProduct={storeProduct}
+              isEdit={isStoreProductEdit}
+              isOpen={addStoreProductDialogOpen}
+              onClose={closeAddStoreProductDialog}
+              onConfirm={confirmAddStoreProductDialog}
+            />
+          )}
+
+          {addNewsDialogOpen && (
+            <AddNewsDialog
+              news={member}
+              isEdit={isNewsEdit}
+              isOpen={addNewsDialogOpen}
+              onClose={closeAddNewsDialog}
+              onConfirm={confirmAddNewsDialog}
+            />
+          )}
+
           {addMemberDialogOpen && (
             <AddMemberDialog
               member={member}
@@ -107,6 +162,15 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
               isOpen={addMemberDialogOpen}
               onClose={closeAddMemberDialog}
               onConfirm={confirmAddMemberDialog}
+            />
+          )}
+
+          {grantRewardDialogOpen && (
+            <GrantRewardDialog
+              memberList={memberList}
+              isOpen={grantRewardDialogOpen}
+              onClose={closeGrantRewardDialog}
+              onConfirm={confirmGrantRewardDialog}
             />
           )}
 

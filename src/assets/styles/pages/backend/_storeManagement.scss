@@ -1,11 +1,10 @@
-$root-block-name: '.memberManagement';
+$root-block-name: '.storeManagement';
 
 #{$root-block-name} {
   $p: &;
   $p__text: #{$p}__text;
   $p__btn: #{$p}__btn;
 
-  width: 100%;
   &__title {
     color: #6b9fd2;
     font-size: 20px;
@@ -49,7 +48,11 @@ $root-block-name: '.memberManagement';
       transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
   }
-
+  &__btns {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
   &__btn {
     min-width: 120px;
     height: 40px;
@@ -70,14 +73,10 @@ $root-block-name: '.memberManagement';
       cursor: not-allowed;
       opacity: 0.7;
     }
-  }
 
-  &__list {
-    width: 100%;
-    &-content {
-      width: 100%;
-
-      overflow: hidden;
+    &--edit,
+    &--del {
+      min-width: 80px;
     }
   }
 }

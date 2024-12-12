@@ -5,6 +5,8 @@ import { useForm } from 'react-hook-form';
 import { FormSelect } from '../FormSelect';
 import { FormInput } from '../FormInput';
 import { createUser, updateUser } from '@/services/backend/UserService';
+import { useBackendDialog } from '@/context/backend/useBackendDialog';
+import { useLoading } from '@/context/frontend/LoadingContext';
 
 interface AddMemberDialogProps {
   isOpen: boolean;
@@ -31,6 +33,9 @@ const AddMemberDialog: FC<AddMemberDialogProps> = ({
     },
   });
 
+  const { openInfoDialog } = useBackendDialog();
+  const { setLoading } = useLoading();
+
   useEffect(() => {
     const defaultValues = {
       username: '',
@@ -50,24 +55,72 @@ const AddMemberDialog: FC<AddMemberDialogProps> = ({
     reset(defaultValues);
   }, [isEdit, member, reset]);
 
-  const handleSubmit = async () => {
+  const validateForm = async () => {
+    const { username, nickName, phoneNumber, address, roleId } = getValues();
+
     try {
-      const formData = getValues();
-      const { success, data } =
-        isEdit && member
-          ? await updateUser(member.id, { ...formData })
-          : await createUser(formData);
-      if (success) {
-        onClose(true);
+      if (!username.trim()) {
+        throw new Error('帳號為必填項！');
       }
+      if (!nickName.trim()) {
+        throw new Error('暱稱為必填項！');
+      }
+      if (!phoneNumber.trim()) {
+        throw new Error('電話號碼為必填項！');
+      }
+      if (!/^\d{10}$/.test(phoneNumber)) {
+        throw new Error('電話號碼格式無效，必須為 10 位數字！');
+      }
+      if (!address.trim()) {
+        throw new Error('地址為必填項！');
+      }
+      if (roleId < 1 || roleId > 5) {
+        throw new Error('請選擇有效的角色！');
+      }
+      return true;
     } catch (error) {
-      console.log(error);
+      if (error instanceof Error) {
+        await openInfoDialog('系統提示', error.message);
+      }
+      return false;
     }
   };
+
+  const handleSubmit = async () => {
+    if (await validateForm()) {
+      const formData = getValues();
+
+      try {
+        setLoading(true);
+        const { success, data, code, message } = isEdit
+          ? await updateUser(member.id, formData)
+          : await createUser(formData);
+
+        setLoading(false);
+
+        if (success) {
+          await openInfoDialog(
+            '系統提示',
+            isEdit ? '更新成功！' : '新增成功！'
+          );
+          onClose(true);
+        } else {
+          await openInfoDialog('系統提示', message || '操作失敗，請稍後再試！');
+        }
+      } catch (error) {
+        setLoading(false);
+        console.error('操作失敗:', error);
+        await openInfoDialog('系統提示', '操作過程中出現錯誤，請稍後再試！');
+      }
+    }
+  };
+
   return (
     <BDialog isOpen={isOpen} onClose={() => onClose(false)}>
       <div className="addMemberDialog">
-        <p>新增 會員</p>
+        <p className="addMemberDialog__text addMemberDialog__text--title">
+          新增會員
+        </p>
         <div className="addMemberDialog__main">
           <div className="flex">
             <div className="w-100">

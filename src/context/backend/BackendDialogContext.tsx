@@ -12,6 +12,7 @@ export interface DialogContextType {
     customClass?: string
   ) => Promise<void>;
   openAddMemberDialog: (isEdit?: boolean, user?: any) => Promise<boolean>;
+  openGrantRewardDialog: (memberList: any[]) => Promise<boolean>;
   openAddBannerDialog: (customClass?: string) => Promise<boolean>;
   openAddShipmentDialog: (
     isEdit?: boolean,
@@ -21,6 +22,11 @@ export interface DialogContextType {
   openAddRedemptionCodeDialog: (customClass?: string) => Promise<boolean>;
   openAddProductRecommendationDialog: (
     customClass?: string
+  ) => Promise<boolean>;
+  openAddNewsDialog: (isEdit?: boolean, news?: any) => Promise<boolean>;
+  openAddStoreProductDialog: (
+    isEdit?: boolean,
+    storeProduct?: any
   ) => Promise<boolean>;
 }
 

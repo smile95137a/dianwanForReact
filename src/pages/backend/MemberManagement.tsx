@@ -4,15 +4,17 @@ import BCard from '@/components/backend/MCard';
 import NoData from '@/components/backend/NoData';
 import Pagination from '@/components/backend/Pagination';
 import DateFormatter from '@/components/common/DateFormatter';
+import NumberFormatter from '@/components/common/NumberFormatter';
 import Card from '@/components/frontend/MCard';
 import { useBackendDialog } from '@/context/backend/useBackendDialog';
+import { useLoading } from '@/context/frontend/LoadingContext';
 import { usePagination } from '@/hooks/usePagination';
 import { getAllUsers } from '@/services/backend/UserService';
 import React, { useEffect, useState } from 'react';
 
 const MemberManagement = () => {
-  const { openAddMemberDialog } = useBackendDialog();
-
+  const { openAddMemberDialog, openGrantRewardDialog } = useBackendDialog();
+  const { setLoading } = useLoading();
   const [users, setUsers] = useState<any[]>([]);
 
   const [statItems, setStatItems] = useState([
@@ -24,23 +26,25 @@ const MemberManagement = () => {
 
   const pagination = usePagination({
     list: users,
-    pageLimitSize: 3,
+    pageLimitSize: 10,
     initialPage: 1,
   });
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const { success, data } = await getAllUsers();
-        if (success) {
-          setUsers(data);
-          updateStats();
-        }
-      } catch (error) {
-        console.error('Error fetching users:', error);
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const { success, data } = await getAllUsers();
+      setLoading(false);
+      if (success) {
+        setUsers(data);
+        updateStats();
       }
-    };
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
 
+  useEffect(() => {
     fetchUsers();
   }, []);
 
@@ -82,23 +86,50 @@ const MemberManagement = () => {
 
   const openMemberDialog = async () => {
     const result = await openAddMemberDialog();
-    console.log(result);
+    if (result) {
+      fetchUsers();
+    }
   };
 
   const handleEditMember = (user: any) => async () => {
     const result = await openAddMemberDialog(true, user);
+    if (result) {
+      fetchUsers();
+    }
+  };
+  const handleSelectMember = (memberId: number) => {
+    setUsers((prevUsers) =>
+      prevUsers.map((user) =>
+        user.id === memberId ? { ...user, isSelected: !user.isSelected } : user
+      )
+    );
+  };
+  const handleGrantRewards = async () => {
+    const memberList = users.filter((user) => user.isSelected);
+    const result = await openGrantRewardDialog(memberList);
+    if (result) {
+      fetchUsers();
+    }
   };
 
   return (
     <div className="memberManagement">
       <p className="memberManagement__title">會員管理</p>
-      <button
-        className="memberManagement__addButton"
-        onClick={openMemberDialog}
-      >
-        新增會員
-      </button>
-      <div className="flex gap-x-24">
+      <div className="flex gap-x-12">
+        <button
+          className="memberManagement__btn m-y-12"
+          onClick={openMemberDialog}
+        >
+          新增會員
+        </button>
+        <button
+          className="memberManagement__btn m-y-12"
+          onClick={handleGrantRewards}
+        >
+          發放獎勵
+        </button>
+      </div>
+      <div className="flex gap-x-24  m-y-12">
         {statItems.map((item, index) => (
           <div key={index} className="w-25">
             <BCard
@@ -120,6 +151,7 @@ const MemberManagement = () => {
           <div className="memberManagement__list-content">
             <BTable
               headers={[
+                { text: '', className: '' },
                 { text: '會員類型', className: '' },
                 { text: '暱稱', className: '' },
                 { text: '電話', className: '' },
@@ -131,24 +163,49 @@ const MemberManagement = () => {
                 { text: '操作', className: '' },
               ]}
             >
-              {pagination.currentPageItems.map((user, index) => (
+              {pagination.currentPageItems.map((member, index) => (
                 <BTableRow
                   key={index}
                   data={[
                     {
-                      content: <>{getRoleName(user.roleId)}</>,
+                      content: (
+                        <>
+                          <input
+                            type="checkbox"
+                            checked={member.isSelected || false}
+                            onChange={() => handleSelectMember(member.id)}
+                          />
+                        </>
+                      ),
                       dataTitle: '會員類型',
                     },
-                    { content: <>{user.nickName}</>, dataTitle: '暱稱' },
-                    { content: <>{user.phoneNumber}</>, dataTitle: '電話' },
-                    { content: <>{user.address}</>, dataTitle: '居住地址' },
-                    { content: <>{user.balance}</>, dataTitle: '金幣' },
-                    { content: <>{user.sliverCoin}</>, dataTitle: '銀幣' },
-                    { content: <>{user.bonus}</>, dataTitle: '紅利點數' },
+                    {
+                      content: <>{getRoleName(member.roleId)}</>,
+                      dataTitle: '會員類型',
+                    },
+                    { content: <>{member.nickName}</>, dataTitle: '暱稱' },
+                    { content: <>{member.phoneNumber}</>, dataTitle: '電話' },
+                    { content: <>{member.address}</>, dataTitle: '居住地址' },
+                    {
+                      content: (
+                        <>{<NumberFormatter number={member.balance} />}</>
+                      ),
+                      dataTitle: '金幣',
+                    },
+                    {
+                      content: (
+                        <>{<NumberFormatter number={member.sliverCoin} />}</>
+                      ),
+                      dataTitle: '銀幣',
+                    },
+                    {
+                      content: <>{<NumberFormatter number={member.bonus} />}</>,
+                      dataTitle: '紅利點數',
+                    },
                     {
                       content: (
                         <>
-                          <DateFormatter date={user.updatedAt} />
+                          <DateFormatter date={member.updatedAt} />
                         </>
                       ),
                       dataTitle: '修改時間',
@@ -157,7 +214,7 @@ const MemberManagement = () => {
                       content: (
                         <button
                           className="memberManagement__btn"
-                          onClick={handleEditMember(user)}
+                          onClick={handleEditMember(member)}
                         >
                           編輯
                         </button>

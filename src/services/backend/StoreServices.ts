@@ -74,13 +74,9 @@ export const deleteStoreProduct = async (
   }
 };
 
-export const getAllCategories = async (): Promise<
-  ApiResponse<StoreCategoryListApiResponse>
-> => {
+export const getAllCategories = async (): Promise<ApiResponse<any>> => {
   try {
-    const response = await api.get<ApiResponse<StoreCategoryListApiResponse>>(
-      `${categoryBasePath}/all`
-    );
+    const response = await api.get<ApiResponse<any>>(`${categoryBasePath}/all`);
     return response.data;
   } catch (error) {
     console.error('Error fetching categories:', error);
@@ -150,4 +146,49 @@ export const deleteCategory = async (
 export const getImageUrl = (imagePath: string): string => {
   const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
   return `${import.meta.env.VITE_BASE_API_URL3}/${cleanPath}`;
+};
+
+export const fetchReportData = async (
+  reportType: any,
+  startDate: any,
+  endDate: any,
+  groupType: any
+): Promise<ApiResponse<void>> => {
+  try {
+    const response = await api.get('/reports', {
+      params: {
+        reportType: reportType,
+        startDate: startDate,
+        endDate: endDate,
+        groupType: groupType,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting category:', error);
+    throw error;
+  }
+};
+
+export const exportReportData = async (
+  reportType: any,
+  startDate: any,
+  endDate: any,
+  groupType: any
+) => {
+  try {
+    const response = await api.get('/reports/export', {
+      params: {
+        reportType: reportType,
+        startDate: startDate,
+        endDate: endDate,
+        groupType: groupType,
+      },
+      responseType: 'blob',
+    });
+    return response;
+  } catch (error) {
+    console.error('Error deleting category:', error);
+    throw error;
+  }
 };

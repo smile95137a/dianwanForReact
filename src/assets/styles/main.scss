@@ -32,8 +32,13 @@
 @import 'components/backend/dialog/confirm-dialog';
 @import 'components/backend/dialog/info-dialog';
 @import 'components/backend/dialog/add-banner-dialog';
+@import 'components/backend/dialog/add-product-recommendation-dialog';
 @import 'components/backend/dialog/add-redemption-code-dialog';
 @import 'components/backend/dialog/add-shipment-code-dialog';
+@import 'components/backend/dialog/add-member-dialog';
+@import 'components/backend/dialog/add-news-dialog';
+@import 'components/backend/dialog/add-store-product-dialog';
+@import 'components/backend/dialog/grant-reward-dialog';
 @import 'components/backend/b-input';
 @import 'components/backend/b-select';
 
@@ -81,6 +86,10 @@
 @import 'pages/backend/bannerManagement';
 @import 'pages/backend//productRecommendation';
 @import 'pages/backend/redemptionCodeManagement';
+@import 'pages/backend/newsManagement';
+@import 'pages/backend/vendorManagement';
+@import 'pages/backend/orderManagement';
+@import 'pages/backend/storeManagement';
 
 // themes
 // ec6ab1 f29bcb f8cde5

@@ -15,7 +15,7 @@ import OrderManagement from '@/pages/backend/OrderManagement';
 import ProductRecommendation from '@/pages/backend/ProductRecommendation';
 import RedemptionCodeList from '@/pages/backend/RedemptionCodeList';
 import ShipmentManagement from '@/pages/backend/ShipmentManagement';
-import StoreControl from '@/pages/backend/StoreControl';
+import StoreManagement from '@/pages/backend/StoreManagement';
 import VendorManagement from '@/pages/backend/VendorManagement';
 import ProductDataManagement from '@/pages/backend/ProductDataManagement';
 import BannerManagement from '@/pages/backend/BannerManagement';
@@ -101,7 +101,7 @@ const BackendRoutes: RouteObject[] = [
             element: <ProductDataManagement />,
           },
           { path: 'shipment-management', element: <ShipmentManagement /> },
-          { path: 'store-control', element: <StoreControl /> },
+          { path: 'store-control', element: <StoreManagement /> },
           { path: 'news-management', element: <NewsManagement /> },
           { path: 'order-management', element: <OrderManagement /> },
           { path: 'vendor', element: <VendorManagement /> },

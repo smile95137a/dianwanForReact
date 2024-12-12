@@ -66,8 +66,10 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
   } = useAddBannerDialog();
 
   const {
+    productRecommendation,
+    isEdit: isProductRecommendationEdit,
     addProductRecommendationDialogOpen,
-    customClass: addProductRecommendationCustomClass,
+    customClass: addProductRecommendationDialogCustomClass,
     openAddProductRecommendationDialog,
     closeAddProductRecommendationDialog,
     confirmAddProductRecommendationDialog,
@@ -185,10 +187,12 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
 
           {addProductRecommendationDialogOpen && (
             <AddProductRecommendationDialog
+              productRecommendation={productRecommendation}
+              isEdit={isProductRecommendationEdit}
               isOpen={addProductRecommendationDialogOpen}
               onClose={closeAddProductRecommendationDialog}
               onConfirm={confirmAddProductRecommendationDialog}
-              customClass={addProductRecommendationCustomClass}
+              customClass={addProductRecommendationDialogCustomClass}
             />
           )}
 
@@ -197,7 +201,7 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
               isOpen={addRedemptionCodeDialogOpen}
               onClose={closeAddRedemptionCodeDialog}
               onConfirm={confirmAddRedemptionCodeDialog}
-              customClass={addProductRecommendationCustomClass}
+              customClass={addRedemptionCodeCustomClass}
             />
           )}
 
@@ -208,7 +212,7 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
               isOpen={addShipmentDialogOpen}
               onClose={closeAddShipmentDialog}
               onConfirm={confirmAddShipmentDialog}
-              customClass={addProductRecommendationCustomClass}
+              customClass={addShipmentDialogCustomClass}
             />
           )}
 

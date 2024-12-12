@@ -37,7 +37,7 @@ export const getRecommendationMappingById = async (
 };
 
 export const createRecommendationMapping = async (
-  mapping: Omit<ProductRecommendationMapping, 'id'>
+  mapping: any
 ): Promise<ApiResponse<ProductRecommendationMapping>> => {
   try {
     const response = await api.post<ApiResponse<ProductRecommendationMapping>>(
@@ -53,7 +53,7 @@ export const createRecommendationMapping = async (
 
 export const updateRecommendationMapping = async (
   id: number,
-  mapping: Partial<ProductRecommendationMapping>
+  mapping: any
 ): Promise<ApiResponse<ProductRecommendationMapping>> => {
   try {
     const response = await api.put<ApiResponse<ProductRecommendationMapping>>(

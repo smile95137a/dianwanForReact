@@ -21,6 +21,8 @@ export interface DialogContextType {
   ) => Promise<boolean>;
   openAddRedemptionCodeDialog: (customClass?: string) => Promise<boolean>;
   openAddProductRecommendationDialog: (
+    isEdit?: boolean,
+    productRecommendation?: any,
     customClass?: string
   ) => Promise<boolean>;
   openAddNewsDialog: (isEdit?: boolean, news?: any) => Promise<boolean>;

@@ -49,6 +49,12 @@ $root-block-name: '.recommendationMappingManagement';
     }
   }
 
+  &__btns {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
   &__btn {
     min-width: 120px;
     height: 40px;

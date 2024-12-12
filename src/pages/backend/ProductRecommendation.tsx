@@ -4,15 +4,24 @@ import NoData from '@/components/backend/NoData';
 import Pagination from '@/components/backend/Pagination';
 import Card from '@/components/frontend/MCard';
 import { usePagination } from '@/hooks/usePagination';
-import { getAllRecommendationMappings } from '@/services/backend/RecommendationService';
+import {
+  deleteRecommendationMapping,
+  getAllRecommendationMappings,
+} from '@/services/backend/RecommendationService';
 import DateFormatter from '@/components/common/DateFormatter';
 import React, { useEffect, useState } from 'react';
 import { useBackendDialog } from '@/context/backend/useBackendDialog';
+import { useLoading } from '@/context/frontend/LoadingContext';
+import { deleteShippingMethod } from '@/services/backend/ShipService';
 
 const ProductRecommendation = () => {
-  const { openAddProductRecommendationDialog } = useBackendDialog();
-
   const [mappingList, setMappingList] = useState<any[]>([]);
+  const {
+    openAddProductRecommendationDialog,
+    openConfirmDialog,
+    openInfoDialog,
+  } = useBackendDialog();
+  const { setLoading } = useLoading();
 
   const pagination = usePagination({
     list: mappingList,
@@ -37,7 +46,38 @@ const ProductRecommendation = () => {
 
   const openProductRecommendation = async () => {
     const result = await openAddProductRecommendationDialog();
-    console.log(result);
+    if (result) {
+      fetchMappings();
+    }
+  };
+
+  const handleEdit = (data: any) => async () => {
+    const result = await openAddProductRecommendationDialog(true, data);
+    if (result) {
+      fetchMappings();
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    const result = await openConfirmDialog('系統提示', '確定要刪除嗎？');
+
+    if (result) {
+      try {
+        setLoading(true);
+        const { success } = await deleteRecommendationMapping(id);
+        setLoading(false);
+        if (success) {
+          await openInfoDialog('系統提示', '已成功刪除！');
+          fetchMappings();
+        } else {
+          await openInfoDialog('系統提示', '刪除失敗，請稍後再試！');
+        }
+      } catch (error) {
+        setLoading(false);
+        console.error('Error deleting banner:', error);
+        await openInfoDialog('系統提示', '刪除失敗，請稍後再試！');
+      }
+    }
   };
 
   return (
@@ -90,9 +130,20 @@ const ProductRecommendation = () => {
                     },
                     {
                       content: (
-                        <button className="recommendationMappingManagement__btn">
-                          編輯
-                        </button>
+                        <div className="recommendationMappingManagement__btns">
+                          <button
+                            className="recommendationMappingManagement__btn"
+                            onClick={handleEdit(recommand)}
+                          >
+                            編輯
+                          </button>
+                          <button
+                            className="recommendationMappingManagement__btn"
+                            onClick={() => handleDelete(recommand.id)}
+                          >
+                            刪除
+                          </button>
+                        </div>
                       ),
                       dataTitle: '操作',
                     },

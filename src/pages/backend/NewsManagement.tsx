@@ -7,7 +7,11 @@ import Card from '@/components/frontend/MCard';
 import { useBackendDialog } from '@/context/backend/useBackendDialog';
 import { useLoading } from '@/context/frontend/LoadingContext';
 import { usePagination } from '@/hooks/usePagination';
-import { getAllNews, NewsStatus } from '@/services/backend/NewsService';
+import {
+  deleteNews,
+  getAllNews,
+  NewsStatus,
+} from '@/services/backend/NewsService';
 import React, { useEffect, useState } from 'react';
 
 const NewsManagement = () => {
@@ -22,24 +26,55 @@ const NewsManagement = () => {
     pageLimitSize: 10,
     initialPage: 1,
   });
+  const fetchNews = async () => {
+    try {
+      const { success, data } = await getAllNews();
+      if (success) {
+        setNewsList(data);
+      }
+    } catch (err) {
+      console.error('Error fetching news:', err);
+    }
+  };
 
   useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const { success, data } = await getAllNews();
-        if (success) {
-          setNewsList(data);
-        }
-      } catch (err) {
-        console.error('Error fetching news:', err);
-      }
-    };
-
     fetchNews();
   }, []);
 
   const openNewsDialog = async () => {
     const result = await openAddNewsDialog();
+    if (result) {
+      fetchNews();
+    }
+  };
+
+  const handleEdit = (data: any) => async () => {
+    const result = await openAddNewsDialog(true, data);
+    if (result) {
+      fetchNews();
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    const result = await openConfirmDialog('系統提示', '確定要刪除嗎？');
+
+    if (result) {
+      try {
+        setLoading(true);
+        const { success } = await deleteNews(id);
+        setLoading(false);
+        if (success) {
+          await openInfoDialog('系統提示', '已成功刪除！');
+          fetchNews();
+        } else {
+          await openInfoDialog('系統提示', '刪除失敗，請稍後再試！');
+        }
+      } catch (error) {
+        setLoading(false);
+        console.error('Error deleting banner:', error);
+        await openInfoDialog('系統提示', '刪除失敗，請稍後再試！');
+      }
+    }
   };
 
   return (
@@ -72,7 +107,7 @@ const NewsManagement = () => {
                     {
                       content: (
                         <>
-                          <DateFormatter date={news.publishDate} />
+                          <DateFormatter date={news.createdDate} />
                         </>
                       ),
                       dataTitle: '發布日期',
@@ -89,7 +124,20 @@ const NewsManagement = () => {
                     },
                     {
                       content: (
-                        <button className="newsManagement__btn">編輯</button>
+                        <div className="newsManagement__btns">
+                          <button
+                            className="newsManagement__btn newsManagement__btn--edit"
+                            onClick={handleEdit(news)}
+                          >
+                            編輯
+                          </button>
+                          <button
+                            className="newsManagement__btn newsManagement__btn--del"
+                            onClick={() => handleDelete(news.newsUid)}
+                          >
+                            刪除
+                          </button>
+                        </div>
                       ),
                       dataTitle: '操作',
                     },

@@ -33,8 +33,8 @@ const VendorManagement = () => {
   const [list, setList] = useState<any[]>([]);
   const { control, getValues } = useForm({
     defaultValues: {
-      reportType: '',
-      groupType: '',
+      reportType: 'DRAW_AMOUNT',
+      groupType: 'day',
       startDate: '',
       endDate: '',
     },

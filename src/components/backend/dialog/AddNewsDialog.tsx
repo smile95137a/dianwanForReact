@@ -59,8 +59,15 @@ const AddNewsDialog: FC<AddNewsDialogProps> = ({
     };
 
     if (isEdit && news) {
-      Object.assign(defaultValues, news);
+      defaultValues.title = news.title || '';
+      defaultValues.preview = news.preview || '';
+      defaultValues.content = news.content || '';
+      defaultValues.status = news.status || NewsStatus.UNAVAILABLE;
+      defaultValues.author = news.author || '';
+      defaultValues.imageFiles = news.imageFiles || [];
+      defaultValues.imageUrls = news.imageUrls || [];
     }
+
     reset(defaultValues);
   }, [isEdit, news, reset]);
 
@@ -70,7 +77,6 @@ const AddNewsDialog: FC<AddNewsDialogProps> = ({
       if (!title.trim()) throw new Error('標題為必填項！');
       if (!preview.trim()) throw new Error('摘要為必填項！');
       if (!content.trim()) throw new Error('內容為必填項！');
-      if (!author.trim()) throw new Error('作者為必填項！');
       return true;
     } catch (error) {
       if (error instanceof Error)
@@ -96,12 +102,13 @@ const AddNewsDialog: FC<AddNewsDialogProps> = ({
 
   const handleSubmit = async () => {
     if (await validateForm()) {
-      const { title, preview, content, status, author } = getValues();
+      const { title, preview, content, status, author, imageUrls } =
+        getValues();
       const formData = new FormData();
 
       formData.append(
         'newsReq',
-        JSON.stringify({ title, preview, content, status, author })
+        JSON.stringify({ title, preview, content, status, author, imageUrls })
       );
 
       imageFiles.forEach((file) => {
@@ -156,42 +163,28 @@ const AddNewsDialog: FC<AddNewsDialogProps> = ({
           {isEdit ? '編輯新聞' : '新增新聞'}
         </p>
         <div className="addNewsDialog__main">
-          <FormInput
-            name="title"
-            control={control}
-            label="標題"
-            placeholder="輸入新聞標題"
-          />
-          <FormInput
-            name="preview"
-            control={control}
-            label="摘要"
-            placeholder="輸入新聞摘要"
-          />
-          <div className="form-group editor-container">
-            <label className="form-label">內容</label>
-            <CKEditor
-              editor={ClassicEditor}
-              data={watch('content')}
-              config={{
-                licenseKey:
-                  'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NjU0OTc1OTksImp0aSI6ImM0MzMyMThmLWI4OWQtNDNmOS04OWVjLTcyN2Q5MGU2Y2YwMCIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiXSwiZmVhdHVyZXMiOlsiRFJVUCIsIkJPWCJdLCJ2YyI6IjgwNDQ4YjI3In0.-QZwe1h28C8klU4zFA3u5KWp6iyqjZCj_Om8hNChdwNqwowWf56Vhz69R3gqyKcAc_iHkCYmAucOoCQfBSTIvA',
-                toolbar: [
-                  'bold',
-                  'italic',
-                  'link',
-                  'bulletedList',
-                  'numberedList',
-                ],
-              }}
-              onChange={(event, editor) => {
-                const data = editor.getData();
-                setValue('content', data);
-              }}
-            />
+          <div className="flex">
+            <div className="w-100">
+              <p className="addMemberDialog__text">標題:</p>
+            </div>
+            <FormInput name="title" control={control} />
           </div>
-          <div className="form-group">
-            <label>上傳圖片</label>
+          <div className="flex">
+            <div className="w-100">
+              <p className="addMemberDialog__text">預覽:</p>
+            </div>
+            <FormInput name="preview" control={control} />
+          </div>
+          <div className="flex">
+            <div className="w-100">
+              <p className="addMemberDialog__text">內容:</p>
+            </div>
+            <FormInput name="content" control={control} />
+          </div>
+          <div className="flex">
+            <div className="w-100">
+              <p className="addMemberDialog__text">上傳圖片:</p>
+            </div>
             <input
               type="file"
               multiple
@@ -213,15 +206,20 @@ const AddNewsDialog: FC<AddNewsDialogProps> = ({
               ))}
             </div>
           </div>
-          <FormSelect
-            name="status"
-            control={control}
-            label="狀態"
-            options={[
-              { value: NewsStatus.AVAILABLE, label: '可用' },
-              { value: NewsStatus.UNAVAILABLE, label: '不可用' },
-            ]}
-          />
+
+          <div className="flex">
+            <div className="w-100">
+              <p className="addMemberDialog__text">狀態:</p>
+            </div>
+            <FormSelect
+              name="status"
+              control={control}
+              options={[
+                { value: NewsStatus.AVAILABLE, label: '可用' },
+                { value: NewsStatus.UNAVAILABLE, label: '不可用' },
+              ]}
+            />
+          </div>
         </div>
         <div className="addNewsDialog__btns">
           <MButton

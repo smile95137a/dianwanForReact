@@ -248,7 +248,7 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
 
           {addNewsDialogOpen && (
             <AddNewsDialog
-              news={member}
+              news={news}
               isEdit={isNewsEdit}
               isOpen={addNewsDialogOpen}
               onClose={closeAddNewsDialog}

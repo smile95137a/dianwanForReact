@@ -5,27 +5,36 @@ import NoData from '@/components/backend/NoData';
 import Pagination from '@/components/backend/Pagination';
 import Card from '@/components/frontend/MCard';
 import { usePagination } from '@/hooks/usePagination';
-import {
-  getAllRedemptionCodes,
-  generateRedemptionCode,
-} from '@/services/backend/RedemptionService';
-import DateFormatter from '@/components/common/DateFormatter';
-import { getAllProductsByType } from '@/services/backend/ProductService';
+import { getAllProducts } from '@/services/backend/ProductService';
 import { useBackendDialog } from '@/context/backend/useBackendDialog';
 import { useLoading } from '@/context/frontend/LoadingContext';
 import {
   deleteStoreProduct,
   getAllCategories,
-  getAllStoreProducts,
 } from '@/services/backend/StoreServices';
 import { getImageUrl } from '@/utils/ImageUtils';
 import NumberFormatter from '@/components/common/NumberFormatter';
-
+import { PrizeCategory } from '@/interfaces/product';
 const ProductDataManagement = () => {
+  enum ProductType {
+    PRIZE = 'PRIZE',
+    GACHA = 'GACHA',
+    BLIND_BOX = 'BLIND_BOX',
+    CUSTMER_PRIZE = 'CUSTMER_PRIZE',
+  }
+
+  const productTypeOptions: Record<ProductType, string> = {
+    [ProductType.PRIZE]: '一番賞',
+    [ProductType.GACHA]: '扭蛋',
+    [ProductType.BLIND_BOX]: '盲盒',
+    [ProductType.CUSTMER_PRIZE]: '客製化抽獎',
+  };
+
   const [products, setProducts] = useState<any[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [filterProductType, setFilterProductType] = useState('');
+  const [filterPrizeCategory, setFilterPrizeCategory] = useState('');
 
   const pagination = usePagination({
     list: filteredProducts,
@@ -35,7 +44,7 @@ const ProductDataManagement = () => {
 
   const {
     openInfoDialog,
-    openAddStoreProductDialog,
+    openAddProductDialog,
     openConfirmDialog,
     openProductCategoryManagementDialog,
   } = useBackendDialog();
@@ -44,7 +53,7 @@ const ProductDataManagement = () => {
   const fetchProductList = async () => {
     try {
       setLoading(true);
-      const { success, data, message } = await getAllStoreProducts();
+      const { success, data } = await getAllProducts();
       setLoading(false);
       if (success) {
         setProducts(data);
@@ -61,30 +70,10 @@ const ProductDataManagement = () => {
     }
   };
 
-  const applyFilters = () => {
-    if (!selectedCategory) {
-      setFilteredProducts(products);
-    } else {
-      setFilteredProducts(
-        products.filter(
-          (product) => product.categoryId.toString() === selectedCategory
-        )
-      );
-    }
-  };
-
-  const openStoreProductDialog = async () => {
-    const result = await openAddStoreProductDialog();
-    if (result) {
-      fetchProductList();
-    }
-  };
-
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const { success, data, code, message } = await getAllCategories();
-
+      const { success, data } = await getAllCategories();
       setLoading(false);
       if (success) {
         setCategories(data);
@@ -98,33 +87,34 @@ const ProductDataManagement = () => {
     }
   };
 
-  const filterProducts = () => {
-    if (!selectedCategory) {
-      setFilteredProducts(products);
-    } else {
-      setFilteredProducts(
-        products.filter(
-          (product) => product.categoryId.toString() === selectedCategory
-        )
-      );
+  // Filtering logic for products based on type and prize category
+  useEffect(() => {
+    setFilteredProducts(() =>
+      products.filter((product) => {
+        if (filterProductType && product.productType !== filterProductType) {
+          return false;
+        }
+        if (
+          filterProductType === ProductType.PRIZE &&
+          filterPrizeCategory &&
+          product.prizeCategory !== filterPrizeCategory
+        ) {
+          return false;
+        }
+        return true;
+      })
+    );
+  }, [filterProductType, filterPrizeCategory, products]);
+
+  const handleOpenProductDialog = async () => {
+    const result = await openAddProductDialog();
+    if (result) {
+      fetchProductList();
     }
   };
 
-  const formatDimensions = (product: any) => {
-    return `${product.width || 0} x ${product.height || 0} x ${
-      product.length || 0
-    }`;
-  };
-
-  const getCategoryName = (categoryId: string) => {
-    const category = categories.find(
-      (c) => c.categoryId.toString() === categoryId
-    );
-    return category ? category.categoryName : `Category ${categoryId}`;
-  };
-
   const handleEdit = (data: any) => async () => {
-    const result = await openAddStoreProductDialog(true, data);
+    const result = await openAddProductDialog(true, data);
     if (result) {
       fetchProductList();
     }
@@ -160,65 +150,69 @@ const ProductDataManagement = () => {
     fetchCategories();
   }, []);
 
-  useEffect(() => {
-    applyFilters();
-  }, [selectedCategory, products]);
-
   const openProductCategoryManagement = () => {
     openProductCategoryManagementDialog();
   };
 
   return (
-    <div className="storeManagement">
-      <p className="storeManagement__title">產品系列管理</p>
+    <div className="productDataManagement">
+      <p className="productDataManagement__title">產品系列管理</p>
       <button
-        onClick={openStoreProductDialog}
-        className="storeManagement__btn m-b-12"
+        onClick={handleOpenProductDialog}
+        className="productDataManagement__btn m-b-12"
       >
         新增商品
       </button>
       <button
         onClick={openProductCategoryManagement}
-        className="storeManagement__btn m-b-12"
+        className="productDataManagement__btn m-b-12"
       >
         管理商品類別
       </button>
-      <div className="storeManagement__productFilter">
+      <div className="productDataManagement__productFilter">
         篩選產品：
         <select
-          id="filterCategory"
-          value={selectedCategory}
+          value={filterProductType}
           onChange={(e) => {
-            setSelectedCategory(e.target.value);
-            filterProducts();
+            setFilterProductType(e.target.value);
+            if (e.target.value !== ProductType.PRIZE) {
+              setFilterPrizeCategory(''); // Clear prize category when not PRIZE type
+            }
           }}
-          className="filter-select"
         >
           <option value="">全部</option>
-          {categories.map((category) => (
-            <option
-              key={category.categoryId}
-              value={category.categoryId.toString()}
-            >
-              {category.categoryName}
-            </option>
-          ))}
+          {}
         </select>
+        {filterProductType === ProductType.PRIZE && (
+          <select
+            value={filterPrizeCategory}
+            onChange={(e) => setFilterPrizeCategory(e.target.value)}
+          >
+            <option value="">全部一番賞類別</option>
+            {Object.values(PrizeCategory).map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
 
-      <div className="storeManagement__list">
+      <div className="productDataManagement__list">
         {filteredProducts.length > 0 ? (
-          <div className="storeManagement__list-content">
+          <div className="productDataManagement__list-content">
             <BTable
               headers={[
                 { text: '圖片', className: '' },
-                { text: '名稱', className: '' },
-                { text: '描述', className: '' },
-                { text: '價格', className: '' },
-                { text: '售出數量', className: '' },
+                { text: '產品名稱', className: '' },
+                { text: '類型', className: '' },
+                { text: '一番賞類別', className: '' },
+                { text: '金幣價格', className: '' },
+                { text: '銀幣價格', className: '' },
+                { text: '紅利價格', className: '' },
                 { text: '庫存', className: '' },
-                { text: '尺寸 (寬x高x深)', className: '' },
-                { text: '類別', className: '' },
+                { text: '狀態', className: '' },
+                { text: '商品類別', className: '' },
                 { text: '操作', className: '' },
               ]}
             >
@@ -230,9 +224,9 @@ const ProductDataManagement = () => {
                       content: (
                         <>
                           <img
-                            src={getImageUrl(x.imageUrl[0])}
+                            src={getImageUrl(x.imageUrls[0])}
                             alt="商品圖片"
-                            className="storeManagement__image"
+                            className="productDataManagement__image"
                           />
                         </>
                       ),
@@ -240,11 +234,15 @@ const ProductDataManagement = () => {
                     },
                     {
                       content: <>{x.productName}</>,
-                      dataTitle: '名稱',
+                      dataTitle: '產品名稱',
                     },
                     {
-                      content: <>{x.description}</>,
+                      content: <>{x.productType}</>,
                       dataTitle: '描述',
+                    },
+                    {
+                      content: <>{x.prizeCategory}</>,
+                      dataTitle: '價格',
                     },
                     {
                       content: (
@@ -252,12 +250,12 @@ const ProductDataManagement = () => {
                           <NumberFormatter number={x.price} />
                         </>
                       ),
-                      dataTitle: '價格',
+                      dataTitle: '售出數量',
                     },
                     {
                       content: (
                         <>
-                          <NumberFormatter number={x.soldQuantity} />
+                          <NumberFormatter number={x.sliverPrice} />
                         </>
                       ),
                       dataTitle: '售出數量',
@@ -265,33 +263,31 @@ const ProductDataManagement = () => {
                     {
                       content: (
                         <>
-                          <NumberFormatter number={x.stockQuantity} />
+                          <NumberFormatter number={x.bonusPrice} />
                         </>
                       ),
                       dataTitle: '庫存',
                     },
                     {
-                      content: <>{formatDimensions(x)}</>,
+                      content: <>{x.stockQuantity}</>,
                       dataTitle: '尺寸 (寬x高x深)',
                     },
                     {
-                      content: <>{getCategoryName(x.categoryId)}</>,
+                      content: <>{x.status}</>,
+                      dataTitle: '類別',
+                    },
+                    {
+                      content: <></>,
                       dataTitle: '類別',
                     },
                     {
                       content: (
                         <>
-                          <div className="storeManagement__btns">
-                            <button
-                              className="storeManagement__btn storeManagement__btn--edit"
-                              onClick={handleEdit(x)}
-                            >
+                          <div className="productDataManagement__btns">
+                            <button className="productDataManagement__btn productDataManagement__btn--edit">
                               編輯
                             </button>
-                            <button
-                              className="storeManagement__btn storeManagement__btn--del"
-                              onClick={() => handleDelete(x.storeProductId)}
-                            >
+                            <button className="productDataManagement__btn productDataManagement__btn--del">
                               刪除
                             </button>
                           </div>

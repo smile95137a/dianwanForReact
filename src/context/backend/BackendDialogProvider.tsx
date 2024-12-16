@@ -23,6 +23,10 @@ import { useAddStoreProductDialog } from './AddStoreProductDialogProvider';
 import AddStoreProductDialog from '@/components/backend/dialog/AddStoreProductDialog';
 import { useProductCategoryManagementDialog } from './ProductCategoryManagementDialogProvider';
 import ProductCategoryManagementDialog from '@/components/backend/dialog/ProductCategoryManagementDialog';
+import { useAddProductCategoryDialog } from './AddProductCategoryDialogProvider';
+import AddProductCategoryDialog from '@/components/backend/dialog/AddProductCategoryDialog';
+import { useAddProductDialog } from './AddProductDialogProvider';
+import AddProductDialog from '@/components/backend/dialog/AddProductDialog';
 
 interface DialogProviderProps {
   children: ReactNode;
@@ -129,6 +133,24 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
     confirmAddStoreProductDialog,
   } = useAddStoreProductDialog();
 
+  const {
+    productCategory,
+    isProductCategoryEdit,
+    addProductCategoryDialogOpen,
+    openAddProductCategoryDialog,
+    closeAddProductCategoryDialog,
+    confirmAddProductCategoryDialog,
+  } = useAddProductCategoryDialog();
+
+  const {
+    product,
+    isEdit: isProductEdit,
+    addProductDialogOpen,
+    openAddProductDialog,
+    closeAddProductDialog,
+    confirmAddProductDialog,
+  } = useAddProductDialog();
+
   return (
     <BackendDialogContext.Provider
       value={{
@@ -143,6 +165,8 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
         openAddNewsDialog,
         openAddStoreProductDialog,
         openProductCategoryManagementDialog,
+        openAddProductCategoryDialog,
+        openAddProductDialog,
       }}
     >
       {children}
@@ -157,6 +181,24 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
             />
           )}
 
+          {addProductCategoryDialogOpen && (
+            <AddProductCategoryDialog
+              productCategory={productCategory}
+              isEdit={isProductCategoryEdit}
+              isOpen={addProductCategoryDialogOpen}
+              onClose={closeAddProductCategoryDialog}
+              onConfirm={confirmAddProductCategoryDialog}
+            />
+          )}
+          {addProductDialogOpen && (
+            <AddProductDialog
+              product={product}
+              isEdit={isProductEdit}
+              isOpen={addProductDialogOpen}
+              onClose={closeAddProductDialog}
+              onConfirm={confirmAddProductDialog}
+            />
+          )}
           {addStoreProductDialogOpen && (
             <AddStoreProductDialog
               storeProduct={storeProduct}

@@ -2,9 +2,15 @@ import React from 'react';
 import { getImageUrl } from '@/utils/ImageUtils';
 import { MdOutlineOfflineBolt } from 'react-icons/md';
 
-const ProductCard = ({ product, className = '' }: any) => {
+const ProductCard = ({ isMall = false, product, className = '' }: any) => {
+  const handleClick = () => {
+    console.log(product);
+
+    const productDetailUrl = `/product/${product.productId}`;
+    window.open(productDetailUrl, '_blank');
+  };
   return (
-    <div className={`productCard ${className}`}>
+    <div className={`productCard ${className}`} onClick={handleClick}>
       <div className="productCard__img">
         <img
           src={getImageUrl(product.imageUrls[0])}

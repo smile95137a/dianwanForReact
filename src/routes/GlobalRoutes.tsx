@@ -39,6 +39,7 @@ import Policy from '@/pages/frontend/Policy';
 import Privacy from '@/pages/frontend/Privacy';
 import ScrollToTop from '@/components/common/ScrollToTop';
 import { LoadingProvider } from '@/context/frontend/LoadingContext';
+import PrizeBox from '@/pages/frontend/PrizeBox';
 
 const FrontendRoutes: RouteObject[] = [
   {
@@ -57,6 +58,7 @@ const FrontendRoutes: RouteObject[] = [
       { path: 'mallProduct', element: <MallProduct /> },
       { path: 'mallProduct/:id', element: <MallProductDetail /> },
       { path: 'cart', element: <Cart /> },
+      { path: 'prizeBox', element: <PrizeBox /> },
       { path: 'orderSuccess', element: <OrderSuccess /> },
       {
         path: 'member-center',

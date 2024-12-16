@@ -1,0 +1,237 @@
+$root-block-name: '.prizeBox';
+
+#{$root-block-name} {
+  $p: &;
+  $p__text: #{$p}__text;
+  $p__item: #{$p}__item;
+  max-width: 1280px;
+  margin: 0 auto;
+
+  @include screen(lg) {
+    margin: 0 24px;
+  }
+
+  &__text {
+    &--title {
+      font-size: 24px;
+      font-weight: 700;
+    }
+  }
+  &__products {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  &__product {
+    background: #f1f1f1;
+    border-radius: 30px;
+    @include flex(center);
+    padding: 24px 48px;
+    gap: 24px;
+
+    @include screen(md) {
+      padding: 12px;
+      @include flex(center, null, column);
+    }
+
+    &-item {
+      @include flex(center);
+      &--selected {
+        width: fit-content;
+      }
+
+      &--img {
+        width: 113px;
+      }
+      &--name {
+        flex: 1;
+        #{$p__text} {
+          font-size: 20px;
+          font-weight: 400;
+        }
+      }
+
+      &--quantity {
+        min-width: 100px;
+        @include flex(center, space-between);
+      }
+
+      &--price {
+        width: 20%;
+        justify-content: end;
+        #{$p__text} {
+          font-size: 32px;
+          font-weight: 700;
+          color: #fe4206;
+        }
+      }
+
+      &--delete {
+        min-width: 22px;
+        color: #2a88cb;
+        font-size: 22px;
+      }
+    }
+    &-quantityBtn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: none;
+      color: #ffe7cc;
+      background: #2a88cb;
+      @include flex(center, center);
+
+      &--decrease,
+      &--increase {
+      }
+    }
+  }
+
+  &__main {
+    width: 100%;
+    padding: 32px;
+    border-radius: 30px;
+    background: #f1f1f1;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    &-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    &-title {
+      width: 80px;
+      display: flex;
+      align-items: center;
+      #{$p__text} {
+        font-size: 20px;
+        font-weight: 700;
+      }
+    }
+    &-content {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+    }
+
+    &-other {
+      min-width: 100px;
+      display: flex;
+      align-items: center;
+      #{$p__text} {
+        font-size: 32px;
+        font-weight: 700;
+        color: #fe4206;
+      }
+    }
+  }
+
+  &__content {
+    width: 100%;
+    display: flex;
+    &-main {
+      flex: 1;
+      display: flex;
+      gap: 24px;
+      #{$p__text} {
+        font-size: 20px;
+        font-weight: 400;
+      }
+    }
+    &-other {
+      width: 100px;
+    }
+
+    &-img {
+      width: 80px;
+      height: 80px;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+  }
+
+  &__divider {
+    margin: 12px 0;
+    width: 100%;
+    height: 1px;
+    background: #2a88cb;
+  }
+
+  &__total {
+    margin-top: 24px;
+    padding: 0 64px;
+    @include flex(end, null, column);
+
+    @include screen(md) {
+      padding: 0 12px;
+    }
+
+    &-item {
+      @include flex(center);
+      #{$p__text} {
+        @include flex(center, end);
+        font-size: 20px;
+        font-weight: 400;
+
+        &--title {
+          width: 100px;
+        }
+        &--money {
+          width: 150px;
+        }
+        &--totalMoney {
+          width: 150px;
+          color: #fe4206;
+        }
+      }
+    }
+  }
+  &__btns {
+    @include flex(null, end);
+    margin: 48px 0;
+    gap: 24px;
+    @include screen(xs) {
+      @include flex(center, center, column);
+    }
+  }
+
+  &__btn {
+    width: 100%;
+    max-width: 246px;
+    height: 57px;
+    border-radius: 90px;
+    cursor: pointer;
+    @include flex(center, center);
+    font-size: 24px;
+    font-weight: 900;
+
+    &--back {
+      border: 1px solid #fe4206;
+      color: #fe4206;
+    }
+    &--checkout {
+      background: #fe4206;
+      color: #fff;
+    }
+
+    &--selectAll {
+      background: #eb9838;
+      color: #fff;
+      width: 120px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: row;
+      border-radius: 10px;
+      border: 2px solid #000;
+      font-size: 18px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+  }
+}

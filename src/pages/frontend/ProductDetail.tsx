@@ -1,7 +1,7 @@
-import { getDrawStatus } from '@/services/frontend/drawService';
+import { executeDraw, getDrawStatus } from '@/services/frontend/drawService';
 import { getProductDetailById } from '@/services/frontend/productDetailService';
 import { getProductById } from '@/services/frontend/productService';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import TitleBar from '../../components/frontend/TitleBar';
 import { BsHandbag } from 'react-icons/bs';
@@ -37,9 +37,13 @@ import ticketImgX from '@/assets/image/ticket_X.png';
 import ticketImgY from '@/assets/image/ticket_Y.png';
 import ticketImgZ from '@/assets/image/ticket_Z.png';
 import ticketImgBlank from '@/assets/image/ticket_blank.png';
+import moment from 'moment';
 import { FaCheck, FaChevronDown, FaThumbtack, FaTimes } from 'react-icons/fa';
 import { MdChecklistRtl } from 'react-icons/md';
 import { useFrontendDialog } from '@/context/frontend/useFrontedDialog';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
+import { useLoading } from '@/context/frontend/LoadingContext';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -48,8 +52,43 @@ const ProductDetail = () => {
   const [ticketList, setTicketList] = useState([]);
   const [activeTickets, setActiveTickets] = useState([]);
   const [showOption, setShowOption] = useState(false);
+  const [endTimes, setEndTimes] = useState(null);
+  const [countdown, setCountdown] = useState(0);
+  const { openInfoDialog, openDrawDialog } = useFrontendDialog();
+  const { setLoading } = useLoading();
 
-  const { openConfirmDialog } = useFrontendDialog();
+  const isLogin = useSelector(
+    (state: RootState) => state.frontend.auth.isLogin
+  );
+
+  const remainingQuantity = useMemo(() => {
+    return ticketList.filter((x) => !x.isDrawn).length;
+  }, [ticketList]);
+
+  let countdownInterval: any = null;
+  const startCountdown = (endTime: any) => {
+    const endMoment = moment(endTime);
+    const now = moment();
+
+    const duration = endMoment.diff(now, 'seconds');
+    setCountdown(duration > 0 ? duration : 0);
+
+    if (countdownInterval) {
+      clearInterval(countdownInterval);
+    }
+
+    countdownInterval = setInterval(() => {
+      setCountdown((prevCountdown) => {
+        if (prevCountdown > 0) {
+          return prevCountdown - 1;
+        } else {
+          clearInterval(countdownInterval);
+          countdownInterval = null;
+          return 0;
+        }
+      });
+    }, 1000);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -142,8 +181,59 @@ const ProductDetail = () => {
   };
 
   const handleConfirm = async () => {
-    const result = await openConfirmDialog();
-    console.log(result);
+    if (!isLogin) {
+      await openInfoDialog('系統消息', '請先登入');
+      return;
+    }
+
+    if (activeTickets.length === 0) {
+      await openInfoDialog('系統消息', '請先選擇要抽的項目。');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const { success, data, message } = await executeDraw(
+        product.productId,
+        activeTickets?.map((x) => x.number),
+        1
+      );
+
+      setLoading(false);
+      if (success) {
+        setActiveTickets([]);
+        await fetchDrawStatus();
+        await openDrawDialog({ remainingQuantity, data });
+      } else {
+        await openInfoDialog('系統消息', message);
+      }
+    } catch (error: any) {
+      const { message } = error.response.data;
+      openInfoDialog('系統通知', message);
+    }
+  };
+
+  const fetchDrawStatus = async () => {
+    try {
+      const { success, data } = await getDrawStatus(product.productId);
+
+      if (success) {
+        setTicketList(data.prizeNumberList);
+
+        // if (product.productType === 'PRIZE') {
+        //   const newEndTime = data.endTimes || null;
+        //   if (newEndTime) {
+        //     setEndTimes(newEndTime);
+        //     startCountdown(newEndTime);
+        //   }
+        // }
+      } else {
+        openInfoDialog('系統通知', '系統錯誤');
+      }
+    } catch (error: any) {
+      const { message } = error.response.data;
+      openInfoDialog('系統通知', message);
+    }
   };
 
   return (
@@ -212,6 +302,10 @@ const ProductDetail = () => {
         )}
       </div>
       <TitleBar icon={BsHandbag} titleText="籤桶" showMore={false} />
+      <div className="product-detail-one__text">
+        剩餘數量：{remainingQuantity} / 總數量：{ticketList?.length || 0}
+      </div>
+
       <div
         className="productDetail__sign"
         style={{

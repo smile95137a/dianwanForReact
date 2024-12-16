@@ -6,12 +6,14 @@ interface confirmDialogProps {
   title?: string;
   content: string;
   onClose: () => void;
+  onConfirm: () => void;
   customClass?: string;
 }
 
 const ConfirmDialog: FC<confirmDialogProps> = ({
   isOpen,
   onClose,
+  onConfirm,
   title = '系統提示',
   content,
   customClass,

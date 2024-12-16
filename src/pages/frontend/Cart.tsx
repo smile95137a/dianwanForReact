@@ -1,205 +1,334 @@
-import React from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import logoImg from '@/assets/image/logo.png';
 import NumberFormatter from '@/components/common/NumberFormatter';
 import { FaMinus, FaPlus, FaTrash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { useLoading } from '@/context/frontend/LoadingContext';
+import { getCart } from '@/services/frontend/cartService';
+import { getImageUrl } from '@/utils/ImageUtils';
+import {
+  addCartItem,
+  removeCartItem,
+} from '@/services/frontend/cartItemService';
+import { getShippingMethod } from '@/services/frontend/shippingMethodService';
+import { invoiceInfoOptions, paymentOptions } from '@/data/orderOptions';
+import { FormProvider, useForm } from 'react-hook-form';
+import CheckoutInfoForm from '@/components/frontend/CheckoutInfoForm';
 
 const Cart = () => {
-  const navigate = useNavigate();
+  const [cartItems, setCartItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [shippingMethods, setShippingMethods] = useState([]);
 
+  const navigate = useNavigate();
+  const { setLoading } = useLoading();
+
+  const methods = useForm({
+    defaultValues: {
+      shippingName: '',
+      shippingEmail: '',
+      shippingPhone: '',
+      shippingZipCode: '',
+      shippingCity: '',
+      shippingArea: '',
+      shippingAddress: '',
+      billingName: '',
+      billingEmail: '',
+      billingPhone: '',
+      billingZipCode: '',
+      billingCity: '',
+      billingArea: '',
+      billingAddress: '',
+      shippingMethod: '',
+      paymentMethod: '',
+      invoice: '',
+      vehicle: '',
+      donationCode: '',
+      sameAsBilling: false,
+    },
+  });
+  const invoice = methods.watch('invoice');
   const handleCheckout = () => {
-    navigate('/orderSuccess');
+    console.log(methods.getValues());
+  };
+  const loadCartItems = async () => {
+    try {
+      setLoading(true);
+      const { success, data } = await getCart();
+      setLoading(false);
+      if (success) {
+        setCartItems(data);
+      } else {
+        console.error('Failed to load cart items.');
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error('Error while loading cart items:', error);
+    }
   };
 
+  useEffect(() => {
+    loadCartItems();
+  }, []);
+
+  const increaseQuantity = (item: any) => async () => {
+    const cartItem = {
+      productCode: item.productCode,
+      quantity: 1,
+    };
+    try {
+      setLoading(true);
+      const response = await addCartItem(cartItem);
+      setLoading(false);
+      if (response.success) {
+        await loadCartItems();
+      } else {
+        console.error('添加購物車失敗:', response.message);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error('添加購物車時發生錯誤:', error);
+    }
+  };
+
+  const decreaseQuantity = (item: any) => async () => {
+    try {
+      setLoading(true);
+      const response =
+        item.quantity - 1 === 0
+          ? await removeCartItem(item.cartItemId)
+          : await addCartItem({
+              productCode: item.productCode,
+              quantity: -1,
+            });
+      setLoading(false);
+      if (response.success) {
+        await loadCartItems();
+      } else {
+        console.error(response.message);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error('操作購物車時發生錯誤:', error);
+    }
+  };
+  const handleCheckboxChange = (itemId) => {
+    setSelectedItems((prevSelected) =>
+      prevSelected.includes(itemId)
+        ? prevSelected.filter((id) => id !== itemId)
+        : [...prevSelected, itemId]
+    );
+  };
+
+  const totalProductAmount = cartItems
+    .filter((item) => selectedItems.includes(item.cartItemId))
+    .reduce((acc, item) => acc + item.totalPrice, 0);
+
+  const totalProductSize = useMemo(() => {
+    return cartItems
+      .filter((item) => selectedItems.includes(item.id)) // Assuming `id` is the unique identifier
+      .reduce((sum, item) => sum + item.size, 0);
+  }, [cartItems, selectedItems]);
+
+  const fetchShippingMethod = async () => {
+    try {
+      const response = await getShippingMethod(totalProductSize);
+      setShippingMethods(response.data);
+    } catch (error) {
+      console.error('Error fetching shipping methods:', error);
+    }
+  };
+  useEffect(() => {
+    fetchShippingMethod();
+    // if (totalProductSize > 0) {
+    // } else {
+    //   setShippingMethods([]);
+    // }
+  }, [totalProductSize]);
+
   return (
-    <div className="cart">
-      <p className="cart__text cart__text--title m-b-24">商品資訊</p>
-      <div className="cart__products">
-        {[...Array(4)].map((_, index) => (
-          <div key={index} className="cart__product">
-            <div className="cart__product-item cart__product-item--selected">
-              <input type="checkbox" />
+    <FormProvider {...methods}>
+      <div className="cart">
+        <p className="cart__text cart__text--title m-b-24">商品資訊</p>
+        <div className="cart__products">
+          {cartItems.map((item, index) => (
+            <div key={index} className="cart__product">
+              <div className="cart__product-item cart__product-item--selected">
+                <input
+                  type="checkbox"
+                  checked={selectedItems.includes(item.cartItemId)}
+                  onChange={() => handleCheckboxChange(item.cartItemId)}
+                />
+              </div>
+              <div className="cart__product-item cart__product-item--img">
+                <img src={getImageUrl(item.imageUrls[0])} alt="" />
+              </div>
+              <div className="cart__product-item cart__product-item--name">
+                <p className="cart__text">{item.productName}</p>
+              </div>
+              <div className="cart__product-item cart__product-item--quantity">
+                <button
+                  className="cart__product-quantityBtn cart__product-quantityBtn--decrease"
+                  onClick={decreaseQuantity(item)}
+                >
+                  <FaMinus />
+                </button>
+                <span>{item.quantity}</span>
+                <button
+                  className="cart__product-quantityBtn cart__product-quantityBtn--increase"
+                  onClick={increaseQuantity(item)}
+                >
+                  <FaPlus />
+                </button>
+              </div>
+              <div className="cart__product-item cart__product-item--price">
+                <p className="cart__text">
+                  $<NumberFormatter number={item.totalPrice} />
+                </p>
+              </div>
+              <div className="cart__product-item cart__product-item--delete">
+                <FaTrash />
+              </div>
             </div>
-            <div className="cart__product-item cart__product-item--img">
-              <img src={logoImg} alt="" />
+          ))}
+        </div>
+        <p className="cart__text cart__text--title m-y-24">寄送資訊</p>
+        <div className="cart__main">
+          <div className="cart__main-row">
+            <div className="cart__main-title">
+              <p className="cart__text">寄送</p>
             </div>
-            <div className="cart__product-item cart__product-item--name">
+            <div className="cart__main-content">
+              {shippingMethods.map((option) => (
+                <div key={option.name} className="cart__content">
+                  <div className="cart__content-main">
+                    <input
+                      type="radio"
+                      value={option.code}
+                      id={option.name}
+                      {...methods.register('shippingMethod')}
+                    />
+                    <p className="cart__text">
+                      {option.name} (${option.shippingPrice})
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="cart__main-other">
               <p className="cart__text">
-                BANDAI 萬代Figure-rise Standard 七龍珠 巴達克 組裝模型
+                $ <NumberFormatter number={100000} />
               </p>
             </div>
-            <div className="cart__product-item cart__product-item--quantity">
-              <button className="cart__product-quantityBtn cart__product-quantityBtn--decrease">
-                <FaMinus />
-              </button>
-              <span>1</span>
-              <button className="cart__product-quantityBtn cart__product-quantityBtn--increase">
-                <FaPlus />
-              </button>
-            </div>
-            <div className="cart__product-item cart__product-item--price">
-              <p className="cart__text">
-                $<NumberFormatter number={10000} />
-              </p>
-            </div>
-            <div className="cart__product-item cart__product-item--delete">
-              <FaTrash />
-            </div>
           </div>
-        ))}
-      </div>
-      <p className="cart__text cart__text--title m-y-24">寄送資訊</p>
-      <div className="cart__main">
-        <div className="cart__main-row">
-          <div className="cart__main-title">
-            <p className="cart__text">寄送</p>
-          </div>
-          <div className="cart__main-content">
-            <div className="cart__content">
-              <div className="cart__content-main">
-                <input type="radio" name="" id="" />
-                <p className="cart__text">宅配</p>
-              </div>
-            </div>{' '}
-            <div className="cart__content">
-              <div className="cart__content-main">
-                <input type="radio" name="" id="" />
-                <p className="cart__text">宅配</p>
-              </div>
-            </div>{' '}
-            <div className="cart__content">
-              <div className="cart__content-main">
-                <input type="radio" name="" id="" />
-                <p className="cart__text">宅配</p>
-              </div>
-            </div>{' '}
-            <div className="cart__content">
-              <div className="cart__content-main">
-                <input type="radio" name="" id="" />
-                <p className="cart__text">宅配</p>
-              </div>
-            </div>{' '}
-            <div className="cart__content">
-              <div className="cart__content-main">
-                <input type="radio" name="" id="" />
-                <p className="cart__text">宅配</p>
-              </div>
-            </div>{' '}
-            <div className="cart__content">
-              <div className="cart__content-main">
-                <input type="radio" name="" id="" />
-                <p className="cart__text">宅配</p>
+          <div className="cart__divider "></div>
+          <CheckoutInfoForm />
+        </div>
+        <p className="cart__text cart__text--title  m-y-24">優惠及結帳</p>
+        <div className="cart__main">
+          <div className="cart__main-row">
+            <div className="cart__main-title">
+              <p className="cart__text">發票</p>
+            </div>
+            <div className="cart__main-content">
+              <div className="cart__content">
+                <div className="cart__content-main">
+                  <select {...methods.register('invoice')}>
+                    {invoiceInfoOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
           </div>
-          <div className="cart__main-other">
-            <p className="cart__text">
-              $ <NumberFormatter number={100000} />
+          {invoice === 'donation' && (
+            <div className="cart__main-row">
+              <div className="cart__main-title">
+                <p className="cart__text">愛心碼</p>
+              </div>
+              <div className="cart__main-content">
+                <div className="cart__content">
+                  <div className="cart__content-main">
+                    <input type="text" {...methods.register('donationCode')} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          {invoice === 'mobileCarrier' && (
+            <div className="cart__main-row">
+              <div className="cart__main-title">
+                <p className="cart__text">手機載具號碼</p>
+              </div>
+              <div className="cart__main-content">
+                <div className="cart__content">
+                  <div className="cart__content-main">
+                    <input type="text" {...methods.register('vehicle')} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          <div className="cart__divider "></div>
+          <div className="cart__main-row">
+            <div className="cart__main-title">
+              <p className="cart__text">付款</p>
+            </div>
+            <div className="cart__main-content">
+              {paymentOptions.map((option) => (
+                <div className="cart__content">
+                  <div className="cart__content-main">
+                    <input
+                      type="radio"
+                      id={`payment-${option.value}`}
+                      value={option.value}
+                      {...methods.register('paymentMethod')}
+                    />
+                    <p className="cart__text">{option.name}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="cart__main-other"></div>
+          </div>
+        </div>
+
+        <div className="cart__total">
+          <div className="cart__total-item">
+            <p className="cart__text cart__text--title">商品：</p>
+            <p className="cart__text cart__text--money">
+              <NumberFormatter number={totalProductAmount} />
+            </p>
+          </div>
+          <div className="cart__total-item">
+            <p className="cart__text cart__text--title">運費：</p>
+            <p className="cart__text cart__text--money">
+              $<NumberFormatter number={100000} />
+            </p>
+          </div>
+
+          <div className="cart__total-item m-t-36">
+            <p className="cart__text cart__text--title">總金額：</p>
+            <p className="cart__text cart__text--totalMoney">
+              $<NumberFormatter number={100000} />
             </p>
           </div>
         </div>
-        <div className="cart__divider "></div>
-        <div className="cart__main-row">
-          <div className="cart__main-title">
-            <p className="cart__text">發票</p>
-          </div>
-          <div className="cart__main-content">
-            <div className="cart__content">
-              <div className="cart__content-main">
-                <select name="" id=""></select>
-              </div>
-            </div>
-          </div>
-          <div className="cart__main-other"></div>
-        </div>
-      </div>
-      <p className="cart__text cart__text--title  m-y-24">優惠及結帳</p>
-      <div className="cart__main">
-        <div className="cart__main-row">
-          <div className="cart__main-title">
-            <p className="cart__text">寄送</p>
-          </div>
-          <div className="cart__main-content">
-            <div className="cart__content">
-              <div className="cart__content-main">
-                <input type="radio" name="" id="" />
-                <p className="cart__text">優惠券</p>
-              </div>
-            </div>{' '}
-            <div className="cart__content">
-              <div className="cart__content-main">
-                <input type="radio" name="" id="" />
-                <p className="cart__text">優惠碼</p>
-              </div>
-            </div>
-          </div>
-          <div className="cart__main-other">
-            <p className="cart__text">
-              - $ <NumberFormatter number={100000} />
-            </p>
-          </div>
-        </div>
-        <div className="cart__divider "></div>
-        <div className="cart__main-row">
-          <div className="cart__main-title">
-            <p className="cart__text">付款</p>
-          </div>
-          <div className="cart__main-content">
-            <div className="cart__content">
-              <div className="cart__content-main">
-                <input type="radio" name="" id="" />
-                <p className="cart__text">信用卡一次付清</p>
-              </div>
-            </div>{' '}
-            <div className="cart__content">
-              <div className="cart__content-main">
-                <input type="radio" name="" id="" />
-                <p className="cart__text">超商取貨付款</p>
-              </div>
-            </div>{' '}
-          </div>
-          <div className="cart__main-other"></div>
-        </div>
-      </div>
+        <div className="cart__btns">
+          <div className="cart__btn cart__btn--back">回上頁</div>
 
-      <div className="cart__total">
-        <div className="cart__total-item">
-          <p className="cart__text cart__text--title">商品：</p>
-          <p className="cart__text cart__text--money">
-            <NumberFormatter number={100000} />
-          </p>
-        </div>
-        <div className="cart__total-item">
-          <p className="cart__text cart__text--title">運費：</p>
-          <p className="cart__text cart__text--money">
-            $<NumberFormatter number={100000} />
-          </p>
-        </div>
-        <div className="cart__total-item">
-          <p className="cart__text cart__text--title">折扣：</p>
-          <p className="cart__text cart__text--money">
-            -$
-            <NumberFormatter number={100000} />
-          </p>
-        </div>
-        <div className="cart__total-item m-t-36">
-          <p className="cart__text cart__text--title">總金額：</p>
-          <p className="cart__text cart__text--totalMoney">
-            $<NumberFormatter number={100000} />
-          </p>
+          <button
+            className="cart__btn cart__btn--checkout"
+            onClick={handleCheckout}
+          >
+            結帳
+          </button>
         </div>
       </div>
-      <div className="cart__btns">
-        <div className="cart__btn cart__btn--back">回上頁</div>
-
-        <button
-          className="cart__btn cart__btn--checkout"
-          onClick={handleCheckout}
-        >
-          結帳
-        </button>
-      </div>
-    </div>
+    </FormProvider>
   );
 };
 

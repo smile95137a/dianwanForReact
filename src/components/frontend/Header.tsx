@@ -18,7 +18,7 @@ const navItems = [
   { to: '/product', icon: <RiShieldStarLine />, label: '電玩賞' },
   { to: '/news', icon: <FaBullhorn />, label: '最新消息' },
   { to: '/mallProduct', icon: <RiShoppingBagLine />, label: '商城' },
-  { to: '/product2', icon: <FaToolbox />, label: '賞品盒' },
+  { to: '/prizeBox', icon: <FaToolbox />, label: '賞品盒' },
   { to: '/cart', icon: <IoCartOutline />, label: '購物車' },
 ];
 

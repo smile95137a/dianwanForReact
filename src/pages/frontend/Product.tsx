@@ -149,11 +149,7 @@ const Product = () => {
         {filteredProducts.length > 0 && (
           <>
             {pagination.currentPageItems.map((product) => (
-              <div
-                key={product.productId}
-                className="fproduct__item"
-                onClick={handleProductClick(product.productId)}
-              >
+              <div key={product.productId} className="fproduct__item">
                 <div className="fproduct__item-main">
                   <ProductCard product={product} />
                 </div>

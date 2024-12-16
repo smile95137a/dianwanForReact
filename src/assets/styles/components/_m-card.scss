@@ -10,6 +10,7 @@ $root-block-name: '.mcard';
   border-radius: 30px;
   overflow: hidden;
   width: 100%;
+  box-shadow: 0px 12px 30px 0px #00000026;
 
   &--ichiban {
     #{ $p__header} {
@@ -48,7 +49,7 @@ $root-block-name: '.mcard';
   &__header {
     padding: 16px 0;
     height: 74px;
-    background: #6b9fd2;
+    background: #c2f6f6;
 
     @include flex(center, center);
 

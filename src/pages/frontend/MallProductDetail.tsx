@@ -18,6 +18,14 @@ import {
   FaRegHeart,
   FaTruck,
 } from 'react-icons/fa';
+import { RootState } from '@/store';
+import { useSelector } from 'react-redux';
+import { useFrontendDialog } from '@/context/frontend/useFrontedDialog';
+import {
+  addCartItem,
+  checkQuantity,
+} from '@/services/frontend/cartItemService';
+import { useLoading } from '@/context/frontend/LoadingContext';
 
 const MallProductDetail = () => {
   const { id } = useParams();
@@ -38,9 +46,11 @@ const MallProductDetail = () => {
   const [activeTab, setActiveTab] = useState('詳情');
   const [expanded, setExpanded] = useState(false);
 
-  const handleCart = () => {
-    navigate('/cart');
-  };
+  const isLogin = useSelector(
+    (state: RootState) => state.frontend.auth.isLogin
+  );
+  const { setLoading } = useLoading();
+  const { openInfoDialog, openDrawDialog } = useFrontendDialog();
 
   const loadProductData = async () => {
     try {
@@ -85,6 +95,58 @@ const MallProductDetail = () => {
   const decreaseQuantity = () =>
     setQuantity((prev) => (prev > 1 ? prev - 1 : prev));
   const toggleExpand = () => setExpanded(!expanded);
+
+  const handleAddToCart = async (redirectToCheckout = false) => {
+    if (!isLogin) {
+      await openInfoDialog('系統消息', '請先登入');
+      return;
+    }
+
+    if (product) {
+      const cartItem = {
+        productCode: product.productCode,
+        quantity: quantity,
+      };
+      const isCanAddCart = await checkQuantity(cartItem);
+
+      if (isCanAddCart.success) {
+        try {
+          setLoading(true);
+          const response = await addCartItem(cartItem);
+          setLoading(false);
+          if (response.success) {
+            if (redirectToCheckout) {
+              navigate('/cart');
+            } else {
+              await openInfoDialog('系統消息', '商品成功加到購物車');
+            }
+          } else {
+            await openInfoDialog(
+              '系統消息',
+              `添加購物車失敗: ${response.message}`
+            );
+          }
+        } catch (error) {
+          setLoading(false);
+          console.error('添加購物車時發生錯誤:', error);
+          await openInfoDialog(
+            '系統消息',
+            '添加購物車時發生錯誤，請稍後再試。'
+          );
+        }
+      } else {
+        await openInfoDialog('系統消息', '超出庫存數量。');
+      }
+    }
+  };
+
+  const addProductToCart = async () => {
+    await handleAddToCart();
+  };
+
+  const buyItNow = async () => {
+    await handleAddToCart(true);
+  };
 
   return (
     <>
@@ -184,12 +246,15 @@ const MallProductDetail = () => {
               </div>
             </div>
             <div className="mall-product__detail-action">
-              <div className="mall-product__detail-action-btn">
+              <div
+                className="mall-product__detail-action-btn"
+                onClick={addProductToCart}
+              >
                 <FaCartPlus /> 加到購物車
               </div>
               <div
                 className="mall-product__detail-action-btn mall-product__detail-action-btn--red"
-                onClick={handleCart}
+                onClick={buyItNow}
               >
                 立即購買!
               </div>

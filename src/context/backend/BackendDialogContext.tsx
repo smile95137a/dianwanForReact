@@ -30,6 +30,9 @@ export interface DialogContextType {
     isEdit?: boolean,
     storeProduct?: any
   ) => Promise<boolean>;
+  openProductCategoryManagementDialog: (
+    customClass?: string
+  ) => Promise<boolean>;
 }
 
 export const BackendDialogContext = createContext<

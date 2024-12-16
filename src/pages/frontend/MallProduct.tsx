@@ -112,6 +112,7 @@ const MallProduct = () => {
             >
               <div className="fMallProduct__item-main">
                 <ProductCard
+                  isMall={true}
                   key={product.productId}
                   product={product}
                   className="productCard--mall"

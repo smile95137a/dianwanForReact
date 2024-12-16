@@ -21,6 +21,8 @@ import AddNewsDialog from '@/components/backend/dialog/AddNewsDialog';
 import { useAddNewsDialog } from './AddNewsDialogProvider';
 import { useAddStoreProductDialog } from './AddStoreProductDialogProvider';
 import AddStoreProductDialog from '@/components/backend/dialog/AddStoreProductDialog';
+import { useProductCategoryManagementDialog } from './ProductCategoryManagementDialogProvider';
+import ProductCategoryManagementDialog from '@/components/backend/dialog/ProductCategoryManagementDialog';
 
 interface DialogProviderProps {
   children: ReactNode;
@@ -29,6 +31,14 @@ interface DialogProviderProps {
 export const BackendDialogProvider: FC<DialogProviderProps> = ({
   children,
 }) => {
+  const {
+    productCategoryManagementDialogOpen,
+    customClass: productCategoryManagementCustomClass,
+    openProductCategoryManagementDialog,
+    closeProductCategoryManagementDialog,
+    confirmProductCategoryManagementDialog,
+  } = useProductCategoryManagementDialog();
+
   const {
     confirmDialogOpen,
     confirmTitle,
@@ -132,11 +142,21 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
         openGrantRewardDialog,
         openAddNewsDialog,
         openAddStoreProductDialog,
+        openProductCategoryManagementDialog,
       }}
     >
       {children}
       {ReactDOM.createPortal(
         <>
+          {productCategoryManagementDialogOpen && (
+            <ProductCategoryManagementDialog
+              isOpen={productCategoryManagementDialogOpen}
+              onClose={closeProductCategoryManagementDialog}
+              onConfirm={confirmProductCategoryManagementDialog}
+              customClass={productCategoryManagementCustomClass}
+            />
+          )}
+
           {addStoreProductDialogOpen && (
             <AddStoreProductDialog
               storeProduct={storeProduct}

@@ -10,12 +10,8 @@ import {
 } from '@/services/backend/StoreServices';
 import { useLoading } from '@/context/frontend/LoadingContext';
 import { usePagination } from '@/hooks/usePagination';
-import BTable from '@/components/backend/btable/BTable';
-import BTableRow from '@/components/backend/btable/BTableRow';
-import DateFormatter from '@/components/common/DateFormatter';
-import NumberFormatter from '@/components/common/NumberFormatter';
-import NoData from '@/components/frontend/NoData';
 import Pagination from '@/components/backend/Pagination';
+import NoData from '@/components/frontend/NoData';
 
 const reportNameMap: { [key: string]: string } = {
   DRAW_AMOUNT: '開獎金額報表',
@@ -26,6 +22,17 @@ const reportNameMap: { [key: string]: string } = {
   SLIVER_COIN_RECYCLE: '銀幣回收報表',
   PRIZE_RECYCLE_REPORT: '獎品回收報表',
   DRAW_RESULT_SUMMARY: '開獎結果報表',
+};
+
+const isImage = (value: any) => {
+  if (typeof value !== 'string') return false;
+  const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
+  return imageExtensions.some((ext) => value.toLowerCase().includes(ext));
+};
+
+const getFormattedImageUrl = (url: string) => {
+  const BASE_IMAGE_URL = process.env.REACT_APP_IMAGE_API_URL || '';
+  return `${BASE_IMAGE_URL}/img/${url}`;
 };
 
 const VendorManagement = () => {
@@ -49,25 +56,20 @@ const VendorManagement = () => {
   const exportToExcel = async () => {
     try {
       const params = getValues();
-
-      const res = await exportReportData(
+      const response = await exportReportData(
         params.reportType,
         params.startDate,
         params.endDate,
         params.groupType
       );
 
-      // 获取中文名称
       const reportName = reportNameMap[params.reportType] || params.reportType;
-
-      // 创建下载链接并触发下载
-      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
       link.setAttribute('download', `${reportName}.xlsx`);
       document.body.appendChild(link);
       link.click();
-
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (error) {
@@ -79,23 +81,55 @@ const VendorManagement = () => {
     try {
       const params = getValues();
       setLoading(true);
-      const { success, data } = await fetchReportData(
+      const data = await fetchReportData(
         params.reportType,
         params.startDate,
         params.endDate,
         params.groupType
       );
+      setList(data || []);
       setLoading(false);
-      if (success) {
-        console.log('Data fetched successfully:', data);
-        setList(data || []);
-      } else {
-        console.error('Failed to fetch report data');
-      }
     } catch (error) {
       setLoading(false);
-      console.error('Error fetching report data:', error);
+      console.error('查詢報表失敗:', error);
     }
+  };
+
+  const renderTable = () => {
+    if (list.length === 0) {
+      return <NoData />;
+    }
+
+    return (
+      <table>
+        <thead>
+          <tr>
+            {Object.keys(list[0]).map((key) => (
+              <th key={key}>{key}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {pagination.currentPageItems.map((row, index) => (
+            <tr key={index}>
+              {Object.entries(row).map(([key, value]) => (
+                <td key={key}>
+                  {isImage(value) ? (
+                    <img
+                      src={getFormattedImageUrl(value)}
+                      alt="圖片"
+                      className="product-image"
+                    />
+                  ) : (
+                    value
+                  )}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
   };
 
   return (
@@ -107,79 +141,60 @@ const VendorManagement = () => {
           </p>
 
           <div className="vendorManagement__main">
-            <div className="flex">
-              <div className="w-100">
-                <p className="vendorManagement__text">選擇報表:</p>
-                <FormSelect
-                  name="reportType"
-                  control={control}
-                  options={[
-                    { value: 'DRAW_AMOUNT', label: '開獎金額報表' },
-                    { value: 'TOTAL_CONSUMPTION', label: '消費總額報表' },
-                    { value: 'TOTAL_DEPOSIT', label: '儲值總額報表' },
-                    { value: 'USER_UPDATE_LOG', label: '發放銀幣紅利報表' },
-                    { value: 'DAILY_SIGN_IN', label: '每日簽到報表' },
-                    { value: 'SLIVER_COIN_RECYCLE', label: '銀幣回收報表' },
-                    { value: 'PRIZE_RECYCLE_REPORT', label: '獎品回收報表' },
-                    { value: 'DRAW_RESULT_SUMMARY', label: '開獎結果報表' },
-                  ]}
-                />
-              </div>
-            </div>
+            {/* 報表選擇 */}
+            <FormSelect
+              name="reportType"
+              control={control}
+              label="選擇報表"
+              options={Object.keys(reportNameMap).map((key) => ({
+                value: key,
+                label: reportNameMap[key],
+              }))}
+            />
 
-            <div className="flex">
-              <div className="w-100">
-                <p className="vendorManagement__text">分組類型：</p>
-                <FormSelect
-                  name="groupType"
-                  control={control}
-                  options={[
-                    { value: 'day', label: '日' },
-                    { value: 'week', label: '週' },
-                    { value: 'month', label: '月' },
-                    { value: 'year', label: '年' },
-                  ]}
-                />
-              </div>
-            </div>
+            {/* 分組類型 */}
+            <FormSelect
+              name="groupType"
+              control={control}
+              label="分組類型"
+              options={[
+                { value: 'day', label: '日' },
+                { value: 'week', label: '週' },
+                { value: 'month', label: '月' },
+                { value: 'year', label: '年' },
+              ]}
+            />
 
+            {/* 日期選擇 */}
             <div className="flex">
-              <div className="w-100">
-                <p className="vendorManagement__text">開始日期:</p>
-                <FormInput
-                  name="startDate"
-                  control={control}
-                  type="date"
-                  placeholder="選擇開始日期"
-                />
-              </div>
-
-              <div className="w-100">
-                <p className="vendorManagement__text">結束日期:</p>
-                <FormInput
-                  name="endDate"
-                  control={control}
-                  type="date"
-                  placeholder="選擇結束日期"
-                />
-              </div>
+              <FormInput
+                name="startDate"
+                control={control}
+                type="date"
+                label="開始日期"
+                placeholder="選擇開始日期"
+              />
+              <FormInput
+                name="endDate"
+                control={control}
+                type="date"
+                label="結束日期"
+                placeholder="選擇結束日期"
+              />
             </div>
 
             <div className="vendorManagement__btns">
-              <MButton text={'查詢報表'} click={handleSubmit} />
-              <MButton text={'匯出 Excel'} click={exportToExcel} />
+              <MButton text="查詢報表" click={handleSubmit} />
+              <MButton text="匯出 Excel" click={exportToExcel} />
             </div>
           </div>
         </div>
       </Card>
 
+      {/* 表格與分頁 */}
       <div className="vendorManagement__list">
-        {list.length > 0 && (
-          <div className="vendorManagement__list-content">
-            <Pagination {...pagination} />
-          </div>
-        )}
-        {/* {users.length === 0 && <Card content={<NoData />} />} */}
+        {renderTable()}
+        {list.length > 0 && <Pagination {...pagination} />}
       </div>
     </div>
   );

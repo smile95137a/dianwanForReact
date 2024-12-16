@@ -27,6 +27,10 @@ import { useAddProductCategoryDialog } from './AddProductCategoryDialogProvider'
 import AddProductCategoryDialog from '@/components/backend/dialog/AddProductCategoryDialog';
 import { useAddProductDialog } from './AddProductDialogProvider';
 import AddProductDialog from '@/components/backend/dialog/AddProductDialog';
+import { useOrderDetailsDialog } from './OrderDetailsDialogProvider';
+import OrderDetailsDialog from '@/components/backend/dialog/OrderDetailsDialog';
+import { useOrderShipmentDialog } from './OrderShipmentDialogProvider';
+import OrderShipmentDialog from '@/components/backend/dialog/OrderShipmentDialog';
 
 interface DialogProviderProps {
   children: ReactNode;
@@ -114,6 +118,21 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
     closeGrantRewardDialog,
     confirmGrantRewardDialog,
   } = useGrantRewardDialog();
+  const {
+    order: orderByOrderDetailsDialog,
+    orderDetailsDialogOpen,
+    openOrderDetailsDialog,
+    closeOrderDetailsDialog,
+    confirmOrderDetailsDialog,
+  } = useOrderDetailsDialog();
+
+  const {
+    order: orderByOrderShipmentDialog,
+    orderShipmentDialogOpen,
+    openOrderShipmentDialog,
+    closeOrderShipmentDialog,
+    confirmOrderShipmentDialog,
+  } = useOrderShipmentDialog();
 
   const {
     news,
@@ -167,11 +186,29 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
         openProductCategoryManagementDialog,
         openAddProductCategoryDialog,
         openAddProductDialog,
+        openOrderDetailsDialog,
+        openOrderShipmentDialog,
       }}
     >
       {children}
       {ReactDOM.createPortal(
         <>
+          {orderDetailsDialogOpen && (
+            <OrderDetailsDialog
+              order={orderByOrderDetailsDialog}
+              isOpen={orderDetailsDialogOpen}
+              onClose={closeOrderDetailsDialog}
+              onConfirm={confirmOrderDetailsDialog}
+            />
+          )}
+          {orderShipmentDialogOpen && (
+            <OrderShipmentDialog
+              order={orderByOrderShipmentDialog}
+              isOpen={orderShipmentDialogOpen}
+              onClose={closeOrderShipmentDialog}
+              onConfirm={confirmOrderShipmentDialog}
+            />
+          )}
           {productCategoryManagementDialogOpen && (
             <ProductCategoryManagementDialog
               isOpen={productCategoryManagementDialogOpen}

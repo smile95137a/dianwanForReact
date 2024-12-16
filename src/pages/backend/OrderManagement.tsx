@@ -18,6 +18,7 @@ import {
 } from '@/services/backend/OrderService';
 import NumberFormatter from '@/components/common/NumberFormatter';
 import MButton from '@/components/backend/MButton';
+import { useBackendDialog } from '@/context/backend/useBackendDialog';
 
 const OrderManagement = () => {
   const [orderList, setOrderList] = useState<any[]>([]);
@@ -33,6 +34,8 @@ const OrderManagement = () => {
   });
 
   const { setLoading } = useLoading();
+  const { openOrderDetailsDialog, openOrderShipmentDialog } =
+    useBackendDialog();
 
   useEffect(() => {
     fetchOrderList();
@@ -105,6 +108,14 @@ const OrderManagement = () => {
       setLoading(false);
       console.error('更新訂單狀態失敗：', error);
     }
+  };
+
+  const handleOrderDetails = (order: any) => {
+    openOrderDetailsDialog(order);
+  };
+
+  const handleOrderShipmentDialog = (order: any) => {
+    openOrderShipmentDialog(order);
   };
 
   return (
@@ -236,8 +247,14 @@ const OrderManagement = () => {
                     {
                       content: (
                         <>
-                          <MButton text={'查看訂單明細'} />
-                          <MButton text={'出貨單'} />
+                          <MButton
+                            text={'查看訂單明細'}
+                            click={() => handleOrderDetails(order)}
+                          />
+                          <MButton
+                            text={'出貨單'}
+                            click={() => handleOrderShipmentDialog(order)}
+                          />
                           <MButton text={'建立物流訂單'} />
                         </>
                       ),

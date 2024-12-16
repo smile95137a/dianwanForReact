@@ -35,6 +35,7 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
   const { setLoading } = useLoading();
   const [categories, setCategories] = useState([]);
   const [images, setImages] = useState<any[]>([]);
+  const [bannerImages, setBannerImages] = useState<any[]>([]);
   enum ProductType {
     PRIZE = 'PRIZE',
     GACHA = 'GACHA',
@@ -132,6 +133,19 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
 
   const removeImage = (index: number) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleBannerFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (event.target.files) {
+      const files = Array.from(event.target.files);
+      setBannerImages((prev) => [...prev, ...files]);
+    }
+  };
+
+  const removeBannerImage = (index: number) => {
+    setBannerImages((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async () => {
@@ -301,8 +315,39 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
             />
           </div>
 
-          <div className="form-group">
-            <label>商品圖片</label>
+          <div className="flex">
+            <div className="w-100">
+              <p className="addMemberDialog__text">橫幅圖片:</p>
+            </div>
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleBannerFileChange}
+            />
+            <div className="image-preview">
+              {images.map((image, index) => (
+                <div key={index} className="image-item">
+                  {typeof image === 'string' ? (
+                    <img src={image} alt="商品圖片" className="preview-image" />
+                  ) : (
+                    <p>{image.name}</p>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => removeBannerImage(index)}
+                  >
+                    移除
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex">
+            <div className="w-100">
+              <p className="addMemberDialog__text">商品圖片:</p>
+            </div>
             <input
               type="file"
               multiple

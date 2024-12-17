@@ -39,7 +39,7 @@ const Main = () => {
       setLoading(true);
       const allProductList = await getAllProductList();
       const pagedStoreProducts = await getPagedStoreProducts(0, 200);
-      const bannerData = await getAllBanners(); // 獲取橫幅數據
+      const bannerData = await getAllBanners();
       setLoading(false);
 
       if (allProductList.success) {
@@ -55,6 +55,8 @@ const Main = () => {
       }
 
       if (bannerData.success) {
+        console.log(bannerData);
+
         setBanners(bannerData.data);
       } else {
         console.error('獲取橫幅資料失敗:', bannerData.message);
@@ -93,7 +95,9 @@ const Main = () => {
               <SwiperSlide key={index}>
                 <div className="slider__item">
                   <img
-                    src={getImageUrl(banner.imageUrls[0])}
+                    src={getImageUrl(
+                      banner.imageUrls ? banner.imageUrls[0] : ''
+                    )}
                     className="slider__item-img"
                   />
                 </div>

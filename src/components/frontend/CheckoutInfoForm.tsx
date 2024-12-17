@@ -1,8 +1,85 @@
-import React from 'react';
+import {
+  getAllCityNames,
+  getAreaListByCityName,
+} from '@/services/frontend/taiwanCitiesService';
+import React, { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 const CheckoutInfoForm = () => {
-  const { register } = useFormContext();
+  const { register, watch, setValue } = useFormContext();
+
+  // Billing States
+  const [billCityOptions, setBillCityOptions] = useState<
+    { value: string; label: string }[]
+  >([]);
+  const [billAreaOptions, setBillAreaOptions] = useState<
+    { value: string; label: string }[]
+  >([]);
+
+  // Shipping States
+  const [shipCityOptions, setShipCityOptions] = useState<
+    { value: string; label: string }[]
+  >([]);
+  const [shipAreaOptions, setShipAreaOptions] = useState<
+    { value: string; label: string }[]
+  >([]);
+
+  const watchBillingCity = watch('billingCity');
+  const watchShippingCity = watch('shippingCity');
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      try {
+        const cityNames = getAllCityNames();
+        setBillCityOptions([
+          { value: '', label: '縣市' },
+          ...cityNames.map((city) => ({ value: city, label: city })),
+        ]);
+        setBillAreaOptions([{ value: '', label: '行政區' }]);
+        setShipCityOptions([
+          { value: '', label: '縣市' },
+          ...cityNames.map((city) => ({ value: city, label: city })),
+        ]);
+        setShipAreaOptions([{ value: '', label: '行政區' }]);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchInitialData();
+  }, [setValue]);
+
+  useEffect(() => {
+    if (watchBillingCity) {
+      setValue('billingArea', '');
+      const areas = getAreaListByCityName(watchBillingCity);
+      setBillAreaOptions([
+        { value: '', label: '行政區' },
+        ...areas.map((area) => ({
+          value: area.areaName,
+          label: area.areaName,
+        })),
+      ]);
+    } else {
+      setBillAreaOptions([{ value: '', label: '行政區' }]);
+    }
+  }, [watchBillingCity, setValue]);
+
+  useEffect(() => {
+    if (watchShippingCity) {
+      setValue('shippingArea', '');
+      const areas = getAreaListByCityName(watchShippingCity);
+      setShipAreaOptions([
+        { value: '', label: '行政區' },
+        ...areas.map((area) => ({
+          value: area.areaName,
+          label: area.areaName,
+        })),
+      ]);
+    } else {
+      setShipAreaOptions([{ value: '', label: '行政區' }]);
+    }
+  }, [watchShippingCity, setValue]);
+
   return (
     <>
       <div className="flex gap-x-12">
@@ -34,16 +111,28 @@ const CheckoutInfoForm = () => {
         <p>購買人地址</p>
         <div className="flex  gap-x-12">
           <div className="w-25 w-md-50">
-            <input
-              className="checkoutInfoForm__input"
+            <select
               {...register('billingCity')}
-            />
+              className="checkoutInfoForm__select"
+            >
+              {billCityOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="w-25 w-md-50">
-            <input
-              className="checkoutInfoForm__input"
+            <select
               {...register('billingArea')}
-            />
+              className="checkoutInfoForm__select"
+            >
+              {billAreaOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="w-50 w-md-100">
             <input
@@ -82,16 +171,28 @@ const CheckoutInfoForm = () => {
         <p>收貨人地址</p>
         <div className="flex  gap-x-12">
           <div className="w-25 w-md-50">
-            <input
-              className="checkoutInfoForm__input"
+            <select
               {...register('shippingCity')}
-            />
+              className="checkoutInfoForm__select"
+            >
+              {shipCityOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="w-25 w-md-50">
-            <input
-              className="checkoutInfoForm__input"
-              {...register('shippingArea')}
-            />
+            <select
+              {...register('shippingCity')}
+              className="checkoutInfoForm__select"
+            >
+              {shipAreaOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="w-50 w-md-100">
             <input

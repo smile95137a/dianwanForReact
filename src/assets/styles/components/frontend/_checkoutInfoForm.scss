@@ -1,0 +1,29 @@
+$root-block-name: '.checkoutInfoForm';
+
+#{$root-block-name} {
+  $p: &;
+  $p__item: #{$p}__item;
+  $p__btn: #{$p}__btn;
+
+  &__input {
+    @include w_h(100%, 50px);
+    padding: 14px 20px;
+    border-radius: 8px;
+    border: 1px solid #d4d4d4;
+    &--error {
+      border: 1px solid #fe4206;
+    }
+  }
+
+  &__select {
+    margin-left: 8px;
+    padding: 6px 12px;
+    font-size: 14px;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+}

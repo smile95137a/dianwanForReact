@@ -233,7 +233,10 @@ const Cart = () => {
             <div className="cart__main-content">
               <div className="cart__content">
                 <div className="cart__content-main">
-                  <select {...methods.register('invoice')}>
+                  <select
+                    {...methods.register('invoice')}
+                    className="checkoutInfoForm__select"
+                  >
                     {invoiceInfoOptions.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
@@ -252,7 +255,11 @@ const Cart = () => {
               <div className="cart__main-content">
                 <div className="cart__content">
                   <div className="cart__content-main">
-                    <input type="text" {...methods.register('donationCode')} />
+                    <input
+                      type="text"
+                      {...methods.register('donationCode')}
+                      className="checkoutInfoForm__input"
+                    />
                   </div>
                 </div>
               </div>
@@ -266,7 +273,11 @@ const Cart = () => {
               <div className="cart__main-content">
                 <div className="cart__content">
                   <div className="cart__content-main">
-                    <input type="text" {...methods.register('vehicle')} />
+                    <input
+                      type="text"
+                      {...methods.register('vehicle')}
+                      className="checkoutInfoForm__input"
+                    />
                   </div>
                 </div>
               </div>

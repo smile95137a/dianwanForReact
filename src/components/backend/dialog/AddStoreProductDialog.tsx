@@ -5,12 +5,14 @@ import { useForm } from 'react-hook-form';
 import { FormSelect } from '../FormSelect';
 import { FormInput } from '../FormInput';
 import {
-  addStoreProduct,
+  createStoreProduct2,
   getAllCategories,
-  updateStoreProduct,
+  updateStoreProduct2,
+  uploadStoreProductImg,
 } from '@/services/backend/StoreServices';
 import { useBackendDialog } from '@/context/backend/useBackendDialog';
 import { useLoading } from '@/context/frontend/LoadingContext';
+import { getImageUrl } from '@/utils/ImageUtils';
 
 interface AddStoreProductDialogProps {
   isOpen: boolean;
@@ -45,27 +47,32 @@ const AddStoreProductDialog: FC<AddStoreProductDialogProps> = ({
       details: '',
       status: '',
       categoryId: '',
-      imageUrl: [],
+      shippingMethod: 'Express',
+      shippingPrice: 0,
+      size: 0,
     },
   });
 
   useEffect(() => {
     if (isEdit && storeProduct) {
       reset({
-        productName: storeProduct.productName,
-        description: storeProduct.description,
-        price: storeProduct.price,
-        stockQuantity: storeProduct.stockQuantity,
-        width: storeProduct.width,
-        height: storeProduct.height,
-        length: storeProduct.length,
-        specification: storeProduct.specification,
-        specialPrice: storeProduct.specialPrice,
-        details: storeProduct.details,
-        status: storeProduct.status,
-        categoryId: storeProduct.categoryId,
-        imageUrl: storeProduct.imageUrl || [],
+        productName: storeProduct.productName || '',
+        description: storeProduct.description || '',
+        price: storeProduct.price || '',
+        stockQuantity: storeProduct.stockQuantity || '',
+        width: storeProduct.width || '',
+        height: storeProduct.height || '',
+        length: storeProduct.length || '',
+        specification: storeProduct.specification || '',
+        specialPrice: storeProduct.specialPrice || '',
+        details: storeProduct.details || '',
+        status: storeProduct.status || '',
+        categoryId: storeProduct.categoryId || '',
+        shippingMethod: storeProduct.shippingMethod || 'Express',
+        shippingPrice: storeProduct.shippingPrice || 0,
+        size: storeProduct.size || 0,
       });
+
       setImages(storeProduct.imageUrl || []);
     }
   }, [isEdit, storeProduct, reset]);
@@ -95,66 +102,48 @@ const AddStoreProductDialog: FC<AddStoreProductDialogProps> = ({
     setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = async () => {
+  const validateForm = async () => {
     try {
-      setLoading(true);
-      const formData = new FormData();
-
-      const productReq = {
-        productName: getValues().productName,
-        description: getValues().description,
-        price: Number(getValues().price),
-        stockQuantity: Number(getValues().stockQuantity),
-        categoryId: getValues().categoryId,
-        width: Number(getValues().width),
-        height: Number(getValues().height),
-        length: Number(getValues().length),
-        specification: getValues().specification,
-        shippingMethod: 'Express',
-        specialPrice: Number(getValues().specialPrice),
-        status: getValues().status,
-        imageUrl: images.filter((img) => typeof img === 'string'),
-        details: getValues().details,
-        shippingPrice: 0,
-        size: 0,
-      };
-
-      formData.append('productReq', JSON.stringify(productReq));
-
-      const newImages = images.filter((img) => img instanceof File) as File[];
-      newImages.forEach((file) => {
-        formData.append('images', file, file.name);
-      });
-
-      let response;
-      if (isEdit && storeProduct) {
-        response = await updateStoreProduct(
-          storeProduct.storeProductId,
-          formData
-        );
-      } else {
-        response = await addStoreProduct(formData);
-      }
-      setLoading(false);
-      if (response.success) {
-        await openInfoDialog(
-          '系統提示',
-          isEdit ? '商品更新成功' : '商品新增成功'
-        );
-        onClose(true);
-      } else {
-        await openInfoDialog(
-          '系統提示',
-          response.message || '操作失敗，請稍後再試！'
-        );
-      }
+      return true;
     } catch (error) {
-      setLoading(false);
-      console.error('操作失敗:', error);
-      await openInfoDialog('系統提示', '操作過程中出現錯誤，請稍後再試！');
+      if (error instanceof Error)
+        await openInfoDialog('系統提示', error.message);
+      return false;
     }
   };
+  const handleSubmit = async () => {
+    const values = getValues();
+    if (await validateForm()) {
+      try {
+        setLoading(true);
 
+        const { success, data, message } = isEdit
+          ? await updateStoreProduct2({
+              storeProductId: storeProduct.storeProductId,
+              ...values,
+            })
+          : await createStoreProduct2(values);
+        if (!success) {
+          setLoading(false);
+          await openInfoDialog('系統提示', message || '產品創建失敗');
+          return;
+        }
+
+        const storeProductId = isEdit
+          ? storeProduct.storeProductId
+          : data.storeProductId;
+        setLoading(true);
+        await uploadStoreProductImg(images, storeProductId);
+        setLoading(false);
+        await openInfoDialog('系統提示', isEdit ? '更新成功！' : '新增成功！');
+        onConfirm();
+      } catch (error) {
+        setLoading(false);
+        console.error('操作失敗:', error);
+        await openInfoDialog('系統提示', '操作過程中出現錯誤，請稍後再試！');
+      }
+    }
+  };
   return (
     <BDialog isOpen={isOpen} onClose={() => onClose(false)}>
       <div className="addStoreProductDialog">
@@ -278,7 +267,7 @@ const AddStoreProductDialog: FC<AddStoreProductDialogProps> = ({
             <FormSelect
               name="categoryId"
               control={control}
-              options={categories.map((cat) => ({
+              options={categories.map((cat: any) => ({
                 value: cat.categoryId.toString(),
                 label: cat.categoryName,
               }))}
@@ -296,7 +285,11 @@ const AddStoreProductDialog: FC<AddStoreProductDialogProps> = ({
               {images.map((image, index) => (
                 <div key={index} className="image-item">
                   {typeof image === 'string' ? (
-                    <img src={image} alt="商品圖片" className="preview-image" />
+                    <img
+                      src={getImageUrl(image)}
+                      alt="商品圖片"
+                      className="preview-image"
+                    />
                   ) : (
                     <p>{image.name}</p>
                   )}

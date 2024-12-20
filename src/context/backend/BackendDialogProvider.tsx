@@ -31,6 +31,14 @@ import { useOrderDetailsDialog } from './OrderDetailsDialogProvider';
 import OrderDetailsDialog from '@/components/backend/dialog/OrderDetailsDialog';
 import { useOrderShipmentDialog } from './OrderShipmentDialogProvider';
 import OrderShipmentDialog from '@/components/backend/dialog/OrderShipmentDialog';
+import { useProductDetailDialog } from './ProductDetailDialogProvider';
+import ProductDetailDialog from '@/components/backend/dialog/ProductDetailDialog';
+import { useAddProductDetailDialog } from './AddProductDetailDialogProvider';
+import AddProductDetailDialog from '@/components/backend/dialog/AddProductDetailDialog';
+import { useProductStoreCategoryManagementDialog } from './ProductStoreCategoryManagementDialogProvider';
+import ProductStoreCategoryManagementDialog from '@/components/backend/dialog/ProductStoreCategoryManagementDialog';
+import { useAddProductStoreCategoryDialog } from './AddProductStoreCategoryDialogProvider';
+import AddProductStoreCategoryDialog from '@/components/backend/dialog/AddProductStoreCategoryDialog';
 
 interface DialogProviderProps {
   children: ReactNode;
@@ -39,6 +47,24 @@ interface DialogProviderProps {
 export const BackendDialogProvider: FC<DialogProviderProps> = ({
   children,
 }) => {
+  const {
+    productId,
+    productDetail,
+    isProductDetailEdit,
+    addProductDetailDialogOpen,
+    openAddProductDetailDialog,
+    closeAddProductDetailDialog,
+  } = useAddProductDetailDialog();
+
+  const {
+    product: productData4Detail,
+    productDetailDialogOpen,
+    customClass: productDetailCustomClass,
+    openProductDetailDialog,
+    closeProductDetailDialog,
+    confirmProductDetailDialog,
+  } = useProductDetailDialog();
+
   const {
     productCategoryManagementDialogOpen,
     customClass: productCategoryManagementCustomClass,
@@ -170,6 +196,21 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
     confirmAddProductDialog,
   } = useAddProductDialog();
 
+  const {
+    productStoreCategoryManagementDialogOpen,
+    customClass: ProductStoreCategoryManagementCustomClass,
+    openProductStoreCategoryManagementDialog,
+    closeProductStoreCategoryManagementDialog,
+    confirmProductStoreCategoryManagementDialog,
+  } = useProductStoreCategoryManagementDialog();
+  const {
+    productStoreCategory,
+    isProductStoreCategoryEdit,
+    addProductStoreCategoryDialogOpen,
+    openAddProductStoreCategoryDialog,
+    closeAddProductStoreCategoryDialog,
+    confirmAddProductStoreCategoryDialog,
+  } = useAddProductStoreCategoryDialog();
   return (
     <BackendDialogContext.Provider
       value={{
@@ -188,11 +229,51 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
         openAddProductDialog,
         openOrderDetailsDialog,
         openOrderShipmentDialog,
+        openProductDetailDialog,
+        openAddProductDetailDialog,
+        openProductStoreCategoryManagementDialog,
+        openAddProductStoreCategoryDialog,
       }}
     >
       {children}
       {ReactDOM.createPortal(
         <>
+          {productStoreCategoryManagementDialogOpen && (
+            <ProductStoreCategoryManagementDialog
+              isOpen={productStoreCategoryManagementDialogOpen}
+              onClose={closeProductStoreCategoryManagementDialog}
+              onConfirm={confirmProductStoreCategoryManagementDialog}
+              customClass={ProductStoreCategoryManagementCustomClass}
+            />
+          )}
+          {addProductStoreCategoryDialogOpen && (
+            <AddProductStoreCategoryDialog
+              productStoreCategory={productStoreCategory}
+              isEdit={isProductStoreCategoryEdit}
+              isOpen={addProductStoreCategoryDialogOpen}
+              onClose={closeAddProductStoreCategoryDialog}
+              onConfirm={confirmAddProductStoreCategoryDialog}
+            />
+          )}
+          {productDetailDialogOpen && (
+            <ProductDetailDialog
+              product={productData4Detail}
+              isOpen={productDetailDialogOpen}
+              onClose={closeProductDetailDialog}
+              onConfirm={confirmProductDetailDialog}
+              customClass={productDetailCustomClass}
+            />
+          )}
+          {addProductDetailDialogOpen && (
+            <AddProductDetailDialog
+              productId={productId}
+              productDetail={productDetail}
+              isEdit={isProductDetailEdit}
+              isOpen={addProductDetailDialogOpen}
+              onClose={closeAddProductDetailDialog}
+            />
+          )}
+
           {orderDetailsDialogOpen && (
             <OrderDetailsDialog
               order={orderByOrderDetailsDialog}

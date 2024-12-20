@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect } from 'react';
 import BDialog from './BDialog';
 import MButton from '../MButton';
 import { useForm } from 'react-hook-form';
@@ -146,7 +146,7 @@ const AddNewsDialog: FC<AddNewsDialogProps> = ({
       const file = await loader.file;
       const response = await uploadImage(file);
       return {
-        default: response.url,
+        default: '',
       };
     },
   });
@@ -179,7 +179,40 @@ const AddNewsDialog: FC<AddNewsDialogProps> = ({
             <div className="w-100">
               <p className="addMemberDialog__text">內容:</p>
             </div>
-            <FormInput name="content" control={control} />
+            <CKEditor
+              editor={ClassicEditor}
+              config={{
+                licenseKey:
+                  'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3MzUxNzExOTksImp0aSI6ImMwM2Y2YWZkLWI1OWQtNGZmOS04YTQ2LTg3NWQ1MjBmYjVmZSIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiLCJzaCJdLCJ3aGl0ZUxhYmVsIjp0cnVlLCJsaWNlbnNlVHlwZSI6InRyaWFsIiwiZmVhdHVyZXMiOlsiKiJdLCJ2YyI6IjE1MzNjYzdmIn0.H5FG7B36Q6xkH8nfT_fhqVSy_bs23ZMWle8KsWRdc8HYsVCV90xWrcfrsJXF7Ra6f8lawNnT-ZJnvnFTEfuVZg',
+
+                toolbar: [
+                  'heading',
+                  '|',
+                  'bold',
+                  'italic',
+                  'link',
+                  'bulletedList',
+                  'numberedList',
+                  'blockQuote',
+                  '|',
+                  'uploadImage',
+                  'undo',
+                  'redo',
+                ],
+                image: {
+                  toolbar: [
+                    'imageTextAlternative',
+                    'imageStyle:full',
+                    'imageStyle:side',
+                  ],
+                },
+              }}
+              data={watch('content')}
+              onChange={(_, editor) => {
+                const data = editor.getData();
+                setValue('content', data);
+              }}
+            />
           </div>
           <div className="flex">
             <div className="w-100">

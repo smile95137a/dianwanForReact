@@ -18,6 +18,20 @@ const basePath = '/product';
 const productCategoryPath = '/productCategory';
 const productDetailPath = '/productDetail';
 
+export const copyProduct = async (
+  productId: any
+): Promise<ApiResponse<any>> => {
+  try {
+    const response = await api.post<ApiResponse<any>>(
+      `${basePath}/${productId}/duplicate`
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error creating product:', error);
+    throw error;
+  }
+};
+
 export const getAllProducts = async (): Promise<ApiResponse<any[]>> => {
   try {
     const response = await api.get<ApiResponse<any[]>>(`${basePath}/query`);
@@ -38,6 +52,90 @@ export const getProductById = async (
     return response.data;
   } catch (error) {
     console.error(`Error fetching product by ID: ${id}`, error);
+    throw error;
+  }
+};
+
+export const createProduct2 = async (req: any): Promise<ApiResponse<any>> => {
+  try {
+    const response = await api.post<ApiResponse<any>>(`${basePath}/add2`, req);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating product:', error);
+    throw error;
+  }
+};
+export const updateProduct2 = async (req: any): Promise<ApiResponse<any>> => {
+  try {
+    const response = await api.post<ApiResponse<any>>(
+      `${basePath}/update2`,
+      req
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error creating product:', error);
+    throw error;
+  }
+};
+
+export const uploadProductImg = async (
+  list: (File | string)[],
+  productId: number
+): Promise<ApiResponse<string[]>> => {
+  try {
+    const formData = new FormData();
+    formData.append('productId', productId.toString());
+
+    list.forEach((item) => {
+      if (item instanceof File) {
+        formData.append('files', item);
+      } else if (typeof item === 'string') {
+        formData.append('existingUrls', item); // Adjust key if needed
+      }
+    });
+
+    const response = await api.post<ApiResponse<string[]>>(
+      `${basePath}/uploadProductImg`,
+      formData,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error('Error uploading product images:', error);
+    throw error;
+  }
+};
+
+export const uploadProductBannerImg = async (
+  list: (File | string)[],
+  productId: number
+): Promise<ApiResponse<string[]>> => {
+  try {
+    const formData = new FormData();
+    formData.append('productId', productId.toString());
+
+    list.forEach((item) => {
+      if (item instanceof File) {
+        formData.append('files', item);
+      } else if (typeof item === 'string') {
+        formData.append('existingUrls', item); // Adjust key if needed
+      }
+    });
+
+    const response = await api.post<ApiResponse<string[]>>(
+      `${basePath}/uploadProductBannerImg`,
+      formData,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error('Error uploading banner images:', error);
     throw error;
   }
 };
@@ -154,16 +252,76 @@ export const getOneKuJiType = async (
 };
 
 // Product Details
-export const getAllProductDetails = async (): Promise<
-  ApiResponse<DetailListApiResponse>
-> => {
+export const getAllProductDetails = async (): Promise<ApiResponse<any[]>> => {
   try {
-    const response = await api.get<ApiResponse<DetailListApiResponse>>(
+    const response = await api.get<ApiResponse<any[]>>(
       `${productDetailPath}/all`
     );
     return response.data;
   } catch (error) {
     console.error('Error fetching all product details:', error);
+    throw error;
+  }
+};
+
+export const createProductDetail2 = async (
+  req: any
+): Promise<ApiResponse<any>> => {
+  console.log(req);
+
+  try {
+    const response = await api.post<ApiResponse<any>>(
+      `${productDetailPath}/add2`,
+      req
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error creating product:', error);
+    throw error;
+  }
+};
+export const updateProductDetail2 = async (
+  req: any
+): Promise<ApiResponse<any>> => {
+  try {
+    const response = await api.post<ApiResponse<any>>(
+      `${productDetailPath}/update2`,
+      req
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error creating product:', error);
+    throw error;
+  }
+};
+
+export const uploadProductDetailImg = async (
+  list: (File | string)[],
+  productDetailId: number
+): Promise<ApiResponse<string[]>> => {
+  try {
+    const formData = new FormData();
+    formData.append('productDetailId', productDetailId.toString());
+
+    list.forEach((item) => {
+      if (item instanceof File) {
+        formData.append('files', item);
+      } else if (typeof item === 'string') {
+        formData.append('existingUrls', item); // Adjust key if needed
+      }
+    });
+
+    const response = await api.post<ApiResponse<string[]>>(
+      `${productDetailPath}/uploadProductDetailImg`,
+      formData,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error('Error uploading product images:', error);
     throw error;
   }
 };

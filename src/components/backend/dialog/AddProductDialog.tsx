@@ -7,7 +7,14 @@ import { FormInput } from '../FormInput';
 
 import { useBackendDialog } from '@/context/backend/useBackendDialog';
 import { useLoading } from '@/context/frontend/LoadingContext';
-import { getAllCategories } from '@/services/backend/ProductService';
+import {
+  createProduct2,
+  getAllCategories,
+  updateProduct2,
+  uploadProductBannerImg,
+  uploadProductImg,
+} from '@/services/backend/ProductService';
+import { getImageUrl } from '@/utils/ImageUtils';
 
 interface AddProductDialogProps {
   isOpen: boolean;
@@ -81,31 +88,35 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
       prizeCategory: '',
       price: '',
       sliverPrice: '',
+      stockQuantity: 0,
       bonusPrice: '',
       status: '',
       specification: '',
-      selectedCategoryId: '',
+      categoryId: '',
       hasBanner: '',
     },
   });
 
   useEffect(() => {
     if (isEdit && product) {
+      console.log(product);
+
       reset({
-        productName: product.productName,
-        description: product.description,
-        price: product.price,
-        stockQuantity: product.stockQuantity,
-        width: product.width,
-        height: product.height,
-        length: product.length,
-        specification: product.specification,
-        specialPrice: product.specialPrice,
-        details: product.details,
-        status: product.status,
-        categoryId: product.categoryId,
+        productName: product.productName || '',
+        description: product.description || '',
+        productType: product.productType || '',
+        prizeCategory: product.prizeCategory || '',
+        price: product.price || '',
+        sliverPrice: product.sliverPrice || '',
+        stockQuantity: product.stockQuantity || 0,
+        bonusPrice: product.bonusPrice || '',
+        status: product.status || '',
+        specification: product.specification || '',
+        categoryId: product.categoryId || '',
+        hasBanner: product.hasBanner || '',
       });
-      setImages(product.imageUrl || []);
+      setImages(product.imageUrls || []);
+      setBannerImages(product.bannerImageUrl || []);
     }
   }, [isEdit, product, reset]);
 
@@ -148,59 +159,44 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
     setBannerImages((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = async () => {
-    console.log(getValues());
+  const validateForm = async () => {
+    try {
+      return true;
+    } catch (error) {
+      if (error instanceof Error)
+        await openInfoDialog('系統提示', error.message);
+      return false;
+    }
+  };
 
-    // try {
-    //   setLoading(true);
-    //   const formData = new FormData();
-    //   const productReq = {
-    //     productName: getValues().productName,
-    //     description: getValues().description,
-    //     price: Number(getValues().price),
-    //     stockQuantity: Number(getValues().stockQuantity),
-    //     categoryId: getValues().categoryId,
-    //     width: Number(getValues().width),
-    //     height: Number(getValues().height),
-    //     length: Number(getValues().length),
-    //     specification: getValues().specification,
-    //     shippingMethod: 'Express',
-    //     specialPrice: Number(getValues().specialPrice),
-    //     status: getValues().status,
-    //     imageUrl: images.filter((img) => typeof img === 'string'),
-    //     details: getValues().details,
-    //     shippingPrice: 0,
-    //     size: 0,
-    //   };
-    //   formData.append('productReq', JSON.stringify(productReq));
-    //   const newImages = images.filter((img) => img instanceof File) as File[];
-    //   newImages.forEach((file) => {
-    //     formData.append('images', file, file.name);
-    //   });
-    //   let response;
-    //   if (isEdit && product) {
-    //     response = await updateproduct(product.productId, formData);
-    //   } else {
-    //     response = await addproduct(formData);
-    //   }
-    //   setLoading(false);
-    //   if (response.success) {
-    //     await openInfoDialog(
-    //       '系統提示',
-    //       isEdit ? '商品更新成功' : '商品新增成功'
-    //     );
-    //     onClose(true);
-    //   } else {
-    //     await openInfoDialog(
-    //       '系統提示',
-    //       response.message || '操作失敗，請稍後再試！'
-    //     );
-    //   }
-    // } catch (error) {
-    //   setLoading(false);
-    //   console.error('操作失敗:', error);
-    //   await openInfoDialog('系統提示', '操作過程中出現錯誤，請稍後再試！');
-    // }
+  const handleSubmit = async () => {
+    const values = getValues();
+    if (await validateForm()) {
+      try {
+        setLoading(true);
+
+        const { success, data, message } = isEdit
+          ? await updateProduct2({ productId: product.productId, ...values })
+          : await createProduct2(values);
+        if (!success) {
+          setLoading(false);
+          await openInfoDialog('系統提示', message || '產品創建失敗');
+          return;
+        }
+
+        const productId = isEdit ? product.productId : data.productId;
+        setLoading(true);
+        await uploadProductImg(images, productId);
+        await uploadProductBannerImg(bannerImages, productId);
+        setLoading(false);
+        await openInfoDialog('系統提示', isEdit ? '更新成功！' : '新增成功！');
+        onConfirm();
+      } catch (error) {
+        setLoading(false);
+        console.error('操作失敗:', error);
+        await openInfoDialog('系統提示', '操作過程中出現錯誤，請稍後再試！');
+      }
+    }
   };
 
   return (
@@ -293,25 +289,12 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
               <p className="addMemberDialog__text">商品類別:</p>
             </div>
             <FormSelect
-              name="categorySelect"
+              name="categoryId"
               control={control}
-              options={categories.map((cat) => ({
-                value: cat.categoryId.toString(),
+              options={categories.map((cat: any) => ({
+                value: cat.categoryId,
                 label: cat.categoryName,
               }))}
-            />
-          </div>
-          <div className="flex">
-            <div className="w-100">
-              <p className="addMemberDialog__text">選擇是否需要 Banner 圖片:</p>
-            </div>
-            <FormSelect
-              name="hasBanner"
-              control={control}
-              options={[
-                { value: true, label: '是' },
-                { value: false, label: '否' },
-              ]}
             />
           </div>
 
@@ -326,10 +309,14 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
               onChange={handleBannerFileChange}
             />
             <div className="image-preview">
-              {images.map((image, index) => (
+              {bannerImages.map((image, index) => (
                 <div key={index} className="image-item">
                   {typeof image === 'string' ? (
-                    <img src={image} alt="商品圖片" className="preview-image" />
+                    <img
+                      src={getImageUrl(image)}
+                      alt="商品圖片"
+                      className="preview-image"
+                    />
                   ) : (
                     <p>{image.name}</p>
                   )}
@@ -358,7 +345,11 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
               {images.map((image, index) => (
                 <div key={index} className="image-item">
                   {typeof image === 'string' ? (
-                    <img src={image} alt="商品圖片" className="preview-image" />
+                    <img
+                      src={getImageUrl(image)}
+                      alt="商品圖片"
+                      className="preview-image"
+                    />
                   ) : (
                     <p>{image.name}</p>
                   )}

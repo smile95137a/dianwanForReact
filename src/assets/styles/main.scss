@@ -33,15 +33,19 @@
 @import 'components/backend/dialog/info-dialog';
 @import 'components/backend/dialog/add-banner-dialog';
 @import 'components/backend/dialog/add-product-dialog';
+@import 'components/backend/dialog/add-product-detail-dialog';
 @import 'components/backend/dialog/add-product-recommendation-dialog';
 @import 'components/backend/dialog/add-redemption-code-dialog';
 @import 'components/backend/dialog/add-shipment-code-dialog';
 @import 'components/backend/dialog/add-member-dialog';
 @import 'components/backend/dialog/add-productCategory-dialog';
+@import 'components/backend/dialog/add-productStoreCategory-dialog';
 @import 'components/backend/dialog/add-news-dialog';
 @import 'components/backend/dialog/add-store-product-dialog';
 @import 'components/backend/dialog/grant-reward-dialog';
+@import 'components/backend/dialog/product-store-category-management-dialog';
 @import 'components/backend/dialog/product-category-management-dialog';
+@import 'components/backend/dialog/product-detail-dialog';
 @import 'components/backend/b-input';
 @import 'components/backend/b-select';
 
@@ -88,7 +92,8 @@
 @import 'pages/backend/memberManagement';
 @import 'pages/backend/shipmentManagement';
 @import 'pages/backend/bannerManagement';
-@import 'pages/backend//productRecommendation';
+@import 'pages/backend/productManagement';
+@import 'pages/backend/productRecommendation';
 @import 'pages/backend/redemptionCodeManagement';
 @import 'pages/backend/newsManagement';
 @import 'pages/backend/vendorManagement';

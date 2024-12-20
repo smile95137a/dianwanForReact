@@ -7,10 +7,13 @@ import { useDispatch } from 'react-redux';
 import { setAuthData } from '@/store/slices/backend/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { saveState } from '@/utils/Localstorage';
+import { useLoading } from '@/context/frontend/LoadingContext';
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { setLoading } = useLoading();
+
   const { control, handleSubmit, formState, getValues } = useForm({
     defaultValues: {
       username: '',
@@ -22,16 +25,20 @@ const Login = () => {
     if (validateForm()) {
       const formData = getValues();
       try {
+        setLoading(true);
         const { success, data, message } = await login(formData);
+        setLoading(false);
         if (success) {
           const { accessToken, user } = data;
           dispatch(setAuthData({ accessToken, user }));
           saveState('btoken', accessToken);
+          saveState('buser', user);
           navigate('/admin/main');
         } else {
           console.log(message);
         }
       } catch (error) {
+        setLoading(false);
         console.log(error);
       }
     }

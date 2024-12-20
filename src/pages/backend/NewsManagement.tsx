@@ -148,7 +148,9 @@ const NewsManagement = () => {
             <Pagination {...pagination} />
           </div>
         ) : (
-          <Card content={<NoData />} />
+          <Card>
+            <NoData />
+          </Card>
         )}
       </div>
     </div>

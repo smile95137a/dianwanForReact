@@ -11,6 +11,66 @@ import { api } from './BackendAPI';
 const productBasePath = '/storeProduct';
 const categoryBasePath = '/category';
 
+export const createStoreProduct2 = async (
+  req: any
+): Promise<ApiResponse<any>> => {
+  try {
+    const response = await api.post<ApiResponse<any>>(
+      `${productBasePath}/add2`,
+      req
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error creating product:', error);
+    throw error;
+  }
+};
+export const updateStoreProduct2 = async (
+  req: any
+): Promise<ApiResponse<any>> => {
+  try {
+    const response = await api.post<ApiResponse<any>>(
+      `${productBasePath}/update2`,
+      req
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error creating product:', error);
+    throw error;
+  }
+};
+
+export const uploadStoreProductImg = async (
+  list: (File | string)[],
+  storeProductId: number
+): Promise<ApiResponse<string[]>> => {
+  try {
+    const formData = new FormData();
+    formData.append('storeProductId', storeProductId.toString());
+
+    list.forEach((item) => {
+      if (item instanceof File) {
+        formData.append('files', item);
+      } else if (typeof item === 'string') {
+        formData.append('existingUrls', item); // Adjust key if needed
+      }
+    });
+
+    const response = await api.post<ApiResponse<string[]>>(
+      `${productBasePath}/uploadProductImg`,
+      formData,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error('Error uploading product images:', error);
+    throw error;
+  }
+};
+
 export const getAllStoreProducts = async (): Promise<ApiResponse<any[]>> => {
   try {
     const response = await api.get<ApiResponse<any[]>>(

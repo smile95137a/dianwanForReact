@@ -40,6 +40,22 @@ export interface DialogContextType {
   openAddProductDialog: (isEdit?: boolean, product?: any) => Promise<boolean>;
   openOrderDetailsDialog: (order: any) => Promise<boolean>;
   openOrderShipmentDialog: (order: any) => Promise<boolean>;
+  openProductDetailDialog: (
+    product: any,
+    customClass?: string
+  ) => Promise<boolean>;
+  openAddProductDetailDialog: (
+    productId: any,
+    isEdit?: boolean,
+    productDetail?: any
+  ) => Promise<boolean>;
+  openProductStoreCategoryManagementDialog: (
+    customClass?: string
+  ) => Promise<boolean>;
+  openAddProductStoreCategoryDialog: (
+    isEdit?: boolean,
+    productStoreCategory?: any
+  ) => Promise<boolean>;
 }
 
 export const BackendDialogContext = createContext<

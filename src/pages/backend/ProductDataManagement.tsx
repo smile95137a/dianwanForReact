@@ -5,13 +5,14 @@ import NoData from '@/components/backend/NoData';
 import Pagination from '@/components/backend/Pagination';
 import Card from '@/components/frontend/MCard';
 import { usePagination } from '@/hooks/usePagination';
-import { getAllProducts } from '@/services/backend/ProductService';
+import {
+  copyProduct,
+  deleteProduct,
+  getAllProducts,
+} from '@/services/backend/ProductService';
 import { useBackendDialog } from '@/context/backend/useBackendDialog';
 import { useLoading } from '@/context/frontend/LoadingContext';
-import {
-  deleteStoreProduct,
-  getAllCategories,
-} from '@/services/backend/StoreServices';
+import { getAllCategories } from '@/services/backend/StoreServices';
 import { getImageUrl } from '@/utils/ImageUtils';
 import NumberFormatter from '@/components/common/NumberFormatter';
 import { PrizeCategory } from '@/interfaces/product';
@@ -23,12 +24,22 @@ const ProductDataManagement = () => {
     CUSTMER_PRIZE = 'CUSTMER_PRIZE',
   }
 
-  const productTypeOptions: Record<ProductType, string> = {
-    [ProductType.PRIZE]: '一番賞',
-    [ProductType.GACHA]: '扭蛋',
-    [ProductType.BLIND_BOX]: '盲盒',
-    [ProductType.CUSTMER_PRIZE]: '客製化抽獎',
-  };
+  const productTypeOptions = [
+    { value: '', label: '請選擇' },
+    { value: ProductType.PRIZE, label: '一番賞' },
+    { value: ProductType.GACHA, label: '扭蛋' },
+    { value: ProductType.BLIND_BOX, label: '盲盒' },
+    { value: ProductType.CUSTMER_PRIZE, label: '自製獎品' },
+  ];
+
+  const prizeCategoryOptions = [
+    { value: '', label: '請選擇' },
+    { value: PrizeCategory.FIGURE, label: '官方一番賞' },
+    { value: PrizeCategory.C3, label: '家電一番賞' },
+    { value: PrizeCategory.BONUS, label: '紅利賞' },
+    { value: PrizeCategory.PRIZESELF, label: '自製賞' },
+    { value: PrizeCategory.NONE, label: '無' },
+  ];
 
   const [products, setProducts] = useState<any[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
@@ -47,6 +58,7 @@ const ProductDataManagement = () => {
     openAddProductDialog,
     openConfirmDialog,
     openProductCategoryManagementDialog,
+    openProductDetailDialog,
   } = useBackendDialog();
   const { setLoading } = useLoading();
 
@@ -119,6 +131,23 @@ const ProductDataManagement = () => {
       fetchProductList();
     }
   };
+  const handleDuplicate = (data: any) => async () => {
+    try {
+      setLoading(true);
+      const { success } = await copyProduct(data.productId);
+      setLoading(false);
+      if (success) {
+        await openInfoDialog('系統提示', '商品已成功複製！');
+        fetchProductList();
+      } else {
+        await openInfoDialog('系統提示', '複製失敗，請稍後再試！');
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error('Error copyProduct product:', error);
+      await openInfoDialog('系統提示', '複製失敗，請稍後再試！');
+    }
+  };
 
   const handleDelete = async (id: number) => {
     const result = await openConfirmDialog(
@@ -129,7 +158,7 @@ const ProductDataManagement = () => {
     if (result) {
       try {
         setLoading(true);
-        const { success } = await deleteStoreProduct(id);
+        const { success } = await deleteProduct(id);
         setLoading(false);
         if (success) {
           await openInfoDialog('系統提示', '商品已成功刪除！');
@@ -143,6 +172,10 @@ const ProductDataManagement = () => {
         await openInfoDialog('系統提示', '刪除失敗，請稍後再試！');
       }
     }
+  };
+
+  const handlePDetail = async (data: any) => {
+    openProductDetailDialog(data);
   };
 
   useEffect(() => {
@@ -176,22 +209,24 @@ const ProductDataManagement = () => {
           onChange={(e) => {
             setFilterProductType(e.target.value);
             if (e.target.value !== ProductType.PRIZE) {
-              setFilterPrizeCategory(''); // Clear prize category when not PRIZE type
+              setFilterPrizeCategory('');
             }
           }}
         >
-          <option value="">全部</option>
-          {}
+          {productTypeOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
         </select>
         {filterProductType === ProductType.PRIZE && (
           <select
             value={filterPrizeCategory}
             onChange={(e) => setFilterPrizeCategory(e.target.value)}
           >
-            <option value="">全部一番賞類別</option>
-            {Object.values(PrizeCategory).map((category) => (
-              <option key={category} value={category}>
-                {category}
+            {prizeCategoryOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
               </option>
             ))}
           </select>
@@ -223,11 +258,11 @@ const ProductDataManagement = () => {
                     {
                       content: (
                         <>
-                          <img
+                          {/* <img
                             src={getImageUrl(x.imageUrls[0])}
                             alt="商品圖片"
                             className="productDataManagement__image"
-                          />
+                          /> */}
                         </>
                       ),
                       dataTitle: '圖片',
@@ -284,11 +319,29 @@ const ProductDataManagement = () => {
                       content: (
                         <>
                           <div className="productDataManagement__btns">
-                            <button className="productDataManagement__btn productDataManagement__btn--edit">
+                            <button
+                              className="productDataManagement__btn productDataManagement__btn--edit"
+                              onClick={handleEdit(x)}
+                            >
                               編輯
                             </button>
-                            <button className="productDataManagement__btn productDataManagement__btn--del">
+                            <button
+                              className="productDataManagement__btn productDataManagement__btn--del"
+                              onClick={() => handleDelete(x.productId)}
+                            >
                               刪除
+                            </button>
+                            <button
+                              className="productDataManagement__btn productDataManagement__btn--edit"
+                              onClick={() => handlePDetail(x)}
+                            >
+                              查看商品
+                            </button>
+                            <button
+                              className="productDataManagement__btn productDataManagement__btn--edit"
+                              onClick={handleDuplicate(x)}
+                            >
+                              複製商品
                             </button>
                           </div>
                         </>

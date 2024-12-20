@@ -33,8 +33,12 @@ const StoreManagement = () => {
     initialPage: 1,
   });
 
-  const { openInfoDialog, openAddStoreProductDialog, openConfirmDialog } =
-    useBackendDialog();
+  const {
+    openInfoDialog,
+    openAddStoreProductDialog,
+    openConfirmDialog,
+    openProductStoreCategoryManagementDialog,
+  } = useBackendDialog();
   const { setLoading } = useLoading();
 
   const fetchProductList = async () => {
@@ -160,6 +164,10 @@ const StoreManagement = () => {
     applyFilters();
   }, [selectedCategory, products]);
 
+  const openProductStoreCategoryManagement = () => {
+    openProductStoreCategoryManagementDialog();
+  };
+
   return (
     <div className="storeManagement">
       <p className="storeManagement__title">商城管理</p>
@@ -168,6 +176,12 @@ const StoreManagement = () => {
         className="storeManagement__btn m-b-12"
       >
         新增商品
+      </button>
+      <button
+        onClick={openProductStoreCategoryManagement}
+        className="storeManagement__btn m-b-12"
+      >
+        管理商品類別
       </button>
       <div className="storeManagement__productFilter">
         篩選產品：
@@ -215,11 +229,13 @@ const StoreManagement = () => {
                     {
                       content: (
                         <>
-                          <img
-                            src={getImageUrl(x.imageUrl[0])}
-                            alt="商品圖片"
-                            className="storeManagement__image"
-                          />
+                          {x.image && x.image.length > 0 && (
+                            <img
+                              src={getImageUrl(x.image[0])}
+                              alt="商品圖片"
+                              className="storeManagement__image"
+                            />
+                          )}
                         </>
                       ),
                       dataTitle: '圖片',

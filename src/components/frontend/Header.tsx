@@ -54,40 +54,41 @@ const Header = () => {
     try {
       const { success, data } = await getAllMarquees();
       if (success) {
-        const currentTime = moment();
+        if (Object.keys(data).length > 0) {
+          const currentTime = moment();
+          const result = Object.keys(data).map((key) =>
+            data[key].map((marquee: any) => {
+              const createDate = moment(marquee.createDate);
+              const updatedDate = createDate.add(60, 'seconds');
+              const shouldDisplay = updatedDate.isAfter(currentTime);
+              return {
+                ...marquee,
+                shouldDisplay,
+              };
+            })
+          );
 
-        const result = Object.keys(data).map((key) =>
-          data[key].map((marquee: any) => {
-            const createDate = moment(marquee.createDate);
-            const updatedDate = createDate.add(60, 'seconds');
-            const shouldDisplay = updatedDate.isAfter(currentTime);
+          const transformedData = result.map((group) => {
+            const title = group[0]?.username;
             return {
-              ...marquee,
-              shouldDisplay,
+              title,
+              list: group,
             };
-          })
-        );
+          });
 
-        const transformedData = result.map((group) => {
-          const title = group[0]?.username;
-          return {
-            title,
-            list: group,
-          };
-        });
+          const filteredGroup = transformedData.filter(
+            (x) => x.list.length > 0 && x.list[0].shouldDisplay
+          );
 
-        const filteredGroup = transformedData.filter(
-          (x) => x.list.length > 0 && x.list[0].shouldDisplay
-        );
+          const lastData =
+            filteredGroup.length === 0
+              ? [transformedData[transformedData.length - 1]]
+              : filteredGroup;
 
-        const lastData =
-          filteredGroup.length === 0
-            ? [transformedData[transformedData.length - 1]]
-            : filteredGroup;
-
-        setMarqueeMessageData(lastData);
-      } else {
-        console.error('Unable to fetch marquee data or request failed');
+          setMarqueeMessageData(lastData);
+        } else {
+          console.error('Unable to fetch marquee data or request failed');
+        }
       }
     } catch (error) {
       console.error('Failed to fetch marquee data:', error);

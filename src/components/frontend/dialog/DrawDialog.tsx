@@ -34,10 +34,13 @@ const DrawDialog: FC<DrawDialogProps> = ({
           <p className="drawDialog__text">抽中賞品</p>
         </div>
         <div className="drawDialog__main">
-          {drawData?.data.map((item, index) => (
+          {drawData?.data.map((item: any, index: any) => (
             <div key={index} className="drawDialog__item">
               <div className="drawDialog__item-img">
-                <img src={getImageUrl(item.imageUrls[0])} />
+                {Array.isArray(item?.imageUrls) &&
+                  item.imageUrls.length > 0 && (
+                    <img src={getImageUrl(item.imageUrls[0])} alt="圖片" />
+                  )}
               </div>
               <div className="drawDialog__item-name">{item.productName}</div>
             </div>

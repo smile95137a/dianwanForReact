@@ -5,12 +5,6 @@ import NoData from '@/components/backend/NoData';
 import Pagination from '@/components/backend/Pagination';
 import Card from '@/components/frontend/MCard';
 import { usePagination } from '@/hooks/usePagination';
-import {
-  getAllRedemptionCodes,
-  generateRedemptionCode,
-} from '@/services/backend/RedemptionService';
-import DateFormatter from '@/components/common/DateFormatter';
-import { getAllProductsByType } from '@/services/backend/ProductService';
 import { useBackendDialog } from '@/context/backend/useBackendDialog';
 import { useLoading } from '@/context/frontend/LoadingContext';
 import {
@@ -44,11 +38,11 @@ const StoreManagement = () => {
   const fetchProductList = async () => {
     try {
       setLoading(true);
-      const { success, data, message } = await getAllStoreProducts();
+      const { success, data } = await getAllStoreProducts();
       setLoading(false);
       if (success) {
-        setProducts(data);
-        setFilteredProducts(data);
+        setProducts(data || []);
+        setFilteredProducts(data || []);
       } else {
         setProducts([]);
         setFilteredProducts([]);
@@ -83,7 +77,7 @@ const StoreManagement = () => {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const { success, data, code, message } = await getAllCategories();
+      const { success, data } = await getAllCategories();
 
       setLoading(false);
       if (success) {
@@ -229,11 +223,11 @@ const StoreManagement = () => {
                     {
                       content: (
                         <>
-                          {x.image && x.image.length > 0 && (
+                          {Array.isArray(x?.image) && x.image.length > 0 && (
                             <img
-                              src={getImageUrl(x.image[0])}
-                              alt="商品圖片"
                               className="storeManagement__image"
+                              src={getImageUrl(x.image[0])}
+                              alt="圖片"
                             />
                           )}
                         </>

@@ -16,9 +16,9 @@ import { FormProvider, useForm } from 'react-hook-form';
 import CheckoutInfoForm from '@/components/frontend/CheckoutInfoForm';
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [shippingMethods, setShippingMethods] = useState([]);
+  const [cartItems, setCartItems] = useState<any[]>([]);
+  const [selectedItems, setSelectedItems] = useState<any[]>([]);
+  const [shippingMethods, setShippingMethods] = useState<any[]>([]);
 
   const navigate = useNavigate();
   const { setLoading } = useLoading();
@@ -151,7 +151,7 @@ const Cart = () => {
       <div className="cart">
         <p className="cart__text cart__text--title m-b-24">商品資訊</p>
         <div className="cart__products">
-          {cartItems.map((item, index) => (
+          {cartItems.map((item: any, index) => (
             <div key={index} className="cart__product">
               <div className="cart__product-item cart__product-item--selected">
                 <input
@@ -161,7 +161,10 @@ const Cart = () => {
                 />
               </div>
               <div className="cart__product-item cart__product-item--img">
-                <img src={getImageUrl(item.imageUrls[0])} alt="" />
+                {Array.isArray(item?.imageUrls) &&
+                  item.imageUrls.length > 0 && (
+                    <img src={getImageUrl(item.imageUrls[0])} alt="圖片" />
+                  )}
               </div>
               <div className="cart__product-item cart__product-item--name">
                 <p className="cart__text">{item.productName}</p>

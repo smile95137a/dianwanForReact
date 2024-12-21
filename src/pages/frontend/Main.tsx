@@ -94,12 +94,14 @@ const Main = () => {
             {banners.map((banner, index) => (
               <SwiperSlide key={index}>
                 <div className="slider__item">
-                  <img
-                    src={getImageUrl(
-                      banner.imageUrls ? banner.imageUrls[0] : ''
+                  {Array.isArray(banner?.imageUrls) &&
+                    banner.imageUrls.length > 0 && (
+                      <img
+                        src={getImageUrl(banner.imageUrls[0])}
+                        alt="圖片"
+                        className="slider__item-img"
+                      />
                     )}
-                    className="slider__item-img"
-                  />
                 </div>
               </SwiperSlide>
             ))}

@@ -1,10 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import logoImg from '@/assets/image/logo.png';
+import React, { useEffect, useMemo, useState } from 'react';
 import NumberFormatter from '@/components/common/NumberFormatter';
-import { FaMinus, FaPlus, FaTrash } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { FaTrash } from 'react-icons/fa';
 import { useLoading } from '@/context/frontend/LoadingContext';
-import { getCart } from '@/services/frontend/cartService';
 import { getImageUrl } from '@/utils/ImageUtils';
 
 import { getShippingMethod } from '@/services/frontend/shippingMethodService';
@@ -14,11 +11,10 @@ import CheckoutInfoForm from '@/components/frontend/CheckoutInfoForm';
 import { getPrizeCart } from '@/services/frontend/prizeCartService';
 
 const PrizeBox = () => {
-  const [prizeBoxItems, setPrizeBoxItems] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [shippingMethods, setShippingMethods] = useState([]);
+  const [prizeBoxItems, setPrizeBoxItems] = useState<any[]>([]);
+  const [selectedItems, setSelectedItems] = useState<any[]>([]);
+  const [shippingMethods, setShippingMethods] = useState<any[]>([]);
 
-  const navigate = useNavigate();
   const { setLoading } = useLoading();
 
   const methods = useForm({
@@ -69,7 +65,7 @@ const PrizeBox = () => {
     loadPrizeBoxItems();
   }, []);
 
-  const handleCheckboxChange = (itemId) => {
+  const handleCheckboxChange = (itemId: any) => {
     setSelectedItems((prevSelected) =>
       prevSelected.includes(itemId)
         ? prevSelected.filter((id) => id !== itemId)
@@ -143,7 +139,7 @@ const PrizeBox = () => {
           <div className="w-15"></div>
         </div>
         <div className="prizeBox__products">
-          {prizeBoxItems.map((item, index) => (
+          {prizeBoxItems.map((item: any, index) => (
             <div key={index} className="flex p-x-24 gap-x-12 prizeBox__product">
               <div className="w-5 prizeBox__product-item prizeBox__product-item--selected">
                 <input
@@ -153,7 +149,9 @@ const PrizeBox = () => {
                 />
               </div>
               <div className="w-20 prizeBox__product-item prizeBox__product-item--img">
-                <img src={getImageUrl(item.imageUrls[0])} alt="" />
+                {Array.isArray(item.imageUrls) && item.imageUrls.length > 0 && (
+                  <img src={getImageUrl(item.imageUrls[0])} alt="產品圖片" />
+                )}
               </div>
               <div className="w-50 prizeBox__product-item prizeBox__product-item--name">
                 {item.productName}
@@ -177,7 +175,7 @@ const PrizeBox = () => {
               <p className="prizeBox__text">寄送</p>
             </div>
             <div className="prizeBox__main-content">
-              {shippingMethods.map((option) => (
+              {shippingMethods.map((option: any) => (
                 <div key={option.name} className="prizeBox__content">
                   <div className="prizeBox__content-main">
                     <input

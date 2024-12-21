@@ -101,19 +101,21 @@ const OrderDetailsDialog: FC<OrderDetailsDialogProps> = ({
                     content: (
                       <>
                         {detail.storeProduct &&
-                        detail.storeProduct.imageUrls ? (
+                        Array.isArray(detail.storeProduct.imageUrls) &&
+                        detail.storeProduct.imageUrls.length > 0 ? (
                           <img
                             src={getImageUrl(detail.storeProduct.imageUrls[0])}
-                            alt="Product Image"
+                            alt="Store Product Image"
                             style={{ width: '100px', height: '100px' }}
                           />
                         ) : detail.productDetailRes &&
-                          detail.productDetailRes.imageUrls ? (
+                          Array.isArray(detail.productDetailRes.imageUrls) &&
+                          detail.productDetailRes.imageUrls.length > 0 ? (
                           <img
                             src={getImageUrl(
                               detail.productDetailRes.imageUrls[0]
                             )}
-                            alt="Product Image"
+                            alt="Product Detail Image"
                             style={{ width: '100px', height: '100px' }}
                           />
                         ) : null}

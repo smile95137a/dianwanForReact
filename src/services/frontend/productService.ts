@@ -49,7 +49,7 @@ export const getAllProductList = async (): Promise<ApiResponse<IProduct[]>> => {
 };
 
 export const getProductById = async (
-  id: number
+  id: any
 ): Promise<ApiResponse<IProduct>> => {
   try {
     const response = await api.get<ApiResponse<IProduct>>(
@@ -63,7 +63,7 @@ export const getProductById = async (
 };
 
 export const getProductByType = async (
-  type: string
+  type: any
 ): Promise<ApiResponse<IProduct[]>> => {
   try {
     const response = await api.get<ApiResponse<IProduct[]>>(

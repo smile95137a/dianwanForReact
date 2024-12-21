@@ -38,7 +38,7 @@ export const getAllProductDetails = async (): Promise<
 };
 
 export const getProductDetailById = async (
-  productId: number
+  productId: any
 ): Promise<ApiResponse<IProductDetail[]>> => {
   try {
     const response = await api.get<ApiResponse<IProductDetail[]>>(

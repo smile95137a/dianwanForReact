@@ -35,7 +35,7 @@ export const drawPrize = async (
 
 // 獲取抽獎狀態
 export const getDrawStatus = async (
-  productId: number
+  productId: any
 ): Promise<ApiResponse<any>> => {
   try {
     const response = await api.get(`${basePath}/status/${productId}`);

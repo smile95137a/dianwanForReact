@@ -8,7 +8,6 @@ import { BsHandbag } from 'react-icons/bs';
 import { getImageUrl } from '@/utils/ImageUtils';
 import boxClose from '@/assets/image/box-close.png';
 import boxOpen from '@/assets/image/box-open.png';
-import btnIcon from '@/assets/image/btn-icon.png';
 import ticketImg from '@/assets/image/ticket.png';
 import ticketImgA from '@/assets/image/ticket_A.png';
 import ticketImgB from '@/assets/image/ticket_B.png';
@@ -47,8 +46,8 @@ import { useLoading } from '@/context/frontend/LoadingContext';
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const [product, setProduct] = useState(null);
-  const [productDetail, setProductDetail] = useState([]);
+  const [product, setProduct] = useState<any>(null);
+  const [productDetail, setProductDetail] = useState<any[]>([]);
   const [ticketList, setTicketList] = useState([]);
   const [activeTickets, setActiveTickets] = useState([]);
   const [showOption, setShowOption] = useState(false);
@@ -62,7 +61,7 @@ const ProductDetail = () => {
   );
 
   const remainingQuantity = useMemo(() => {
-    return ticketList.filter((x) => !x.isDrawn).length;
+    return ticketList.filter((x: any) => !x.isDrawn).length;
   }, [ticketList]);
 
   let countdownInterval: any = null;
@@ -115,14 +114,14 @@ const ProductDetail = () => {
     fetchData();
   }, [id]);
 
-  const handleCheckboxChange = (ticket) => {
+  const handleCheckboxChange = (ticket: any) => {
     setShowOption(true);
-    setActiveTickets((prev) => {
+    setActiveTickets((prev: any) => {
       const isActive = prev.some(
-        (t) => t.prizeNumberId === ticket.prizeNumberId
+        (t: any) => t.prizeNumberId === ticket.prizeNumberId
       );
       return isActive
-        ? prev.filter((t) => t.prizeNumberId !== ticket.prizeNumberId)
+        ? prev.filter((t: any) => t.prizeNumberId !== ticket.prizeNumberId)
         : [...prev, ticket];
     });
   };
@@ -170,7 +169,9 @@ const ProductDetail = () => {
   const toggleExpand = () => setExpanded(!expanded);
 
   const handleSelectAll = () => {
-    const selectableTickets = ticketList.filter((ticket) => !ticket.isDrawn);
+    const selectableTickets = ticketList.filter(
+      (ticket: any) => !ticket.isDrawn
+    );
     setActiveTickets(selectableTickets);
     setShowOption(true);
   };
@@ -195,7 +196,7 @@ const ProductDetail = () => {
       setLoading(true);
       const { success, data, message } = await executeDraw(
         product.productId,
-        activeTickets?.map((x) => x.number),
+        activeTickets?.map((x: any) => x.number),
         1
       );
 
@@ -259,7 +260,10 @@ const ProductDetail = () => {
           </div>
         </div>
         <div className="productDetail__infoImgs">
-          <img src={getImageUrl(product?.imageUrls[0])} />
+          {Array.isArray(product?.imageUrls) &&
+            product.imageUrls.length > 0 && (
+              <img src={getImageUrl(product.imageUrls[0])} alt="產品圖片" />
+            )}
         </div>
         <div className="productDetail__infoOther">
           <div className="productDetail__infoOther-item">
@@ -279,10 +283,16 @@ const ProductDetail = () => {
       <TitleBar icon={BsHandbag} titleText="獎項" showMore={false} />
       <div className="productDetail__awards">
         {productDetail.length > 0 ? (
-          productDetail.map((detail, index) => (
+          productDetail.map((detail: any, index) => (
             <div key={index} className="productDetail__awardItem">
               <div className="productDetail__awardItem-img">
-                <img src={getImageUrl(detail.imageUrls[0])} alt="" />
+                {Array.isArray(detail?.imageUrls) &&
+                  detail.imageUrls.length > 0 && (
+                    <img
+                      src={getImageUrl(detail.imageUrls[0])}
+                      alt="產品圖片"
+                    />
+                  )}
               </div>
               <div className="productDetail__awardItem-grade">
                 <p className="productDetail__text">{detail.grade}賞</p>
@@ -313,12 +323,12 @@ const ProductDetail = () => {
           overflow: expanded ? 'visible' : 'hidden',
         }}
       >
-        {ticketList.map((ticket, index) => (
+        {ticketList.map((ticket: any, index) => (
           <label
             key={index}
             className={`productDetail__ticket ${
               activeTickets.some(
-                (t) => t.prizeNumberId === ticket.prizeNumberId
+                (t: any) => t.prizeNumberId === ticket.prizeNumberId
               )
                 ? 'productDetail__ticket--active'
                 : ''
@@ -328,7 +338,7 @@ const ProductDetail = () => {
               type="checkbox"
               className="productDetail__ticket-check"
               checked={activeTickets.some(
-                (t) => t.prizeNumberId === ticket.prizeNumberId
+                (t: any) => t.prizeNumberId === ticket.prizeNumberId
               )}
               onChange={() => handleCheckboxChange(ticket)}
               disabled={ticket.isDrawn}

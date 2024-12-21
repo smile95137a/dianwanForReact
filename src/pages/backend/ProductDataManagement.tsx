@@ -43,7 +43,7 @@ const ProductDataManagement = () => {
 
   const [products, setProducts] = useState<any[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
-  const [categories, setCategories] = useState<any[]>([]);
+  const [, setCategories] = useState<any[]>([]);
   const [filterProductType, setFilterProductType] = useState('');
   const [filterPrizeCategory, setFilterPrizeCategory] = useState('');
 
@@ -258,11 +258,14 @@ const ProductDataManagement = () => {
                     {
                       content: (
                         <>
-                          {/* <img
-                            src={getImageUrl(x.imageUrls[0])}
-                            alt="商品圖片"
-                            className="productDataManagement__image"
-                          /> */}
+                          {Array.isArray(x?.imageUrls) &&
+                            x.imageUrls.length > 0 && (
+                              <img
+                                className="productDataManagement__image"
+                                src={getImageUrl(x.imageUrls[0])}
+                                alt="圖片"
+                              />
+                            )}
                         </>
                       ),
                       dataTitle: '圖片',

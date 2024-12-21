@@ -58,7 +58,9 @@ const News: React.FC = () => {
               onClick={() => goToDetail(item.newsUid)}
             >
               <div className="news__item-img">
-                <img src={getImageUrl(item.imageUrls[0])} />
+                {Array.isArray(item.imageUrls) && item.imageUrls.length > 0 && (
+                  <img src={getImageUrl(item.imageUrls[0])} alt="圖片預覽" />
+                )}
               </div>
               <div className="news__item-content">
                 <p className="news__text news__text--title">{item.title}</p>

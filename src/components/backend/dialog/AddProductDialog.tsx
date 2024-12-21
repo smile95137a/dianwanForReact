@@ -84,7 +84,7 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
     defaultValues: {
       productName: '',
       description: '',
-      productType: '',
+      productType: ProductType.PRIZE,
       prizeCategory: '',
       price: '',
       sliverPrice: '',
@@ -104,7 +104,7 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
       reset({
         productName: product.productName || '',
         description: product.description || '',
-        productType: product.productType || '',
+        productType: product.productType || ProductType.PRIZE,
         prizeCategory: product.prizeCategory || '',
         price: product.price || '',
         sliverPrice: product.sliverPrice || '',
@@ -269,11 +269,12 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
             <FormSelect
               name="status"
               control={control}
-              options={Object.entries(productStatusOptions).map(
-                ([key, label]) => {
+              options={[
+                { value: '', label: '請選擇' },
+                ...Object.entries(productStatusOptions).map(([key, label]) => {
                   return { value: key, label };
-                }
-              )}
+                }),
+              ]}
             />
           </div>
 
@@ -291,10 +292,13 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
             <FormSelect
               name="categoryId"
               control={control}
-              options={categories.map((cat: any) => ({
-                value: cat.categoryId,
-                label: cat.categoryName,
-              }))}
+              options={[
+                { value: '', label: '請選擇' },
+                ...categories.map((cat: any) => ({
+                  value: cat.categoryId,
+                  label: cat.categoryName,
+                })),
+              ]}
             />
           </div>
 

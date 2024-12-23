@@ -9,6 +9,9 @@ import { invoiceInfoOptions, paymentOptions } from '@/data/orderOptions';
 import { FormProvider, useForm } from 'react-hook-form';
 import CheckoutInfoForm from '@/components/frontend/CheckoutInfoForm';
 import { getPrizeCart } from '@/services/frontend/prizeCartService';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
+import { useNavigate } from 'react-router-dom';
 
 const PrizeBox = () => {
   const [prizeBoxItems, setPrizeBoxItems] = useState<any[]>([]);
@@ -16,6 +19,16 @@ const PrizeBox = () => {
   const [shippingMethods, setShippingMethods] = useState<any[]>([]);
 
   const { setLoading } = useLoading();
+  const navigate = useNavigate();
+  const isLogin = useSelector(
+    (state: RootState) => state.frontend.auth.isLogin
+  );
+
+  useEffect(() => {
+    if (!isLogin) {
+      navigate('/main');
+    }
+  }, [isLogin, navigate]);
 
   const methods = useForm({
     defaultValues: {
@@ -42,6 +55,7 @@ const PrizeBox = () => {
     },
   });
   const invoice = methods.watch('invoice');
+
   const handleCheckout = () => {
     console.log(methods.getValues());
   };

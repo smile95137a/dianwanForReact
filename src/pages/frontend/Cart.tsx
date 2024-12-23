@@ -14,6 +14,8 @@ import { getShippingMethod } from '@/services/frontend/shippingMethodService';
 import { invoiceInfoOptions, paymentOptions } from '@/data/orderOptions';
 import { FormProvider, useForm } from 'react-hook-form';
 import CheckoutInfoForm from '@/components/frontend/CheckoutInfoForm';
+import { RootState } from '@/store';
+import { useSelector } from 'react-redux';
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState<any[]>([]);
@@ -22,6 +24,15 @@ const Cart = () => {
 
   const navigate = useNavigate();
   const { setLoading } = useLoading();
+  const isLogin = useSelector(
+    (state: RootState) => state.frontend.auth.isLogin
+  );
+
+  useEffect(() => {
+    if (!isLogin) {
+      navigate('/main');
+    }
+  }, [isLogin, navigate]);
 
   const methods = useForm({
     defaultValues: {

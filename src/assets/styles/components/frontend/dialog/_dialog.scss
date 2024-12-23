@@ -19,6 +19,12 @@ $root-block-style: '.downDialog';
     }
   }
 
+  &--animate {
+    #{$p__main} {
+      background: transparent;
+    }
+  }
+
   &__overlay {
     position: absolute;
     inset: 0;

@@ -1,0 +1,22 @@
+$root-block-name: '.animateDialog';
+
+#{$root-block-name} {
+  $p: &;
+  $p__text: #{$p}__text;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &__img {
+    width: 400px;
+    position: relative;
+    &-ticket {
+      width: 100%;
+    }
+    &-animate {
+      position: absolute;
+      width: 100%;
+      left: 0;
+    }
+  }
+}

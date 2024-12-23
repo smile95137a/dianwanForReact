@@ -2,6 +2,7 @@ import { createContext } from 'react';
 
 export interface DialogContextType {
   openDrawDialog: (drawData: any, customClass?: string) => Promise<boolean>;
+  openAnimateDialog: (drawData: any, customClass?: string) => Promise<boolean>;
   openConfirmDialog: (customClass?: string) => Promise<boolean>;
   openInfoDialog: (
     title: string,

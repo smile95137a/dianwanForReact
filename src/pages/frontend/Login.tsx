@@ -15,7 +15,7 @@ import { useFrontendDialog } from '@/context/frontend/useFrontedDialog';
 const Login: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { openInfoDialog } = useFrontendDialog();
+  const { openInfoDialog, openAnimateDialog } = useFrontendDialog();
   const { setLoading } = useLoading();
 
   const isLogin = useSelector(
@@ -40,8 +40,7 @@ const Login: React.FC = () => {
   });
 
   const forwardRegistration = () => {
-    // navigate('/register');
-    openInfoDialog('gello', '123');
+    navigate('/register');
   };
 
   const handleOauthLogin = (provider: string) => {

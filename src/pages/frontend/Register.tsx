@@ -9,10 +9,12 @@ import {
   getZipCodeByCityAndAreaName,
 } from '@/services/frontend/taiwanCitiesService';
 import MCard from '@/components/frontend/MCard';
+import { useLoading } from '@/context/frontend/LoadingContext';
+import { registerUser } from '@/services/frontend/userService';
+import { useFrontendDialog } from '@/context/frontend/useFrontedDialog';
 
 const schema = yup.object({
   username: yup.string().required('請輸入用戶名'),
-  email: yup.string().email('信箱格式不正確').required('請輸入電子信箱'),
   password: yup.string().required('請輸入密碼').min(6, '密碼長度至少6位'),
   confirmPassword: yup
     .string()
@@ -23,18 +25,19 @@ const schema = yup.object({
     .matches(/^[0-9]{10}$/, '手機號碼格式不正確')
     .required('請輸入手機號碼'),
   nickname: yup.string().required('請輸入暱稱'),
-  addressName: yup.string().required('請輸入收貨姓名'),
-  city: yup.string().required('請選擇縣市'),
-  area: yup.string().required('請選擇行政區'),
-  zipCode: yup.string().required('郵遞區號未自動填入，請重新選擇行政區'),
-  address: yup.string().required('請輸入詳細地址'),
+  addressName: yup.string().nullable(),
+  city: yup.string().nullable(),
+  area: yup.string().nullable(),
+  zipCode: yup.string().nullable(),
+  address: yup.string().nullable(),
   lineId: yup.string().required('請輸入 LINE ID'),
   agreeTerms: yup.boolean().oneOf([true], '請勾選同意條款'),
 });
 
 const Register = () => {
   const navigate = useNavigate();
-
+  const { openInfoDialog } = useFrontendDialog();
+  const { setLoading } = useLoading();
   const {
     register,
     handleSubmit,
@@ -45,7 +48,6 @@ const Register = () => {
     resolver: yupResolver(schema),
     defaultValues: {
       username: '',
-      email: '',
       phoneNumber: '',
       password: '',
       confirmPassword: '',
@@ -111,13 +113,25 @@ const Register = () => {
     }
   }, [selectedArea, selectedCity, setValue]);
 
-  const onSubmit = async (data: FormValues) => {
-    console.log('Register Data:', data);
+  const onSubmit = async (values: any) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // 模擬提交延遲
-      navigate('/member-center');
-    } catch (err) {
-      console.error('註冊失敗:', err);
+      setLoading(true);
+      const { success, data, code, message } = await registerUser(values);
+      setLoading(false);
+
+      if (success) {
+        await openInfoDialog(
+          '系統消息',
+          '恭喜您，註冊成功！我們很高興您成為我們的一員，請檢查您的信箱以完成後續步驟。'
+        );
+        navigate('/main');
+      } else {
+        await openInfoDialog('系統消息', message);
+      }
+    } catch (error) {
+      setLoading(false);
+      await openInfoDialog('系統消息', '系統問題，請稍後再嘗試。');
+      console.error('登入失敗:', error);
     }
   };
 
@@ -131,12 +145,12 @@ const Register = () => {
                 <p className="register__text register__text--required">信箱</p>
                 <input
                   className={`register__form-input ${
-                    errors.email ? 'input-error' : ''
+                    errors.username ? 'input-error' : ''
                   }`}
-                  {...register('email')}
+                  {...register('username')}
                 />
                 <p className="register__text register__text--error">
-                  {errors.email?.message}
+                  {errors.username?.message}
                 </p>
               </div>
               <div className="register__form-inputs m-t-20">

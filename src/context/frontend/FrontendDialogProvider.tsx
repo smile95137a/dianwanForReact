@@ -7,6 +7,8 @@ import { useInfoDialog } from './InfoDialogProvider';
 import InfoDialog from '@/components/frontend/dialog/InfoDialog';
 import DrawDialog from '@/components/frontend/dialog/DrawDialog';
 import { useDrawDialog } from './DrawDialogProvider';
+import { useAnimateDialog } from './AnimateDialogProvider';
+import AnimateDialog from '@/components/frontend/dialog/AnimateDialog';
 
 interface DialogProviderProps {
   children: ReactNode;
@@ -41,12 +43,22 @@ export const FrontendDialogProvider: FC<DialogProviderProps> = ({
     drawData,
   } = useDrawDialog();
 
+  const {
+    animateDialogOpen,
+    customClass: animateDialogCustomClass,
+    openAnimateDialog,
+    closeAnimateDialog,
+    confirmAnimateDialog,
+    drawData: animateDialogData,
+  } = useAnimateDialog();
+
   return (
     <FrontDialogContext.Provider
       value={{
         openConfirmDialog,
         openInfoDialog,
         openDrawDialog,
+        openAnimateDialog,
       }}
     >
       {children}
@@ -79,6 +91,16 @@ export const FrontendDialogProvider: FC<DialogProviderProps> = ({
               title={infoTitle}
               content={infoContent}
               customClass={infoCustomClass}
+            />
+          )}
+
+          {animateDialogOpen && (
+            <AnimateDialog
+              isOpen={animateDialogOpen}
+              onClose={closeAnimateDialog}
+              onConfirm={confirmAnimateDialog}
+              customClass={animateDialogCustomClass}
+              drawData={animateDialogData}
             />
           )}
         </>,

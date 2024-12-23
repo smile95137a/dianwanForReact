@@ -14,7 +14,7 @@ import { useLoading } from '@/context/frontend/LoadingContext';
 import { NewsStatus } from '@/services/backend/NewsService';
 import { FormInput } from '../FormInput';
 import { FormSelect } from '../FormSelect';
-
+import CustomUploadAdapterPlugin from './CustomeUoload';
 interface AddNewsDialogProps {
   isOpen: boolean;
   onClose: (result: boolean) => void;
@@ -22,6 +22,28 @@ interface AddNewsDialogProps {
   isEdit?: boolean;
   news?: any;
 }
+
+const editorConfig = {
+  licenseKey: 'GPL',
+  toolbar: [
+    'heading',
+    '|',
+    'bold',
+    'italic',
+    'link',
+    'bulletedList',
+    'numberedList',
+    'blockQuote',
+    '|',
+    'uploadImage',
+    'undo',
+    'redo',
+  ],
+  image: {
+    toolbar: ['imageTextAlternative', 'imageStyle:full', 'imageStyle:side'],
+  },
+  extraPlugins: [CustomUploadAdapterPlugin],
+};
 
 const AddNewsDialog: FC<AddNewsDialogProps> = ({
   isOpen,
@@ -141,21 +163,6 @@ const AddNewsDialog: FC<AddNewsDialogProps> = ({
     }
   };
 
-  const customUploadAdapter = (loader: any) => ({
-    upload: async () => {
-      const file = await loader.file;
-      const response = await uploadImage(file);
-      return {
-        default: '',
-      };
-    },
-  });
-
-  const customUploadAdapterPlugin = (editor: any) => {
-    editor.plugins.get('FileRepository').createUploadAdapter = (loader: any) =>
-      customUploadAdapter(loader);
-  };
-
   return (
     <BDialog isOpen={isOpen} onClose={() => onClose(false)}>
       <div className="addNewsDialog">
@@ -178,41 +185,16 @@ const AddNewsDialog: FC<AddNewsDialogProps> = ({
           <div className="flex">
             <div className="w-100">
               <p className="addMemberDialog__text">內容:</p>
+              <CKEditor
+                editor={ClassicEditor}
+                config={editorConfig}
+                data={watch('content')}
+                onChange={(_, editor) => {
+                  const data = editor.getData();
+                  setValue('content', data);
+                }}
+              />
             </div>
-            <CKEditor
-              editor={ClassicEditor}
-              config={{
-                licenseKey:
-                  'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3MzUxNzExOTksImp0aSI6ImMwM2Y2YWZkLWI1OWQtNGZmOS04YTQ2LTg3NWQ1MjBmYjVmZSIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiLCJzaCJdLCJ3aGl0ZUxhYmVsIjp0cnVlLCJsaWNlbnNlVHlwZSI6InRyaWFsIiwiZmVhdHVyZXMiOlsiKiJdLCJ2YyI6IjE1MzNjYzdmIn0.H5FG7B36Q6xkH8nfT_fhqVSy_bs23ZMWle8KsWRdc8HYsVCV90xWrcfrsJXF7Ra6f8lawNnT-ZJnvnFTEfuVZg',
-
-                toolbar: [
-                  'heading',
-                  '|',
-                  'bold',
-                  'italic',
-                  'link',
-                  'bulletedList',
-                  'numberedList',
-                  'blockQuote',
-                  '|',
-                  'uploadImage',
-                  'undo',
-                  'redo',
-                ],
-                image: {
-                  toolbar: [
-                    'imageTextAlternative',
-                    'imageStyle:full',
-                    'imageStyle:side',
-                  ],
-                },
-              }}
-              data={watch('content')}
-              onChange={(_, editor) => {
-                const data = editor.getData();
-                setValue('content', data);
-              }}
-            />
           </div>
           <div className="flex">
             <div className="w-100">

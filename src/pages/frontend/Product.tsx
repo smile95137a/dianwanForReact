@@ -156,7 +156,9 @@ const Product = () => {
                 <div className="fproduct__item-detail">
                   <div className="fproduct__item-info">
                     <div className="fproduct__item-infoDetail">
-                      <p className="fproduct__text">箱號：12298</p>
+                      <p className="fproduct__text">
+                        箱號：{product.productId}
+                      </p>
                       <p className="fproduct__text">剩 511 抽</p>
                     </div>
                     <div className="fproduct__item-infoDetail">

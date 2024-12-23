@@ -6,19 +6,22 @@ import { usePagination } from '@/hooks/usePagination';
 import { getPagedStoreProducts } from '@/services/frontend/storeProductService';
 import React, { useEffect, useState } from 'react';
 import { BsHandbag } from 'react-icons/bs';
-import { FaSearch, FaSortAmountUp, FaSortAmountUpAlt } from 'react-icons/fa';
+import { FaSearch, FaSortAmountUpAlt, FaSortAmountUp } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
-const MallProduct = () => {
+const Product = () => {
   const [sortOrder, setSortOrder] = useState('newest');
+  const [searchTerm, setSearchTerm] = useState('');
   const [products, setProducts] = useState<any[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
+
+  const navigate = useNavigate();
+
   const pagination = usePagination({
-    list: products,
+    list: filteredProducts,
     pageLimitSize: 10,
     initialPage: 1,
   });
-
-  const navigate = useNavigate();
 
   const fetchProducts = async () => {
     try {
@@ -37,9 +40,41 @@ const MallProduct = () => {
     fetchProducts();
   }, []);
 
-  const handleProductClick = (productId) => () => {
-    navigate(`/mallProduct/${productId}`);
-  };
+  useEffect(() => {
+    let updatedProducts = [...products];
+
+    // 搜尋過濾
+    if (searchTerm) {
+      updatedProducts = updatedProducts.filter((product) =>
+        product.productName.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // 排序處理
+    if (sortOrder === 'newest') {
+      updatedProducts.sort(
+        (a: any, b: any) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+    } else if (sortOrder === 'bestseller') {
+      updatedProducts.sort((a: any, b: any) => ~~b.popularity - ~~a.popularity);
+    } else if (sortOrder === 'price-asc') {
+      updatedProducts.sort((a: any, b: any) => {
+        const priceA = a.isSpecialPrice ? a.specialPrice : a.price;
+        const priceB = b.isSpecialPrice ? b.specialPrice : b.price;
+        return priceA - priceB;
+      });
+    } else if (sortOrder === 'price-desc') {
+      updatedProducts.sort((a: any, b: any) => {
+        const priceA = a.isSpecialPrice ? a.specialPrice : a.price;
+        const priceB = b.isSpecialPrice ? b.specialPrice : b.price;
+        return priceB - priceA;
+      });
+    }
+
+    setFilteredProducts(updatedProducts);
+    pagination.goToPage(1);
+  }, [searchTerm, sortOrder, products]);
 
   return (
     <div className="fMallProduct">
@@ -49,13 +84,18 @@ const MallProduct = () => {
             <FaSearch />
           </div>
 
-          <input type="text" placeholder="搜尋" />
+          <input
+            type="text"
+            placeholder="搜尋"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
         <div className="fMallProduct__header-title">
           <div className="fMallProduct__icon">
             <CircleIcon icon={BsHandbag} />
           </div>
-          <p className="fMallProduct__text">商城</p>
+          <p className="fMallProduct__text">電玩賞</p>
         </div>
 
         <div className="fMallProduct__header-nav">
@@ -104,30 +144,29 @@ const MallProduct = () => {
         </div>
       </div>
       <div className="fMallProduct__list">
-        {products.length > 0 &&
-          pagination.currentPageItems.map((product) => (
-            <div
-              className="fMallProduct__item"
-              onClick={handleProductClick(product.productCode)}
-            >
-              <div className="fMallProduct__item-main">
-                <ProductCard
-                  isMall={true}
-                  key={product.productId}
-                  product={product}
-                  className="productCard--mall"
-                />
+        {filteredProducts.length > 0 && (
+          <>
+            {pagination.currentPageItems.map((product) => (
+              <div key={product.productCode} className="fMallProduct__item">
+                <div className="fMallProduct__item-main">
+                  <ProductCard
+                    product={product}
+                    isMall={true}
+                    className="productCard--mall"
+                  />
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </>
+        )}
       </div>
-      {products.length > 0 && (
+      {filteredProducts.length > 0 && (
         <>
           <Pagination {...pagination} />
         </>
       )}
 
-      {products.length === 0 && (
+      {filteredProducts.length === 0 && (
         <>
           <NoData />
         </>
@@ -136,4 +175,4 @@ const MallProduct = () => {
   );
 };
 
-export default MallProduct;
+export default Product;

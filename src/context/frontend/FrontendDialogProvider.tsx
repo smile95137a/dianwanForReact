@@ -9,6 +9,8 @@ import DrawDialog from '@/components/frontend/dialog/DrawDialog';
 import { useDrawDialog } from './DrawDialogProvider';
 import { useAnimateDialog } from './AnimateDialogProvider';
 import AnimateDialog from '@/components/frontend/dialog/AnimateDialog';
+import { useRestPwdDialog } from './RestPwdDialogProvider';
+import RestPwdDialog from '@/components/frontend/dialog/RestPwdDialog';
 
 interface DialogProviderProps {
   children: ReactNode;
@@ -52,6 +54,14 @@ export const FrontendDialogProvider: FC<DialogProviderProps> = ({
     drawData: animateDialogData,
   } = useAnimateDialog();
 
+  const {
+    restPwdDialogOpen,
+    customClass: restPwdDialogCustomClass,
+    openRestPwdDialog,
+    closeRestPwdDialog,
+    confirmRestPwdDialog,
+  } = useRestPwdDialog();
+
   return (
     <FrontDialogContext.Provider
       value={{
@@ -59,6 +69,7 @@ export const FrontendDialogProvider: FC<DialogProviderProps> = ({
         openInfoDialog,
         openDrawDialog,
         openAnimateDialog,
+        openRestPwdDialog,
       }}
     >
       {children}
@@ -71,6 +82,14 @@ export const FrontendDialogProvider: FC<DialogProviderProps> = ({
               onConfirm={confirmDialog}
               customClass={confirmCustomClass}
               content={''}
+            />
+          )}
+          {restPwdDialogOpen && (
+            <RestPwdDialog
+              isOpen={restPwdDialogOpen}
+              onClose={closeRestPwdDialog}
+              onConfirm={confirmRestPwdDialog}
+              customClass={restPwdDialogCustomClass}
             />
           )}
 

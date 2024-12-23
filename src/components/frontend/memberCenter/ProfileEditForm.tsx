@@ -94,14 +94,14 @@ const ProfileEditForm = () => {
       setLoading(false);
 
       if (success) {
-        await openInfoDialog('系統通知', '更新成功');
+        await openInfoDialog('系統消息', '更新成功');
       } else {
-        await openInfoDialog('系統通知', '更新失敗');
+        await openInfoDialog('系統消息', '更新失敗');
       }
     } catch (error) {
       setLoading(false);
       console.log(error);
-      await openInfoDialog('系統通知', '更新失敗，系統出錯');
+      await openInfoDialog('系統消息', '更新失敗，系統出錯');
     }
   };
 

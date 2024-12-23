@@ -149,6 +149,7 @@ const Main = () => {
                 <ProductCard
                   key={index}
                   product={product}
+                  isMall={true}
                   className="productCard--mall"
                 />
               ))

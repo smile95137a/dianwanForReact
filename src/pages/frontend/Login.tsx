@@ -15,7 +15,7 @@ import { useFrontendDialog } from '@/context/frontend/useFrontedDialog';
 const Login: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { openInfoDialog, openAnimateDialog } = useFrontendDialog();
+  const { openInfoDialog, openRestPwdDialog } = useFrontendDialog();
   const { setLoading } = useLoading();
 
   const isLogin = useSelector(
@@ -58,23 +58,17 @@ const Login: React.FC = () => {
         dispatch(setToken(data.accessToken));
         navigate('/main');
       } else {
-        alert(message);
-        // 顯示對話框通知用戶
-        // await dialogStore.openInfoDialog({
-        //   title: '系統通知',
-        //   message,
-        // });
+        await openInfoDialog('系統消息', message);
       }
     } catch (error) {
       setLoading(false);
-
-      // await dialogStore.openInfoDialog({
-      //   title: '系統通知',
-      //   message: '系統問題，請稍後再嘗試。',
-      // });
-
       console.error('登入失敗:', error);
+      await openInfoDialog('系統消息', '系統問題，請稍後再嘗試。');
     }
+  };
+
+  const handleForgotPassword = () => {
+    openRestPwdDialog();
   };
 
   return (
@@ -131,7 +125,12 @@ const Login: React.FC = () => {
               </div>
 
               <div className="login__forgot">
-                <p className="login__text login__text--forgot">忘記密碼?</p>
+                <p
+                  className="login__text login__text--forgot"
+                  onClick={handleForgotPassword}
+                >
+                  忘記密碼?
+                </p>
               </div>
 
               <div className="login__btns">

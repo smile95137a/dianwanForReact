@@ -54,6 +54,7 @@
 @import 'components/frontend/dialog/confirm-dialog';
 @import 'components/frontend/dialog/draw-dialog';
 @import 'components/frontend/dialog/info-dialog';
+@import 'components/frontend/dialog/restPwd-dialog';
 @import 'components/frontend/f-pagination';
 @import 'components/frontend/checkoutInfoForm';
 // Layout
@@ -65,6 +66,7 @@
 @import 'pages/fhome';
 
 @import 'pages/login';
+@import 'pages/restPwdForm';
 @import 'pages/register';
 @import 'pages/product';
 @import 'pages/fMallProduct';
@@ -378,4 +380,8 @@
   &__main {
     min-height: 100vh;
   }
+}
+
+.error-text {
+  color: #fe4206 !important;
 }

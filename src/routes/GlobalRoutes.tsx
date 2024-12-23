@@ -40,6 +40,7 @@ import Privacy from '@/pages/frontend/Privacy';
 import ScrollToTop from '@/components/common/ScrollToTop';
 import { LoadingProvider } from '@/context/frontend/LoadingContext';
 import PrizeBox from '@/pages/frontend/PrizeBox';
+import RestPwd from '@/pages/frontend/RestPwd';
 
 const FrontendRoutes: RouteObject[] = [
   {
@@ -77,6 +78,7 @@ const FrontendRoutes: RouteObject[] = [
       { path: 'faq', element: <Faq /> },
       { path: 'policy', element: <Policy /> },
       { path: 'privacy', element: <Privacy /> },
+      { path: 'restPwd', element: <RestPwd /> },
       { path: 'notfound', element: <NotFound /> },
       { path: '', element: <Navigate to="main" /> },
     ],

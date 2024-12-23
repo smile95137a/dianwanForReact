@@ -210,7 +210,7 @@ const ProductDetail = () => {
       }
     } catch (error: any) {
       const { message } = error.response.data;
-      openInfoDialog('系統通知', message);
+      openInfoDialog('系統消息', message);
     }
   };
 
@@ -229,11 +229,11 @@ const ProductDetail = () => {
         //   }
         // }
       } else {
-        openInfoDialog('系統通知', '系統錯誤');
+        openInfoDialog('系統消息', '系統錯誤');
       }
     } catch (error: any) {
       const { message } = error.response.data;
-      openInfoDialog('系統通知', message);
+      openInfoDialog('系統消息', message);
     }
   };
 

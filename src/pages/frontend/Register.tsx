@@ -31,7 +31,9 @@ const schema = yup.object({
   zipCode: yup.string().nullable(),
   address: yup.string().nullable(),
   lineId: yup.string().required('請輸入 LINE ID'),
-  agreeTerms: yup.boolean().oneOf([true], '請勾選同意條款'),
+  agreeTerms: yup
+    .boolean()
+    .oneOf([true], '您必須同意網站服務條款和隱私權政策。'),
 });
 
 const Register = () => {
@@ -310,7 +312,10 @@ const Register = () => {
                 。
               </label>
             </div>
-            <p className="register__text register__text--error"></p>
+            <p className="register__text register__text--error">
+              {errors.agreeTerms?.message}
+            </p>
+
             <div className="register__other-btn">
               <button
                 type="submit"

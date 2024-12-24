@@ -1,3 +1,4 @@
+import NumberFormatter from '@/components/common/NumberFormatter';
 import CircleIcon from '@/components/frontend/CircleIcon';
 import NoData from '@/components/frontend/NoData';
 import Pagination from '@/components/frontend/Pagination';
@@ -16,8 +17,8 @@ import { useNavigate } from 'react-router-dom';
 const Product = () => {
   const [sortOrder, setSortOrder] = useState('newest');
   const [searchTerm, setSearchTerm] = useState('');
-  const [products, setProducts] = useState<IProduct[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
 
   const navigate = useNavigate();
 
@@ -159,21 +160,35 @@ const Product = () => {
                       <p className="fproduct__text">
                         箱號：{product.productId}
                       </p>
-                      <p className="fproduct__text">剩 511 抽</p>
+                      <p className="fproduct__text">
+                        剩 {product.detailQuantity} 抽
+                      </p>
                     </div>
                     <div className="fproduct__item-infoDetail">
-                      <p className="fproduct__text">每抽：350 元</p>
-                      <p className="fproduct__text">10 抽 3000 元</p>
+                      <p className="fproduct__text">
+                        每抽：
+                        <NumberFormatter number={product.price} />元
+                      </p>
+                      <p className="fproduct__text">
+                        10 抽
+                        <NumberFormatter number={product.price * 10} />元
+                      </p>
                     </div>
                   </div>
                   <div className="fproduct__item-list">
-                    {[...Array(5)].map((_, index) => (
+                    {product.productDetails.map((pDetail: any, index: any) => (
                       <p key={index} className="fproduct__item-listItem">
-                        <span className="fproduct__text">SP賞</span>
                         <span className="fproduct__text">
-                          Switch oled版顏色隨機
+                          {pDetail.grade}賞
                         </span>
-                        <span className="fproduct__text">1/1</span>
+                        <span className="fproduct__text">
+                          {pDetail.productName}
+                        </span>
+                        <span className="fproduct__text">
+                          <NumberFormatter number={pDetail.quantity} />
+                          /
+                          <NumberFormatter number={pDetail.stockQuantity} />
+                        </span>
                       </p>
                     ))}
                   </div>

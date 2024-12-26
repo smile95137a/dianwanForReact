@@ -2,6 +2,9 @@ import React from 'react';
 import { getImageUrl } from '@/utils/ImageUtils';
 import { MdOutlineOfflineBolt } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
+import MoneyCard from './MoneyCard';
+import { PrizeCategory } from '@/interfaces/product';
+import NumberFormatter from '../common/NumberFormatter';
 
 const ProductCard = ({ isMall = false, product, className = '' }: any) => {
   const navigate = useNavigate();
@@ -20,6 +23,30 @@ const ProductCard = ({ isMall = false, product, className = '' }: any) => {
         {Array.isArray(product?.imageUrls) && product.imageUrls.length > 0 && (
           <img src={getImageUrl(product.imageUrls[0])} />
         )}
+        {!isMall && (
+          <div className="productCard__moneys">
+            {product.PrizeCategory !== PrizeCategory.BONUS ? (
+              <>
+                <MoneyCard
+                  className="productCard__money--gold"
+                  logoText="G"
+                  price={product.price}
+                />
+                <MoneyCard
+                  className="productCard__money--silver"
+                  logoText="S"
+                  price={product.sliverPrice}
+                />
+              </>
+            ) : (
+              <MoneyCard
+                className="productCard__money--bonus"
+                logoText="B"
+                price={product.bonusPrice}
+              />
+            )}
+          </div>
+        )}
       </div>
       <div className="productCard__infos">
         <div className="productCard__infos-status productCard__infos-status--active">
@@ -29,10 +56,17 @@ const ProductCard = ({ isMall = false, product, className = '' }: any) => {
           <p className="productCard__text productCard__text--subtitle">
             開抽中
           </p>
+          <div className="productCard__stock">
+            <p className="productCard__text">剩餘</p>
+            <p className="productCard__text">
+              <NumberFormatter number={product.stockQuantity} />
+            </p>
+            <p className="productCard__text">抽</p>
+          </div>
         </div>
         <div className="productCard__infos-data">
           <p className="productCard__text productCard__text--title">
-            {product.productName}
+            {product.description}
           </p>
           <p className="productCard__text productCard__text--subtitle">
             {product.productName}

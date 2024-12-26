@@ -90,7 +90,7 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
       sliverPrice: '',
       stockQuantity: 0,
       bonusPrice: '',
-      status: '',
+      status: productStatusOptions.UNAVAILABLE,
       specification: '',
       categoryId: '',
       hasBanner: '',
@@ -110,7 +110,7 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
         sliverPrice: product.sliverPrice || '',
         stockQuantity: product.stockQuantity || 0,
         bonusPrice: product.bonusPrice || '',
-        status: product.status || '',
+        status: product.status || productStatusOptions.UNAVAILABLE,
         specification: product.specification || '',
         categoryId: product.categoryId || '',
         hasBanner: product.hasBanner || '',
@@ -270,7 +270,6 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
               name="status"
               control={control}
               options={[
-                { value: '', label: '請選擇' },
                 ...Object.entries(productStatusOptions).map(([key, label]) => {
                   return { value: key, label };
                 }),

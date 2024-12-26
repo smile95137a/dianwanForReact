@@ -2,7 +2,7 @@ import { executeDraw, getDrawStatus } from '@/services/frontend/drawService';
 import { getProductDetailById } from '@/services/frontend/productDetailService';
 import { getProductById } from '@/services/frontend/productService';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import TitleBar from '../../components/frontend/TitleBar';
 import { BsHandbag } from 'react-icons/bs';
 import { getImageUrl } from '@/utils/ImageUtils';
@@ -45,6 +45,7 @@ import { PrizeCategory } from '@/interfaces/product';
 
 const ProductDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [product, setProduct] = useState<any>(null);
   const [productDetail, setProductDetail] = useState<any[]>([]);
   const [ticketList, setTicketList] = useState([]);
@@ -91,10 +92,11 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const [productRes, productDetailRes, drawStatusRes] = await Promise.all(
           [getProductById(id), getProductDetailById(id), getDrawStatus(id)]
         );
-
+        setLoading(false);
         if (productRes.success) {
           setProduct(productRes.data);
         }
@@ -107,7 +109,10 @@ const ProductDetail = () => {
           setTicketList(drawStatusRes.data.prizeNumberList);
         }
       } catch (error) {
-        alert('Error fetching product data');
+        setLoading(false);
+        console.error('失敗:', error);
+        await openInfoDialog('系統消息', '系統問題，請稍後再嘗試。');
+        navigate('/main');
       }
     };
     fetchData();

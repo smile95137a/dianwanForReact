@@ -312,10 +312,12 @@ const ProductDetail = () => {
         )}
       </div>
       <TitleBar icon={BsHandbag} titleText="籤桶" showMore={false} />
-      <div className="product-detail-one__text">
-        剩餘數量：{remainingQuantity} / 總數量：{ticketList?.length || 0}
-      </div>
 
+      <div className="productDetail__remainingQuantity">
+        <div className="productDetail__text">
+          剩餘數量：{~~remainingQuantity} / 總數量：{ticketList?.length || 0}
+        </div>
+      </div>
       <div
         className="productDetail__sign"
         style={{

@@ -145,6 +145,16 @@ $root-block-name: '.productDetail';
   }
 
   //
+  &__remainingQuantity {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+    #{$p__text} {
+      color: #2988cb;
+      font-size: 28px;
+    }
+  }
+  //
   &__sign {
     padding-top: 72px;
     display: grid;

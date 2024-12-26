@@ -214,7 +214,8 @@ $root-block-name: '.productDetail';
     justify-content: center;
     gap: 12px;
     &-btn {
-      width: 104px;
+      min-width: 104px;
+      padding: 0 24px;
       height: 50px;
       border-radius: 20px;
       font-size: 24px;

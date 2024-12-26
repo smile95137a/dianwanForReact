@@ -5,12 +5,14 @@ type MoneyCardProps = {
   className: string;
   logoText: string;
   price: string | number;
+  suffixText?: string;
 };
 
 const MoneyCard: React.FC<MoneyCardProps> = ({
   className,
   logoText,
   price,
+  suffixText,
 }) => {
   return (
     <div className={`productCard__money ${className}`}>
@@ -24,7 +26,7 @@ const MoneyCard: React.FC<MoneyCardProps> = ({
           </div>
         </div>
       </div>
-      <div className="productCard__money-text">/抽</div>
+      <div className="productCard__money-text">{suffixText}</div>
     </div>
   );
 };

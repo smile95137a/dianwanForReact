@@ -6,9 +6,7 @@ import { useParams } from 'react-router-dom';
 import TitleBar from '../../components/frontend/TitleBar';
 import { BsHandbag } from 'react-icons/bs';
 import { getImageUrl } from '@/utils/ImageUtils';
-import boxClose from '@/assets/image/box-close.png';
-import boxOpen from '@/assets/image/box-open.png';
-import ticketImg from '@/assets/image/ticket.png';
+import ticketImg from '@/assets/image/ticket2.png';
 import ticketImgA from '@/assets/image/ticket_A.png';
 import ticketImgB from '@/assets/image/ticket_B.png';
 import ticketImgC from '@/assets/image/ticket_C.png';
@@ -43,6 +41,7 @@ import { useFrontendDialog } from '@/context/frontend/useFrontedDialog';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { useLoading } from '@/context/frontend/LoadingContext';
+import { PrizeCategory } from '@/interfaces/product';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -130,40 +129,36 @@ const ProductDetail = () => {
     const { productType } = product;
     const { level, isDrawn } = ticket;
 
-    if (productType === 'PRIZE') {
-      const ticketImages: Record<string, string> = {
-        A: ticketImgA,
-        B: ticketImgB,
-        C: ticketImgC,
-        D: ticketImgD,
-        E: ticketImgE,
-        F: ticketImgF,
-        G: ticketImgG,
-        H: ticketImgH,
-        I: ticketImgI,
-        J: ticketImgJ,
-        K: ticketImgK,
-        L: ticketImgL,
-        M: ticketImgM,
-        N: ticketImgN,
-        O: ticketImgO,
-        P: ticketImgP,
-        Q: ticketImgQ,
-        R: ticketImgR,
-        S: ticketImgS,
-        T: ticketImgT,
-        U: ticketImgU,
-        V: ticketImgV,
-        W: ticketImgW,
-        X: ticketImgX,
-        Y: ticketImgY,
-        Z: ticketImgZ,
-      };
+    const ticketImages: Record<string, string> = {
+      A: ticketImgA,
+      B: ticketImgB,
+      C: ticketImgC,
+      D: ticketImgD,
+      E: ticketImgE,
+      F: ticketImgF,
+      G: ticketImgG,
+      H: ticketImgH,
+      I: ticketImgI,
+      J: ticketImgJ,
+      K: ticketImgK,
+      L: ticketImgL,
+      M: ticketImgM,
+      N: ticketImgN,
+      O: ticketImgO,
+      P: ticketImgP,
+      Q: ticketImgQ,
+      R: ticketImgR,
+      S: ticketImgS,
+      T: ticketImgT,
+      U: ticketImgU,
+      V: ticketImgV,
+      W: ticketImgW,
+      X: ticketImgX,
+      Y: ticketImgY,
+      Z: ticketImgZ,
+    };
 
-      return isDrawn ? ticketImages[level] || ticketImgBlank : ticketImg;
-    } else {
-      return isDrawn ? boxOpen : boxClose;
-    }
+    return isDrawn ? ticketImages[level] || ticketImgBlank : ticketImg;
   };
   const [expanded, setExpanded] = useState(false);
   const toggleExpand = () => setExpanded(!expanded);
@@ -181,7 +176,7 @@ const ProductDetail = () => {
     setShowOption(false);
   };
 
-  const handleConfirm = async () => {
+  const handleConfirm = (typeNum) => async () => {
     if (!isLogin) {
       await openInfoDialog('系統消息', '請先登入');
       return;
@@ -361,13 +356,33 @@ const ProductDetail = () => {
       )}
 
       <div className="productDetail__action">
-        <div
-          className="productDetail__action-btn productDetail__action-btn--confirm"
-          onClick={handleConfirm}
-        >
-          <FaCheck />
-          確認
-        </div>
+        {product?.prizeCategory !== PrizeCategory.BONUS ? (
+          <>
+            <div
+              className="productDetail__action-btn productDetail__action-btn--confirm"
+              onClick={handleConfirm(1)}
+            >
+              <FaCheck />
+              金幣確認
+            </div>
+            <div
+              className="productDetail__action-btn productDetail__action-btn--confirm"
+              onClick={handleConfirm(2)}
+            >
+              <FaCheck />
+              銀幣確認
+            </div>
+          </>
+        ) : (
+          <div
+            className="productDetail__action-btn productDetail__action-btn--confirm"
+            onClick={handleConfirm(3)}
+          >
+            <FaCheck />
+            紅利確認
+          </div>
+        )}
+
         <div
           className="productDetail__action-btn productDetail__action-btn--all"
           onClick={handleSelectAll}

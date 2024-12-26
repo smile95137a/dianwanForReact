@@ -23,6 +23,10 @@ $root-block-name: '.fhome';
       grid-template-columns: 1fr 1fr;
       gap: 6px;
     }
+    @include screen(sm) {
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
   }
 }
 

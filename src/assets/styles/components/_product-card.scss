@@ -25,7 +25,11 @@ $root-block-name: '.productCard';
     right: 8px;
     bottom: 8px;
     display: flex;
+    align-items: center;
     gap: 4px;
+    #{$p__text} {
+      color: #fff;
+    }
   }
   &__money {
     display: flex;

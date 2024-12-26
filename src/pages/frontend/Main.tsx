@@ -19,6 +19,7 @@ import { getPagedStoreProducts } from '@/services/frontend/storeProductService';
 import NoData from '@/components/frontend/NoData';
 import { useLoading } from '@/context/frontend/LoadingContext';
 import { getAllBanners } from '@/services/frontend/bannerService';
+import { genRandom } from '@/utils/RandomUtils';
 
 const Main = () => {
   const navigate = useNavigate();
@@ -55,8 +56,6 @@ const Main = () => {
       }
 
       if (bannerData.success) {
-        console.log(bannerData);
-
         setBanners(bannerData.data);
       } else {
         console.error('獲取橫幅資料失敗:', bannerData.message);
@@ -122,7 +121,7 @@ const Main = () => {
               .slice(0, 6)
               .map((product, index) => (
                 <ProductCard
-                  key={product.productId}
+                  key={genRandom(24)}
                   product={product}
                   className="prouctCard--mall"
                 />
@@ -147,7 +146,7 @@ const Main = () => {
               .slice(0, 6)
               .map((product, index) => (
                 <ProductCard
-                  key={index}
+                  key={genRandom(24)}
                   product={product}
                   isMall={true}
                   className="productCard--mall"

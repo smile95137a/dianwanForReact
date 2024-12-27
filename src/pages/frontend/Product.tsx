@@ -3,12 +3,15 @@ import CircleIcon from '@/components/frontend/CircleIcon';
 import NoData from '@/components/frontend/NoData';
 import Pagination from '@/components/frontend/Pagination';
 import ProductCard from '@/components/frontend/ProductCard';
+import { useLoading } from '@/context/frontend/LoadingContext';
 import { usePagination } from '@/hooks/usePagination';
+import { getAllCategories } from '@/services/frontend/productCategoryService';
 import {
   IProduct,
   getAllProductList,
 } from '@/services/frontend/productService';
 import { getImageUrl } from '@/utils/ImageUtils';
+import { genRandom } from '@/utils/RandomUtils';
 import React, { useEffect, useState } from 'react';
 import { BsHandbag } from 'react-icons/bs';
 import { FaSearch, FaSortAmountUpAlt, FaSortAmountUp } from 'react-icons/fa';
@@ -19,14 +22,32 @@ const Product = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [products, setProducts] = useState<any[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
-
-  const navigate = useNavigate();
+  const [categories, setCategories] = useState<any[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const { setLoading } = useLoading();
 
   const pagination = usePagination({
     list: filteredProducts,
     pageLimitSize: 10,
     initialPage: 1,
   });
+
+  const fetchCategories = async () => {
+    try {
+      setLoading(true);
+      const { success, message, data } = await getAllCategories();
+      setLoading(false);
+      if (success) {
+        setCategories(data);
+      } else {
+        console.log(message);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.log('Error fetching categories:', error);
+    }
+  };
 
   const fetchProducts = async () => {
     try {
@@ -43,6 +64,7 @@ const Product = () => {
 
   useEffect(() => {
     fetchProducts();
+    fetchCategories();
   }, []);
 
   useEffect(() => {
@@ -76,30 +98,80 @@ const Product = () => {
         return priceB - priceA;
       });
     }
+    updatedProducts = updatedProducts.filter(
+      (product) =>
+        selectedCategories.length === 0 ||
+        selectedCategories.includes(product.categoryUUid)
+    );
 
     setFilteredProducts(updatedProducts);
     pagination.goToPage(1);
-  }, [searchTerm, sortOrder, products]);
+  }, [searchTerm, sortOrder, products, selectedCategories]);
 
-  const handleProductClick = (productId) => () => {
-    navigate(`/product/${productId}`);
+  const toggleCategoryDropdown = () => setIsCategoryOpen(!isCategoryOpen);
+  const handleCategorySelection = (categoryUUid: number) => {
+    setSelectedCategories((prevSelected) =>
+      prevSelected.includes(categoryUUid)
+        ? prevSelected.filter((id) => id !== categoryUUid)
+        : [...prevSelected, categoryUUid]
+    );
   };
-
   return (
     <div className="fproduct">
       <div className="fproduct__header">
-        <div className="fproduct__header-search">
-          <div className="fproduct__icon">
-            <FaSearch />
+        <div className="fproduct__header-inputs">
+          <div className="fproduct__header-search">
+            <div className="fproduct__icon">
+              <FaSearch />
+            </div>
+
+            <input
+              type="text"
+              placeholder="搜尋"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
 
-          <input
-            type="text"
-            placeholder="搜尋"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+          <div
+            className={`fproduct__header-category ${
+              isCategoryOpen ? 'fproduct__header-category--open' : ''
+            }`}
+          >
+            <div
+              onClick={toggleCategoryDropdown}
+              className="fproduct__header-category__trigger"
+            >
+              請選擇商品
+            </div>
+            {isCategoryOpen && (
+              <div className="fproduct__header-category__content">
+                {categories.map((item) => (
+                  <label
+                    key={item.categoryUUid}
+                    htmlFor={`category-${item.categoryUUid}`}
+                    className={`fproduct__header-category__item ${
+                      selectedCategories.includes(item.categoryUUid)
+                        ? 'checked'
+                        : ''
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedCategories.includes(item.categoryUUid)}
+                      onChange={() =>
+                        handleCategorySelection(item.categoryUUid)
+                      }
+                      id={`category-${item.categoryUUid}`}
+                    />
+                    {item.categoryName}
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
+
         <div className="fproduct__header-title">
           <div className="fproduct__icon">
             <CircleIcon icon={BsHandbag} />

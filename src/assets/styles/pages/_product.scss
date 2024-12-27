@@ -28,6 +28,10 @@ $root-block-name: '.fproduct';
       flex-direction: column;
       gap: 24px;
     }
+    &-inputs {
+      display: flex;
+      gap: 8px;
+    }
     &-search {
       width: 228px;
       height: 40px;
@@ -57,6 +61,61 @@ $root-block-name: '.fproduct';
       @include screen(lg) {
         width: 100%;
         order: 2;
+      }
+    }
+
+    &-category {
+      position: relative;
+      &__trigger {
+        cursor: pointer;
+        min-width: 149px;
+        height: 40px;
+        border: 2px solid #2a88cb;
+        color: #2a88cb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50px;
+      }
+
+      &__content {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        z-index: 9999;
+        background-color: #ebffff;
+        box-shadow: 0px 12px 25px 0px #00000040;
+        padding: 8px 0;
+        width: 80vw;
+        min-height: 240px;
+        transform: translateX(calc(-50% + 149px));
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 24px;
+      }
+
+      &__item {
+        padding: 0 24px;
+        min-width: 148px;
+        height: 40px;
+
+        border-radius: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #2a88cb;
+        color: #2a88cb;
+        &.checked,
+        &:hover {
+          background-color: #2a88cb;
+          border-color: #2a88cb;
+          color: #fff;
+          cursor: pointer;
+        }
+        input {
+          display: none;
+        }
       }
     }
 

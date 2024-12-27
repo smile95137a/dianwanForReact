@@ -6,9 +6,6 @@ $root-block-name: '.fheader';
   $p__logo-img: #{$p}__logo-img;
 
   width: 100%;
-  padding: 24px 0;
-  @include flex(null, null, column);
-  position: relative;
 
   @include screen(lg) {
   }
@@ -24,6 +21,15 @@ $root-block-name: '.fheader';
     z-index: -1;
   }
 
+  &__main {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px 0;
+    @include flex(null, null, column);
+    position: relative;
+  }
+
   &__logo {
     margin: 0 auto;
     width: 128px;
@@ -34,12 +40,41 @@ $root-block-name: '.fheader';
     }
   }
 
+  &__menu {
+    display: none;
+    cursor: pointer;
+    @include screen(md) {
+      display: block;
+      font-size: 28px;
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      color: #2a88cb;
+    }
+  }
+
+  &__socials {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    @include screen(lg) {
+      display: none;
+    }
+  }
+
   &__nav {
     flex: 1;
     display: flex;
     align-items: center;
     margin: 10px auto;
-
+    @include screen(md) {
+      margin: 0;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 20;
+      transform: translateX(-100%);
+    }
     &--open {
       @include screen(md) {
         transform: translateX(0);
@@ -48,20 +83,57 @@ $root-block-name: '.fheader';
     &-items {
       @include flex(center);
       gap: 32px;
+      @include screen(md) {
+        @include flex(null, null, column);
+        width: 196px;
+        background: #d8ffff;
+        height: 100%;
+        gap: 18px;
+        padding: 24px;
+      }
     }
 
     &-item {
+      @include flex(center);
       min-height: 31px;
       font-size: 20px;
-      @include flex(center);
       gap: 12px;
+      &--member,
+      &--box {
+        display: none;
+      }
       @include screen(lg) {
         flex-direction: column;
         font-size: 14px;
       }
+      @include screen(md) {
+        flex-direction: row;
+        min-width: 120px;
+        &-divider {
+          display: block;
+          width: 100%;
+          height: 1px;
+          background-color: #00ffff;
+          margin: 12px 0;
+        }
+        &--member,
+        &--box {
+          display: flex;
+        }
+      }
+
       &-icon {
         @include flex(center);
         font-size: 26px;
+        &--blue {
+          color: #4285f4;
+        }
+        &--red {
+          color: #eb4335;
+        }
+        &--orange {
+          color: #ff7f35;
+        }
         @include screen(lg) {
           font-size: 22px;
         }
@@ -71,8 +143,8 @@ $root-block-name: '.fheader';
   &__btns {
     @include flex(center);
     position: absolute;
-    top: 140px;
-    right: 100px;
+    top: 145px;
+    right: 0;
     @include screen(lg) {
       top: 24px;
       right: 20px;
@@ -85,40 +157,5 @@ $root-block-name: '.fheader';
     height: 36px;
     border-radius: 50px;
     border: 1px solid;
-  }
-
-  &__marquee {
-    @include w_h(100%, 61px);
-    @include flex(center);
-    overflow: hidden;
-    white-space: nowrap;
-    background: #85ffff;
-    position: relative;
-
-    #{$p__text} {
-      font-size: 18px;
-      font-weight: 400;
-      position: absolute;
-      left: 100vw;
-      width: max-content;
-      animation-name: marquee;
-      animation-timing-function: linear;
-      animation-iteration-count: infinite;
-    }
-
-    &--sticky {
-      position: fixed;
-      top: 0;
-      z-index: 1000;
-      width: 100%;
-    }
-  }
-}
-@keyframes marquee {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(calc(-100% - 100vw), 0, 0);
   }
 }

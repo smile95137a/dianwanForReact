@@ -20,6 +20,17 @@ const ProductCard = ({ isMall = false, product, className = '' }: any) => {
   return (
     <div className={`productCard ${className}`} onClick={handleClick}>
       <div className="productCard__img">
+        {!isMall && (
+          <div className="productCard__stock">
+            <p className="productCard__text">
+              <NumberFormatter number={~~product.detailQuantity} />
+            </p>
+            <p className="productCard__text">/</p>
+            <p className="productCard__text">
+              <NumberFormatter number={~~product.stockQuantity} />
+            </p>
+          </div>
+        )}
         {Array.isArray(product?.imageUrls) && product.imageUrls.length > 0 && (
           <img src={getImageUrl(product.imageUrls[0])} />
         )}
@@ -75,13 +86,6 @@ const ProductCard = ({ isMall = false, product, className = '' }: any) => {
           <p className="productCard__text productCard__text--subtitle">
             開抽中
           </p>
-          <div className="productCard__stock">
-            <p className="productCard__text">剩餘</p>
-            <p className="productCard__text">
-              <NumberFormatter number={product.stockQuantity} />
-            </p>
-            <p className="productCard__text">抽</p>
-          </div>
         </div>
         <div className="productCard__infos-data">
           <p className="productCard__text productCard__text--title">

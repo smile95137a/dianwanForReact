@@ -1,6 +1,7 @@
 import React from 'react';
 import logoImg from '@/assets/image/logo.png';
 import { Link } from 'react-router-dom';
+import SocialLinks from '../common/SocialLinks';
 const Footer = () => {
   return (
     <div className="footer">
@@ -9,6 +10,10 @@ const Footer = () => {
           <div className="footer__logo-img">
             <img src={logoImg} />
           </div>
+          <div className="footer__socials">
+            <SocialLinks />
+          </div>
+
           <p className="footer__text">
             @{new Date().getFullYear()} 電玩賞 版權所有
           </p>

@@ -41,6 +41,8 @@ import ScrollToTop from '@/components/common/ScrollToTop';
 import { LoadingProvider } from '@/context/frontend/LoadingContext';
 import PrizeBox from '@/pages/frontend/PrizeBox';
 import RestPwd from '@/pages/frontend/RestPwd';
+import Product3C from '@/pages/frontend/Product3C';
+import ProductRedPrize from '@/pages/frontend/ProductRedPrize';
 
 const FrontendRoutes: RouteObject[] = [
   {
@@ -54,7 +56,9 @@ const FrontendRoutes: RouteObject[] = [
       { path: 'login', element: <FLogin /> },
       { path: 'register', element: <Register /> },
       { path: 'main', element: <FMain /> },
-      { path: 'product', element: <Product /> },
+      { path: 'gamePrize', element: <Product /> },
+      { path: '3cPrize', element: <Product3C /> },
+      { path: 'redPrize', element: <ProductRedPrize /> },
       { path: 'product/:id', element: <ProductDetail /> },
       { path: 'mallProduct', element: <MallProduct /> },
       { path: 'mallProduct/:id', element: <MallProductDetail /> },

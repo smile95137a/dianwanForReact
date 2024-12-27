@@ -14,6 +14,9 @@ $root-block-name: '.footer';
     margin: 0 auto;
     display: flex;
   }
+  &__socials {
+    margin: 4px 0;
+  }
 
   &__logo {
     position: relative;
@@ -37,7 +40,6 @@ $root-block-name: '.footer';
     }
 
     #{$p__text} {
-      margin-top: -16px;
       font-size: 16px;
       font-weight: 400;
       @include screen(md) {
@@ -50,6 +52,9 @@ $root-block-name: '.footer';
   &__main {
     flex: 1;
     margin-left: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   &__nav {

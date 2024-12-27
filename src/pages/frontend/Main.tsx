@@ -1,4 +1,3 @@
-import CircleIcon from '@/components/frontend/CircleIcon';
 import ProductCard from '@/components/frontend/ProductCard';
 import {
   getAllProductList,
@@ -9,17 +8,16 @@ import React, { useEffect, useState } from 'react';
 import { BsHandbag } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import TitleBar from '../../components/frontend/TitleBar';
-import bg from '@/assets/image/bg1.jpeg';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import { Pagination, Navigation } from 'swiper/modules';
-import { FaAngleRight, FaAngleLeft } from 'react-icons/fa';
+import { Navigation } from 'swiper/modules';
 import { getPagedStoreProducts } from '@/services/frontend/storeProductService';
 import NoData from '@/components/frontend/NoData';
 import { useLoading } from '@/context/frontend/LoadingContext';
 import { getAllBanners } from '@/services/frontend/bannerService';
 import { genRandom } from '@/utils/RandomUtils';
+import Marquee from '@/components/frontend/Marquee';
 
 const Main = () => {
   const navigate = useNavigate();
@@ -107,6 +105,8 @@ const Main = () => {
           </Swiper>
         </div>
       )}
+
+      <Marquee />
 
       <div className="fhome">
         <TitleBar

@@ -1,0 +1,13 @@
+$root-block-name: '.social-links';
+
+#{$root-block-name} {
+  $p: &;
+  $p__text: #{$p}__text;
+  $p__item: #{$p}__item;
+  display: flex;
+  gap: 8px;
+  &__item {
+    width: 36px;
+    height: 36px;
+  }
+}

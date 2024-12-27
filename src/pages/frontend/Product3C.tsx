@@ -4,6 +4,7 @@ import NoData from '@/components/frontend/NoData';
 import Pagination from '@/components/frontend/Pagination';
 import ProductCard from '@/components/frontend/ProductCard';
 import { usePagination } from '@/hooks/usePagination';
+import { PrizeCategory } from '@/interfaces/product';
 import {
   IProduct,
   getAllProductList,
@@ -14,7 +15,7 @@ import { BsHandbag } from 'react-icons/bs';
 import { FaSearch, FaSortAmountUpAlt, FaSortAmountUp } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
-const Product = () => {
+const Product3C = () => {
   const [sortOrder, setSortOrder] = useState('newest');
   const [searchTerm, setSearchTerm] = useState('');
   const [products, setProducts] = useState<any[]>([]);
@@ -32,7 +33,10 @@ const Product = () => {
     try {
       const { success, message, data } = await getAllProductList();
       if (success) {
-        setProducts(data);
+        const filteredProducts = data.filter(
+          (item) => item.prizeCategory === PrizeCategory.C3
+        );
+        setProducts(filteredProducts);
       } else {
         console.log(message);
       }
@@ -104,7 +108,7 @@ const Product = () => {
           <div className="fproduct__icon">
             <CircleIcon icon={BsHandbag} />
           </div>
-          <p className="fproduct__text">電玩賞</p>
+          <p className="fproduct__text">3C賞</p>
         </div>
 
         <div className="fproduct__header-nav">
@@ -215,4 +219,4 @@ const Product = () => {
   );
 };
 
-export default Product;
+export default Product3C;

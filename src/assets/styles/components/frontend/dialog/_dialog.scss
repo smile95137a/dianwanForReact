@@ -25,6 +25,12 @@ $root-block-style: '.downDialog';
     }
   }
 
+  &--ticketList {
+    #{$p__main} {
+      background: #ebffff;
+    }
+  }
+
   &__overlay {
     position: absolute;
     inset: 0;

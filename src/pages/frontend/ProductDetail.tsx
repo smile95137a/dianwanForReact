@@ -53,7 +53,8 @@ const ProductDetail = () => {
   const [showOption, setShowOption] = useState(false);
   const [endTimes, setEndTimes] = useState(null);
   const [countdown, setCountdown] = useState(0);
-  const { openInfoDialog, openDrawDialog } = useFrontendDialog();
+  const { openInfoDialog, openDrawDialog, openTicketConfirmDialog } =
+    useFrontendDialog();
   const { setLoading } = useLoading();
 
   const isLogin = useSelector(
@@ -181,7 +182,7 @@ const ProductDetail = () => {
     setShowOption(false);
   };
 
-  const handleConfirm = (typeNum) => async () => {
+  const handleConfirm = (typeNum: any) => async () => {
     if (!isLogin) {
       await openInfoDialog('系統消息', '請先登入');
       return;
@@ -192,21 +193,13 @@ const ProductDetail = () => {
       return;
     }
 
+    const data = await openTicketConfirmDialog(typeNum, product, activeTickets);
     try {
-      setLoading(true);
-      const { success, data, message } = await executeDraw(
-        product.productId,
-        activeTickets?.map((x: any) => x.number),
-        1
-      );
-
-      setLoading(false);
-      if (success) {
+      if (data) {
+        const qu = remainingQuantity - activeTickets.length;
         setActiveTickets([]);
         await fetchDrawStatus();
-        await openDrawDialog({ remainingQuantity, data });
-      } else {
-        await openInfoDialog('系統消息', message);
+        await openDrawDialog({ remainingQuantity: qu, data });
       }
     } catch (error: any) {
       const { message } = error.response.data;

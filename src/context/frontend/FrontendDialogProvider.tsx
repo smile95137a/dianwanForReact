@@ -11,6 +11,8 @@ import { useAnimateDialog } from './AnimateDialogProvider';
 import AnimateDialog from '@/components/frontend/dialog/AnimateDialog';
 import { useRestPwdDialog } from './RestPwdDialogProvider';
 import RestPwdDialog from '@/components/frontend/dialog/RestPwdDialog';
+import { useTicketConfirmDialog } from './TicketConfirmDialogProvider';
+import TicketConfirmDialog from '@/components/frontend/dialog/TicketConfirmDialog';
 
 interface DialogProviderProps {
   children: ReactNode;
@@ -26,6 +28,16 @@ export const FrontendDialogProvider: FC<DialogProviderProps> = ({
     closeConfirmDialog,
     confirmDialog,
   } = useConfirmDialog();
+
+  const {
+    payType,
+    productData,
+    ticketList,
+    ticketConfirmDialogOpen,
+    openTicketConfirmDialog,
+    closeTicketConfirmDialog,
+    ticketConfirmDialog,
+  } = useTicketConfirmDialog();
 
   const {
     infoDialogOpen,
@@ -70,6 +82,7 @@ export const FrontendDialogProvider: FC<DialogProviderProps> = ({
         openDrawDialog,
         openAnimateDialog,
         openRestPwdDialog,
+        openTicketConfirmDialog,
       }}
     >
       {children}
@@ -84,6 +97,17 @@ export const FrontendDialogProvider: FC<DialogProviderProps> = ({
               content={''}
             />
           )}
+          {ticketConfirmDialogOpen && (
+            <TicketConfirmDialog
+              payType={payType}
+              productData={productData}
+              ticketList={ticketList}
+              isOpen={ticketConfirmDialogOpen}
+              onClose={closeTicketConfirmDialog}
+              onConfirm={ticketConfirmDialog}
+            />
+          )}
+
           {restPwdDialogOpen && (
             <RestPwdDialog
               isOpen={restPwdDialogOpen}

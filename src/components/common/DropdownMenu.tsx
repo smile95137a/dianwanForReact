@@ -1,4 +1,6 @@
+import { RootState } from '@/store';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 interface DropdownItem {
   label: string;
@@ -18,6 +20,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   className,
   icon,
 }) => {
+  const user = useSelector((state: RootState) => state.frontend.auth.user);
+
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -32,7 +36,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
     >
       <div onClick={toggleDropdown} className="dropdown-menu__trigger">
         {icon && <span className="dropdown-menu__trigger-icon">{icon}</span>}
-        吳曉明
+        {user.username.slice(0, 3)}
       </div>
       {isOpen && (
         <div className="dropdown-menu__content">

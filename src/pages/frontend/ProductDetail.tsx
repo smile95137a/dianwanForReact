@@ -42,6 +42,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { useLoading } from '@/context/frontend/LoadingContext';
 import { PrizeCategory } from '@/interfaces/product';
+import { delay } from '@/utils/DelayUtils';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -53,8 +54,12 @@ const ProductDetail = () => {
   const [showOption, setShowOption] = useState(false);
   const [endTimes, setEndTimes] = useState(null);
   const [countdown, setCountdown] = useState(0);
-  const { openInfoDialog, openDrawDialog, openTicketConfirmDialog } =
-    useFrontendDialog();
+  const {
+    openInfoDialog,
+    openDrawDialog,
+    openTicketConfirmDialog,
+    openAnimateDialog,
+  } = useFrontendDialog();
   const { setLoading } = useLoading();
 
   const isLogin = useSelector(
@@ -199,7 +204,17 @@ const ProductDetail = () => {
         const qu = remainingQuantity - activeTickets.length;
         setActiveTickets([]);
         await fetchDrawStatus();
-        await openDrawDialog({ remainingQuantity: qu, data });
+        data.forEach(async (x: any) => {
+          await openAnimateDialog(x);
+        });
+
+        if (Array.isArray(data)) {
+          for (const x of data) {
+            await openAnimateDialog(x);
+            await delay(500);
+          }
+          await openDrawDialog({ remainingQuantity: qu, data });
+        }
       }
     } catch (error: any) {
       const { message } = error.response.data;

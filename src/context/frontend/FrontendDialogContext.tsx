@@ -14,7 +14,7 @@ export interface DialogContextType {
     payType: any,
     productData: any,
     ticketList: any[]
-  ) => Promise<boolean>;
+  ) => Promise<any>;
 }
 
 export const FrontDialogContext = createContext<DialogContextType | undefined>(

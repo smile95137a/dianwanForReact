@@ -1,22 +1,16 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import Dialog from './Dialog';
-import ticketAnimate from '@/assets/image/kuji_animation.gif';
-import testA from '@/assets/image/test.gif';
-import testAP from '@/assets/image/kuji_ticket.png';
+import ticketImages from '@/data/ticketImagesData';
 
 interface AnimateDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
   customClass?: string;
-  drawData: any;
+  drawData: {
+    level: keyof typeof ticketImages;
+  };
 }
-
-const gifDuration = {
-  box: 1000,
-  ticket: 1000,
-  gacha: 2000,
-};
 
 const AnimateDialog: FC<AnimateDialogProps> = ({
   isOpen,
@@ -26,10 +20,9 @@ const AnimateDialog: FC<AnimateDialogProps> = ({
   drawData,
 }) => {
   const [animateSrc, setAnimateSrc] = useState('');
-  const [animate2Src, setAnimate2Src] = useState('');
   const [timestamp, setTimestamp] = useState('');
   const [showFinalImage, setShowFinalImage] = useState(false);
-
+  const [finalImageSrc, setFinalImageSrc] = useState('');
   const onGifLoad = useCallback(() => {
     const duration = 2000;
     setShowFinalImage(true);
@@ -38,17 +31,22 @@ const AnimateDialog: FC<AnimateDialogProps> = ({
     }, duration);
   }, []);
 
-  // 处理 GIF 动画完成后关闭对话框
   const handleGifComplete = useCallback(() => {
     onClose();
-  }, []);
+  }, [onClose]);
 
-  // 当对话框打开时，更新动画资源和时间戳
   useEffect(() => {
-    setAnimateSrc(ticketAnimate);
-    setAnimate2Src(testA);
+    setAnimateSrc(ticketImages.kujiAnime);
     setTimestamp(Date.now().toString());
-  }, []);
+
+    const gradeKey =
+      typeof drawData.level === 'string' &&
+      ticketImages[drawData.level.toUpperCase() as keyof typeof ticketImages]
+        ? (drawData.level.toUpperCase() as keyof typeof ticketImages)
+        : '';
+
+    setFinalImageSrc(gradeKey ? ticketImages[gradeKey] : '');
+  }, [drawData]);
 
   return (
     <Dialog
@@ -57,18 +55,18 @@ const AnimateDialog: FC<AnimateDialogProps> = ({
       className={`dialog--animate ${customClass}`}
     >
       <div className="animateDialog">
-        {/* <img
-          src={`${animateSrc}?t=${timestamp}`}
-          onLoad={onGifLoad}
-          className="animateDialog__img"
-        /> */}
         <div className="animateDialog__img">
-          {showFinalImage && (
-            <img src={testAP} className="animateDialog__img-ticket" />
+          {showFinalImage && finalImageSrc && (
+            <img
+              src={finalImageSrc}
+              alt="Final Result"
+              className="animateDialog__img-ticket"
+            />
           )}
           <img
-            src={`${animate2Src}?t=${timestamp}`}
+            src={`${animateSrc}?t=${timestamp}`}
             onLoad={onGifLoad}
+            alt="Animation"
             className="animateDialog__img-animate"
           />
         </div>

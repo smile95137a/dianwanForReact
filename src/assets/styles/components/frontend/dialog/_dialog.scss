@@ -31,6 +31,14 @@ $root-block-style: '.downDialog';
     }
   }
 
+  &--drawStep {
+    #{$p__main} {
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+  }
+
   &__overlay {
     position: absolute;
     inset: 0;

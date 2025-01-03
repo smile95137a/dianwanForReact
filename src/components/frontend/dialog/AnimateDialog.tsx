@@ -1,6 +1,7 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import Dialog from './Dialog';
 import ticketImages from '@/data/ticketImagesData';
+import { BsHandIndex } from 'react-icons/bs';
 
 interface AnimateDialogProps {
   isOpen: boolean;
@@ -23,6 +24,8 @@ const AnimateDialog: FC<AnimateDialogProps> = ({
   const [timestamp, setTimestamp] = useState('');
   const [showFinalImage, setShowFinalImage] = useState(false);
   const [finalImageSrc, setFinalImageSrc] = useState('');
+  const [isAnimationStarted, setIsAnimationStarted] = useState(false);
+
   const onGifLoad = useCallback(() => {
     const duration = 2000;
     setShowFinalImage(true);
@@ -35,10 +38,13 @@ const AnimateDialog: FC<AnimateDialogProps> = ({
     onClose();
   }, [onClose]);
 
-  useEffect(() => {
+  const handleStartAnimation = useCallback(() => {
     setAnimateSrc(ticketImages.kujiAnime);
     setTimestamp(Date.now().toString());
+    setIsAnimationStarted(true);
+  }, []);
 
+  useEffect(() => {
     const gradeKey =
       typeof drawData.level === 'string' &&
       ticketImages[drawData.level.toUpperCase() as keyof typeof ticketImages]
@@ -55,21 +61,35 @@ const AnimateDialog: FC<AnimateDialogProps> = ({
       className={`dialog--animate ${customClass}`}
     >
       <div className="animateDialog">
-        <div className="animateDialog__img">
-          {showFinalImage && finalImageSrc && (
+        {!isAnimationStarted ? (
+          <div className="animateDialog__img animateDialog__img--noAnimate">
             <img
-              src={finalImageSrc}
+              src={ticketImages.BLANK}
               alt="Final Result"
               className="animateDialog__img-ticket"
+              onClick={handleStartAnimation}
             />
-          )}
-          <img
-            src={`${animateSrc}?t=${timestamp}`}
-            onLoad={onGifLoad}
-            alt="Animation"
-            className="animateDialog__img-animate"
-          />
-        </div>
+            <div className="animateDialog__icon">
+              <BsHandIndex />
+            </div>
+          </div>
+        ) : (
+          <div className="animateDialog__img">
+            {showFinalImage && finalImageSrc && (
+              <img
+                src={finalImageSrc}
+                alt="Final Result"
+                className="animateDialog__img-ticket"
+              />
+            )}
+            <img
+              src={`${animateSrc}?t=${timestamp}`}
+              onLoad={onGifLoad}
+              alt="Animation"
+              className="animateDialog__img-animate"
+            />
+          </div>
+        )}
       </div>
     </Dialog>
   );

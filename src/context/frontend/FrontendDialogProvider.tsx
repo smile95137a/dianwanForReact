@@ -7,12 +7,12 @@ import { useInfoDialog } from './InfoDialogProvider';
 import InfoDialog from '@/components/frontend/dialog/InfoDialog';
 import DrawDialog from '@/components/frontend/dialog/DrawDialog';
 import { useDrawDialog } from './DrawDialogProvider';
-import { useAnimateDialog } from './AnimateDialogProvider';
-import AnimateDialog from '@/components/frontend/dialog/AnimateDialog';
 import { useRestPwdDialog } from './RestPwdDialogProvider';
 import RestPwdDialog from '@/components/frontend/dialog/RestPwdDialog';
 import { useTicketConfirmDialog } from './TicketConfirmDialogProvider';
 import TicketConfirmDialog from '@/components/frontend/dialog/TicketConfirmDialog';
+import { useDrawStepDialog } from './DrawStepDialogProvider';
+import DrawStepDialog from '@/components/frontend/dialog/DrawStepDialog';
 
 interface DialogProviderProps {
   children: ReactNode;
@@ -58,13 +58,13 @@ export const FrontendDialogProvider: FC<DialogProviderProps> = ({
   } = useDrawDialog();
 
   const {
-    animateDialogOpen,
-    customClass: animateDialogCustomClass,
-    openAnimateDialog,
-    closeAnimateDialog,
-    confirmAnimateDialog,
-    drawData: animateDialogData,
-  } = useAnimateDialog();
+    drawStepDialogOpen,
+    customClass: drawStepDialogCustomClass,
+    openDrawStepDialog,
+    closeDrawStepDialog,
+    confirmDrawStepDialog,
+    drawData: drawStepDialogData,
+  } = useDrawStepDialog();
 
   const {
     restPwdDialogOpen,
@@ -80,9 +80,9 @@ export const FrontendDialogProvider: FC<DialogProviderProps> = ({
         openConfirmDialog,
         openInfoDialog,
         openDrawDialog,
-        openAnimateDialog,
         openRestPwdDialog,
         openTicketConfirmDialog,
+        openDrawStepDialog,
       }}
     >
       {children}
@@ -137,13 +137,13 @@ export const FrontendDialogProvider: FC<DialogProviderProps> = ({
             />
           )}
 
-          {animateDialogOpen && (
-            <AnimateDialog
-              isOpen={animateDialogOpen}
-              onClose={closeAnimateDialog}
-              onConfirm={confirmAnimateDialog}
-              customClass={animateDialogCustomClass}
-              drawData={animateDialogData}
+          {drawStepDialogOpen && (
+            <DrawStepDialog
+              isOpen={drawStepDialogOpen}
+              onClose={closeDrawStepDialog}
+              onConfirm={confirmDrawStepDialog}
+              customClass={drawStepDialogCustomClass}
+              drawData={drawStepDialogData}
             />
           )}
         </>,

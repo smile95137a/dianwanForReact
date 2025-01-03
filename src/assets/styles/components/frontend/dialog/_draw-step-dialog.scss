@@ -1,0 +1,20 @@
+$root-block-name: '.drawStepDialog';
+
+#{$root-block-name} {
+  $p: &;
+  $p__text: #{$p}__text;
+
+  &__text {
+    font-size: 36px;
+    color: #2a88cb;
+    font-weight: 400;
+  }
+
+  &__skip {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999999999999;
+  }
+}

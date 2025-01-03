@@ -1,4 +1,5 @@
 import kujiAnime from '@/assets/image/kuji_02_anime.gif';
+import kuji from '@/assets/image/kujiblank.png';
 import kujiA from '@/assets/image/kuji_A.png';
 import kujiB from '@/assets/image/kuji_B.png';
 import kujiC from '@/assets/image/kuji_C.png';
@@ -30,6 +31,7 @@ import kujiSP from '@/assets/image/kuji_SP.png';
 
 const ticketImages = {
   kujiAnime,
+  BLANK: kuji,
   A: kujiA,
   B: kujiB,
   C: kujiC,

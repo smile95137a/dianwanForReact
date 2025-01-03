@@ -1,6 +1,8 @@
 import { RootState } from '@/store';
+import { clearAuthData } from '@/store/slices/frontend/authSlice';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 interface DropdownItem {
   label: string;
@@ -22,10 +24,17 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
 }) => {
   const user = useSelector((state: RootState) => state.frontend.auth.user);
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleLogout = () => {
+    dispatch(clearAuthData());
+    navigate('/login');
   };
 
   return (
@@ -36,7 +45,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
     >
       <div onClick={toggleDropdown} className="dropdown-menu__trigger">
         {icon && <span className="dropdown-menu__trigger-icon">{icon}</span>}
-        {user.username.slice(0, 3)}
+        {user?.nickname}
       </div>
       {isOpen && (
         <div className="dropdown-menu__content">
@@ -52,6 +61,9 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
               {item.label}
             </a>
           ))}
+          <div className="dropdown-menu__item" onClick={handleLogout}>
+            登出
+          </div>
         </div>
       )}
     </div>

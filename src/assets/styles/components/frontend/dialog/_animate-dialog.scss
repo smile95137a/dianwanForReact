@@ -3,6 +3,7 @@ $root-block-name: '.animateDialog';
 #{$root-block-name} {
   $p: &;
   $p__text: #{$p}__text;
+  $p__icon: #{$p}__icon;
   width: 100%;
   display: flex;
   align-items: center;
@@ -12,11 +13,32 @@ $root-block-name: '.animateDialog';
     position: relative;
     &-ticket {
       width: 100%;
+      object-fit: contain;
     }
     &-animate {
       position: absolute;
       width: 100%;
       left: 0;
     }
+  }
+  &__icon {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    font-size: 40px;
+    color: #fff;
+    transform: translateY(-50%);
+    animation: slideright 2s cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite
+      alternate both;
+  }
+}
+
+@keyframes slideright {
+  0% {
+    transform: translateY(-50%) translateX(0);
+  }
+  100% {
+    transform: translateY(-50%) translateX(80%);
   }
 }

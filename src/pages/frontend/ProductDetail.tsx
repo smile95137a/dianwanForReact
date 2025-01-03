@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import TitleBar from '../../components/frontend/TitleBar';
 import { BsHandbag } from 'react-icons/bs';
 import { getImageUrl } from '@/utils/ImageUtils';
-import ticketImg from '@/assets/image/ticket2.png';
+import ticketImg from '@/assets/image/kujiblank.png';
 import ticketImgA from '@/assets/image/ticket_A.png';
 import ticketImgB from '@/assets/image/ticket_B.png';
 import ticketImgC from '@/assets/image/ticket_C.png';
@@ -58,7 +58,7 @@ const ProductDetail = () => {
     openInfoDialog,
     openDrawDialog,
     openTicketConfirmDialog,
-    openAnimateDialog,
+    openDrawStepDialog,
   } = useFrontendDialog();
   const { setLoading } = useLoading();
 
@@ -203,18 +203,14 @@ const ProductDetail = () => {
       if (data) {
         const qu = remainingQuantity - activeTickets.length;
         setActiveTickets([]);
-        await fetchDrawStatus();
-        data.forEach(async (x: any) => {
-          await openAnimateDialog(x);
+        await openDrawStepDialog({
+          product: product,
+          productDetail: productDetail,
+          drawItemList: data,
         });
+        await fetchDrawStatus();
 
-        if (Array.isArray(data)) {
-          for (const x of data) {
-            await openAnimateDialog(x);
-            await delay(500);
-          }
-          await openDrawDialog({ remainingQuantity: qu, data });
-        }
+        await openDrawDialog({ remainingQuantity: qu, data });
       }
     } catch (error: any) {
       const { message } = error.response.data;

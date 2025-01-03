@@ -8,7 +8,7 @@ $root-block-name: '.dropdown-menu';
   $p__item: #{$p}__item;
   &--header {
     #{$p__trigger} {
-      width: 100px;
+      min-width: 100px;
       height: 38px;
       border-radius: 50px;
       border: 1px solid #000000;

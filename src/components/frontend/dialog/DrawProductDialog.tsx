@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import Dialog from './Dialog';
-import logoImg from '@/assets/image/logo.png';
 import NumberFormatter from '@/components/common/NumberFormatter';
 import { getImageUrl } from '@/utils/ImageUtils';
 interface DrawProductDialogProps {

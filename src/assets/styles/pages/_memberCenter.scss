@@ -4,6 +4,7 @@ $root-block-name: '.memberCenter';
   $p: &;
   $p__text: #{$p}__text;
   $p__btn: #{$p}__btn;
+  $p__coins-icon: #{$p}__coins-icon;
   @include flex;
   height: 100%;
   padding: 0 0 64px 0;
@@ -87,47 +88,73 @@ $root-block-name: '.memberCenter';
     @include flex(null, center);
     gap: 24px;
     position: relative;
-    padding-bottom: 64px;
+    margin: 48px 0;
     @include screen(sm) {
       @include flex(center, center, column);
       gap: 24px;
-      padding-bottom: 32px;
     }
     &-item {
-      flex: 33.3%;
+      width: 33.3%;
       max-width: 360px;
       @include flex;
+      flex-direction: column;
+      align-items: center;
       gap: 12px;
+      @include screen(sm) {
+        flex-direction: row;
+        width: 100%;
+      }
+      &--gold {
+        color: #fbbc05;
+        #{$p__coins-icon} {
+          background: #fbbc05;
+        }
+      }
+      &--sliver {
+        color: #aeaeb2;
+        #{ $p__coins-icon} {
+          background: #aeaeb2;
+        }
+      }
+      &--bonus {
+        color: #fe4206;
+        #{ $p__coins-icon} {
+          background: #fe4206;
+        }
+      }
     }
 
     &-icon {
-      width: 95px;
-      height: 95px;
-      border-radius: 50%;
-      padding: 12px;
-      font-size: 76px;
-      background-color: #2a88cb;
+      width: 58px;
+      height: 58px;
+      border-radius: 30px;
+      opacity: 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: #fff;
-      @include flex(end, center);
+      font-size: 36px;
     }
 
     &-info {
-      @include flex(null, center, column);
+      @include flex(center);
       gap: 8px;
+      @include screen(sm) {
+        min-width: 120px;
+      }
     }
 
     &-title {
       #{$p__text} {
         font-size: 20px;
         font-weight: 400;
-
-        @include screen(md) {
-          font-size: 14px;
-        }
       }
     }
 
     &-num {
+      @include screen(sm) {
+        flex: 1;
+      }
       #{$p__text} {
         font-size: 24px;
         font-weight: 900;
@@ -135,15 +162,6 @@ $root-block-name: '.memberCenter';
           font-size: 30px;
         }
       }
-    }
-    &::after {
-      content: '';
-      display: block;
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 1px;
-      background: #7c7c7c;
     }
   }
 

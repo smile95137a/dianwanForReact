@@ -32,35 +32,43 @@ const MemberCenterCoins = () => {
   return (
     <div>
       <div className="memberCenter__coins">
-        <div className="memberCenter__coins-item">
-          <div className="memberCenter__coins-icon">
-            <FaDollarSign />
-          </div>
+        <div className="memberCenter__coins-item memberCenter__coins-item--gold">
           <div className="memberCenter__coins-info">
+            <div className="memberCenter__coins-icon">G</div>
             <div className="memberCenter__coins-title">
-              <p className="memberCenter__text">儲值</p>
+              <p className="memberCenter__text">金幣</p>
             </div>
-            <div className="memberCenter__coins-num">
-              <p className="memberCenter__text">
-                <NumberFormatter number={userBalance} />
-              </p>
-            </div>
+          </div>
+          <div className="memberCenter__coins-num">
+            <p className="memberCenter__text">
+              <NumberFormatter number={userBalance} />
+            </p>
           </div>
         </div>
-
-        <div className="memberCenter__coins-item">
-          <div className="memberCenter__coins-icon">
-            <FaGift />
-          </div>
+        <div className="memberCenter__coins-item memberCenter__coins-item--sliver">
           <div className="memberCenter__coins-info">
+            <div className="memberCenter__coins-icon">S</div>
             <div className="memberCenter__coins-title">
-              <p className="memberCenter__text">紅利點數</p>
+              <p className="memberCenter__text">銀幣</p>
             </div>
-            <div className="memberCenter__coins-num">
-              <p className="memberCenter__text">
-                <NumberFormatter number={userBonus} />
-              </p>
+          </div>
+          <div className="memberCenter__coins-num">
+            <p className="memberCenter__text">
+              <NumberFormatter number={userSliver} />
+            </p>
+          </div>
+        </div>
+        <div className="memberCenter__coins-item memberCenter__coins-item--bonus">
+          <div className="memberCenter__coins-info">
+            <div className="memberCenter__coins-icon">利</div>
+            <div className="memberCenter__coins-title">
+              <p className="memberCenter__text">紅利</p>
             </div>
+          </div>
+          <div className="memberCenter__coins-num">
+            <p className="memberCenter__text">
+              <NumberFormatter number={userBonus} />
+            </p>
           </div>
         </div>
       </div>

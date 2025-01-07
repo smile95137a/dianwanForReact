@@ -12,12 +12,6 @@ $root-block-name: '.productCard';
   overflow: hidden;
 
   &--mall {
-    #{$p__img} {
-      height: auto;
-    }
-    #{$p__infos} {
-      display: none;
-    }
   }
 
   &__moneys {
@@ -138,14 +132,15 @@ $root-block-name: '.productCard';
       position: relative;
       &--active {
         width: 100%;
-        max-width: 160px;
+        max-width: 120px;
         background: #2a88cb;
         display: flex;
         align-items: center;
+        flex-direction: column;
         #{$p__icon} {
           display: flex;
           align-items: center;
-          font-size: 58px;
+          font-size: 36px;
           color: #ffffff;
         }
         #{$p__text} {

@@ -1,6 +1,4 @@
 import React, { FC, useEffect } from 'react';
-import Dialog from './Dialog';
-import { useFrontendDialog } from '@/context/frontend/useFrontedDialog';
 import { delay } from '@/utils/DelayUtils';
 import { useAnimateDialog } from '@/context/frontend/AnimateDialogProvider';
 import { useDrawProductDialog } from '@/context/frontend/DrawProductDialogProvider';

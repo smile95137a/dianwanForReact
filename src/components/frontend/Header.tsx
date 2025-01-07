@@ -24,6 +24,8 @@ import { getAllMarquees } from '@/services/frontend/marqueeService';
 import SocialLinks from '../common/SocialLinks';
 import { toggleSidebar } from '@/store/slices/frontend/uiSlice';
 import DropdownMenu from '../common/DropdownMenu';
+import { getUserInfo } from '@/services/frontend/userService';
+import NumberFormatter from '../common/NumberFormatter';
 
 const navItems = [
   {
@@ -71,6 +73,10 @@ const navItems = [
 ];
 
 const Header = () => {
+  const [userBalance, setUserBalance] = useState(0);
+  const [userBonus, setUserBonus] = useState(0);
+  const [userSliver, setUserSliver] = useState(0);
+
   const dispatch = useDispatch();
   const isLogin = useSelector(
     (state: RootState) => state.frontend.auth.isLogin
@@ -87,6 +93,27 @@ const Header = () => {
   const handleToggle = () => {
     dispatch(toggleSidebar());
   };
+
+  const fetchUserInfo = async () => {
+    try {
+      const response = await getUserInfo();
+      const { success, data, message } = response;
+
+      if (success) {
+        setUserBalance(data.balance || 0);
+        setUserBonus(data.bonus || 0);
+        setUserSliver(data.sliverCoin || 0);
+      } else {
+        console.error(`獲取用戶信息失敗：${message || '未知錯誤'}`);
+      }
+    } catch (error: any) {
+      console.error('獲取用戶信息時發生錯誤：', error.message || '請稍後再試');
+    }
+  };
+
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
 
   return (
     <div className="fheader">
@@ -129,6 +156,18 @@ const Header = () => {
             {isLogin && (
               <>
                 <div className="fheader__nav-item-divider"></div>
+                <div className="fheader__nav-item fheader__nav-item--gold">
+                  <div className="fheader__nav-item-icon">G</div>
+                  <NumberFormatter number={userBalance} />
+                </div>
+                <div className="fheader__nav-item fheader__nav-item--sliver">
+                  <div className="fheader__nav-item-icon">S</div>
+                  <NumberFormatter number={userSliver} />
+                </div>
+                <div className="fheader__nav-item fheader__nav-item--bonus">
+                  <div className="fheader__nav-item-icon">利</div>
+                  <NumberFormatter number={userBonus} />
+                </div>
                 <Link
                   className="fheader__nav-item fheader__nav-item--member"
                   to="/member-center"
@@ -143,7 +182,7 @@ const Header = () => {
                   to="/member-center"
                 >
                   <div className="fheader__nav-item-icon">
-                    <RiUserLine />
+                    <FaGift />
                   </div>
                   賞品盒
                 </Link>
@@ -160,7 +199,30 @@ const Header = () => {
           ) : (
             <>
               <DropdownMenu
-                items={[
+                coins={[
+                  {
+                    label: 'Gold Coins',
+                    icon: 'G',
+                    link: '#',
+                    coins: userBalance,
+                    className: 'gold',
+                  },
+                  {
+                    label: 'Silver Coins',
+                    icon: 'S',
+                    link: '#',
+                    coins: userSliver,
+                    className: 'sliver',
+                  },
+                  {
+                    label: 'Bonus Points',
+                    icon: '利',
+                    link: '#',
+                    coins: userBonus,
+                    className: 'bonus',
+                  },
+                ]}
+                links={[
                   {
                     label: '會員中心',
                     link: '/member-center',

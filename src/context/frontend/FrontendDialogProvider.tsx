@@ -13,6 +13,8 @@ import { useTicketConfirmDialog } from './TicketConfirmDialogProvider';
 import TicketConfirmDialog from '@/components/frontend/dialog/TicketConfirmDialog';
 import { useDrawStepDialog } from './DrawStepDialogProvider';
 import DrawStepDialog from '@/components/frontend/dialog/DrawStepDialog';
+import { useImgDialog } from './ImgDialogProvider';
+import ImgDialog from '@/components/frontend/dialog/ImgDialog';
 
 interface DialogProviderProps {
   children: ReactNode;
@@ -74,6 +76,15 @@ export const FrontendDialogProvider: FC<DialogProviderProps> = ({
     confirmRestPwdDialog,
   } = useRestPwdDialog();
 
+  const {
+    imgDialogOpen,
+    customClass: imgDialogCustomClass,
+    openImgDialog,
+    closeImgDialog,
+    confirmImgDialog,
+    imgUrl,
+  } = useImgDialog();
+
   return (
     <FrontDialogContext.Provider
       value={{
@@ -83,6 +94,7 @@ export const FrontendDialogProvider: FC<DialogProviderProps> = ({
         openRestPwdDialog,
         openTicketConfirmDialog,
         openDrawStepDialog,
+        openImgDialog,
       }}
     >
       {children}
@@ -144,6 +156,16 @@ export const FrontendDialogProvider: FC<DialogProviderProps> = ({
               onConfirm={confirmDrawStepDialog}
               customClass={drawStepDialogCustomClass}
               drawData={drawStepDialogData}
+            />
+          )}
+
+          {imgDialogOpen && (
+            <ImgDialog
+              isOpen={imgDialogOpen}
+              onClose={closeImgDialog}
+              onConfirm={confirmImgDialog}
+              customClass={imgDialogCustomClass}
+              imgUrl={imgUrl}
             />
           )}
         </>,

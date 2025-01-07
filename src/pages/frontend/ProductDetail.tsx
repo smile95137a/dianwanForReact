@@ -7,43 +7,19 @@ import TitleBar from '../../components/frontend/TitleBar';
 import { BsHandbag } from 'react-icons/bs';
 import { getImageUrl } from '@/utils/ImageUtils';
 import ticketImg from '@/assets/image/kujiblank.png';
-import ticketImgA from '@/assets/image/ticket_A.png';
-import ticketImgB from '@/assets/image/ticket_B.png';
-import ticketImgC from '@/assets/image/ticket_C.png';
-import ticketImgD from '@/assets/image/ticket_D.png';
-import ticketImgE from '@/assets/image/ticket_E.png';
-import ticketImgF from '@/assets/image/ticket_F.png';
-import ticketImgG from '@/assets/image/ticket_G.png';
-import ticketImgH from '@/assets/image/ticket_H.png';
-import ticketImgI from '@/assets/image/ticket_I.png';
-import ticketImgJ from '@/assets/image/ticket_J.png';
-import ticketImgK from '@/assets/image/ticket_K.png';
-import ticketImgL from '@/assets/image/ticket_L.png';
-import ticketImgM from '@/assets/image/ticket_M.png';
-import ticketImgN from '@/assets/image/ticket_N.png';
-import ticketImgO from '@/assets/image/ticket_O.png';
-import ticketImgP from '@/assets/image/ticket_P.png';
-import ticketImgQ from '@/assets/image/ticket_Q.png';
-import ticketImgR from '@/assets/image/ticket_R.png';
-import ticketImgS from '@/assets/image/ticket_S.png';
-import ticketImgT from '@/assets/image/ticket_T.png';
-import ticketImgU from '@/assets/image/ticket_U.png';
-import ticketImgV from '@/assets/image/ticket_V.png';
-import ticketImgW from '@/assets/image/ticket_W.png';
-import ticketImgX from '@/assets/image/ticket_X.png';
-import ticketImgY from '@/assets/image/ticket_Y.png';
-import ticketImgZ from '@/assets/image/ticket_Z.png';
-import ticketImgBlank from '@/assets/image/ticket_blank.png';
 import moment from 'moment';
 import { FaCheck, FaChevronDown, FaThumbtack, FaTimes } from 'react-icons/fa';
-import { MdChecklistRtl } from 'react-icons/md';
+import { MdChecklistRtl, MdOutlineOfflineBolt } from 'react-icons/md';
 import { useFrontendDialog } from '@/context/frontend/useFrontedDialog';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { useLoading } from '@/context/frontend/LoadingContext';
 import { PrizeCategory } from '@/interfaces/product';
 import { delay } from '@/utils/DelayUtils';
-
+import ticketImages from '@/data/ticketImagesData';
+import NumberFormatter from '@/components/common/NumberFormatter';
+import productContactImg from '@/assets/image/product-contact.png';
+import NoData from '@/components/frontend/NoData';
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -59,6 +35,7 @@ const ProductDetail = () => {
     openDrawDialog,
     openTicketConfirmDialog,
     openDrawStepDialog,
+    openImgDialog,
   } = useFrontendDialog();
   const { setLoading } = useLoading();
 
@@ -140,36 +117,7 @@ const ProductDetail = () => {
     const { productType } = product;
     const { level, isDrawn } = ticket;
 
-    const ticketImages: Record<string, string> = {
-      A: ticketImgA,
-      B: ticketImgB,
-      C: ticketImgC,
-      D: ticketImgD,
-      E: ticketImgE,
-      F: ticketImgF,
-      G: ticketImgG,
-      H: ticketImgH,
-      I: ticketImgI,
-      J: ticketImgJ,
-      K: ticketImgK,
-      L: ticketImgL,
-      M: ticketImgM,
-      N: ticketImgN,
-      O: ticketImgO,
-      P: ticketImgP,
-      Q: ticketImgQ,
-      R: ticketImgR,
-      S: ticketImgS,
-      T: ticketImgT,
-      U: ticketImgU,
-      V: ticketImgV,
-      W: ticketImgW,
-      X: ticketImgX,
-      Y: ticketImgY,
-      Z: ticketImgZ,
-    };
-
-    return isDrawn ? ticketImages[level] || ticketImgBlank : ticketImg;
+    return isDrawn ? ticketImages[level] || ticketImages.BLANK : ticketImg;
   };
   const [expanded, setExpanded] = useState(false);
   const toggleExpand = () => setExpanded(!expanded);
@@ -241,21 +189,27 @@ const ProductDetail = () => {
     }
   };
 
+  const handleImageClick = (imageUrl: string) => {
+    openImgDialog(imageUrl);
+  };
+
   return (
     <div className="productDetail">
       <div className="productDetail__infos">
         <div className="productDetail__infoHeader">
           <div className="productDetail__infoHeader-item productDetail__infoHeader-item--status">
             <div className="productDetail__status">
-              <div className="productDetail__icon"></div>
-              <p className="productDetail__text">急單！</p>
+              <div className="productDetail__icon">
+                <MdOutlineOfflineBolt />
+              </div>
+              <p className="productDetail__text">開抽中</p>
+              <p className="productDetail__text">
+                <span>NT</span>
+                <span className="productDetail__text productDetail__text--money">
+                  <NumberFormatter number={~~product?.price} />
+                </span>
+              </p>
             </div>
-            <p className="productDetail__text">
-              <span>NT</span>
-              <span className="productDetail__text productDetail__text--money">
-                {product?.price}
-              </span>
-            </p>
           </div>
           <div className="productDetail__infoHeader-item">
             <p className="productDetail__text productDetail__text--productName">
@@ -286,34 +240,42 @@ const ProductDetail = () => {
       </div>
       <TitleBar icon={BsHandbag} titleText="獎項" showMore={false} />
       <div className="productDetail__awards">
-        {productDetail.length > 0 ? (
-          productDetail.map((detail: any, index) => (
-            <div key={index} className="productDetail__awardItem">
-              <div className="productDetail__awardItem-img">
-                {Array.isArray(detail?.imageUrls) &&
-                  detail.imageUrls.length > 0 && (
-                    <img
-                      src={getImageUrl(detail.imageUrls[0])}
-                      alt="產品圖片"
-                    />
-                  )}
+        <div className="productDetail__awards-list">
+          {productDetail.length > 0 ? (
+            productDetail.map((detail: any, index) => (
+              <div key={index} className="productDetail__awardItem">
+                <div className="productDetail__awardItem-img">
+                  {Array.isArray(detail?.imageUrls) &&
+                    detail.imageUrls.length > 0 && (
+                      <img
+                        src={getImageUrl(detail.imageUrls[0])}
+                        alt="產品圖片"
+                        onClick={() => handleImageClick(detail.imageUrls[0])}
+                      />
+                    )}
+                </div>
+                <div className="productDetail__awardItem-grade">
+                  <p className="productDetail__text">{detail.grade}賞</p>
+                </div>
+                <div className="productDetail__awardItem-name">
+                  <p className="productDetail__text">{detail.productName}</p>
+                </div>
+                <div className="productDetail__awardItem-num">
+                  <p className="productDetail__text">
+                    {detail.quantity}/{detail.stockQuantity}
+                  </p>
+                </div>
               </div>
-              <div className="productDetail__awardItem-grade">
-                <p className="productDetail__text">{detail.grade}賞</p>
-              </div>
-              <div className="productDetail__awardItem-name">
-                <p className="productDetail__text">{detail.productName}</p>
-              </div>
-              <div className="productDetail__awardItem-num">
-                <p className="productDetail__text">
-                  {detail.quantity}/{detail.stockQuantity}
-                </p>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p>No product details available.</p>
-        )}
+            ))
+          ) : (
+            <NoData />
+          )}
+        </div>
+        <div className="productDetail__awards-infos">
+          <div className="productDetail__contact">
+            <img src={productContactImg} />
+          </div>
+        </div>
       </div>
       <TitleBar icon={BsHandbag} titleText="籤桶" showMore={false} />
 

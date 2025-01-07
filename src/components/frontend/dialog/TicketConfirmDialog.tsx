@@ -19,7 +19,6 @@ interface TicketConfirmDialogProps {
 }
 const validationSchema = Yup.object({
   terms: Yup.boolean().oneOf([true], '必須同意購買須知'),
-  shipping: Yup.boolean().oneOf([true], '必須同意扣除運費'),
 });
 const TicketConfirmDialog: FC<TicketConfirmDialogProps> = ({
   isOpen,
@@ -39,7 +38,6 @@ const TicketConfirmDialog: FC<TicketConfirmDialogProps> = ({
     resolver: yupResolver(validationSchema),
     defaultValues: {
       terms: false,
-      shipping: false,
     },
   });
 
@@ -141,9 +139,7 @@ const TicketConfirmDialog: FC<TicketConfirmDialogProps> = ({
           <div className="ticketConfirmDialog__divider"></div>
           <div className="ticketConfirmDialog__total">
             <div className="ticketConfirmDialog__total-text">
-              <span className="ticketConfirmDialog__text">
-                合計（不含運）：
-              </span>
+              <span className="ticketConfirmDialog__text">合計：</span>
             </div>
             <div className="ticketConfirmDialog__total-money">
               <MoneyCard
@@ -176,20 +172,6 @@ const TicketConfirmDialog: FC<TicketConfirmDialogProps> = ({
                 </a>
                 {errors.terms && (
                   <p className="error-text">{errors.terms.message}</p>
-                )}
-              </label>
-
-              <label className="ticketConfirmDialog__checkbox">
-                <input
-                  type="checkbox"
-                  {...register('shipping')}
-                  className="ticketConfirmDialog__input"
-                />
-                <span className="ticketConfirmDialog__text">
-                  我同意本次購買須先扣除運費
-                </span>
-                {errors.shipping && (
-                  <p className="error-text">{errors.shipping.message}</p>
                 )}
               </label>
             </div>

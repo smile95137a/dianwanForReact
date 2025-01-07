@@ -5,6 +5,8 @@ $root-block-name: '.fheader';
   $p__text: #{$p}__text;
   $p__logo-img: #{$p}__logo-img;
 
+  $p__nav-item-icon: #{$p}__nav-item-icon;
+
   width: 100%;
 
   @include screen(lg) {
@@ -98,10 +100,15 @@ $root-block-name: '.fheader';
       min-height: 31px;
       font-size: 20px;
       gap: 12px;
+
       &--member,
-      &--box {
+      &--box,
+      &--gold,
+      &--sliver,
+      &--bonus {
         display: none;
       }
+
       @include screen(lg) {
         flex-direction: column;
         font-size: 14px;
@@ -116,9 +123,46 @@ $root-block-name: '.fheader';
           background-color: #00ffff;
           margin: 12px 0;
         }
+
         &--member,
-        &--box {
+        &--box,
+        &--gold,
+        &--sliver,
+        &--bonus {
           display: flex;
+        }
+        &--gold,
+        &--sliver,
+        &--bonus {
+          #{ $p__nav-item-icon} {
+            width: 28px;
+            height: 28px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 16px;
+          }
+        }
+
+        &--gold {
+          color: #fbbc05;
+          #{ $p__nav-item-icon} {
+            background: #fbbc05;
+          }
+        }
+        &--sliver {
+          color: #aeaeb2;
+          #{ $p__nav-item-icon} {
+            background: #aeaeb2;
+          }
+        }
+        &--bonus {
+          color: #fe4206;
+          #{ $p__nav-item-icon} {
+            background: #fe4206;
+          }
         }
       }
 

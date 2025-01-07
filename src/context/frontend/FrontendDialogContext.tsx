@@ -15,6 +15,7 @@ export interface DialogContextType {
     ticketList: any[]
   ) => Promise<any>;
   openDrawStepDialog: (drawData: any, customClass?: string) => Promise<boolean>;
+  openImgDialog: (imgUrl: any, customClass?: string) => Promise<boolean>;
 }
 
 export const FrontDialogContext = createContext<DialogContextType | undefined>(

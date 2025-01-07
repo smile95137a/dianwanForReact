@@ -84,7 +84,7 @@ const ProductCard = ({ isMall = false, product, className = '' }: any) => {
             <MdOutlineOfflineBolt />
           </p>
           <p className="productCard__text productCard__text--subtitle">
-            開抽中
+            {isMall ? '熱賣中' : '開抽中'}
           </p>
         </div>
         <div className="productCard__infos-data">

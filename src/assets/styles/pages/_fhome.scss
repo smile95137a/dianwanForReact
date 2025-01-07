@@ -13,6 +13,31 @@ $root-block-name: '.fhome';
     margin: 0 24px;
   }
 
+  &__more {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin: 24px 0 48px 0;
+
+    &-btn {
+      background: none;
+      border: none;
+      color: #2a88cb;
+      font-size: 20px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    &-icon {
+      display: flex;
+      align-items: center;
+      font-size: 18px;
+    }
+  }
+
   &__list {
     width: 100%;
     display: grid;
@@ -24,7 +49,7 @@ $root-block-name: '.fhome';
       gap: 6px;
     }
     @include screen(sm) {
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr 1fr;
       gap: 6px;
     }
   }

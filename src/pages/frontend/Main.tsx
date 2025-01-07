@@ -18,17 +18,28 @@ import { useLoading } from '@/context/frontend/LoadingContext';
 import { getAllBanners } from '@/services/frontend/bannerService';
 import { genRandom } from '@/utils/RandomUtils';
 import Marquee from '@/components/frontend/Marquee';
-
+import { PrizeCategory } from '@/interfaces/product';
+import { FaAngleRight } from 'react-icons/fa6';
 const Main = () => {
   const navigate = useNavigate();
-  const [products, setProducts] = useState<IProduct[]>([]);
-  const [mallProducts, setMallProducts] = useState<any[]>([]);
   const [banners, setBanners] = useState<any[]>([]);
-  const { setLoading } = useLoading();
 
-  const redirectToProductPage = () => {
-    navigate('/product');
+  const [figureProducts, setFigureProducts] = useState<IProduct[]>([]);
+  const [c3Products, setC3Products] = useState<IProduct[]>([]);
+  const [bonusProducts, setBonusProducts] = useState<IProduct[]>([]);
+
+  const [mallProducts, setMallProducts] = useState<any[]>([]);
+  const { setLoading } = useLoading();
+  const redirectToCategoryPage = (category: PrizeCategory) => {
+    if (category === PrizeCategory.FIGURE) {
+      navigate(`/gamePrize`);
+    } else if (category === PrizeCategory.C3) {
+      navigate(`/3cPrize`);
+    } else if (category === PrizeCategory.BONUS) {
+      navigate(`redPrize`);
+    }
   };
+
   const redirectToMallPage = () => {
     navigate('/mallProduct');
   };
@@ -42,7 +53,20 @@ const Main = () => {
       setLoading(false);
 
       if (allProductList.success) {
-        setProducts(allProductList.data);
+        const allProducts = allProductList.data;
+        const figures = allProducts.filter(
+          (p) => p.prizeCategory === PrizeCategory.FIGURE
+        );
+        const c3s = allProducts.filter(
+          (p) => p.prizeCategory === PrizeCategory.C3
+        );
+        const bonuses = allProducts.filter(
+          (p) => p.prizeCategory === PrizeCategory.BONUS
+        );
+
+        setFigureProducts(figures);
+        setC3Products(c3s);
+        setBonusProducts(bonuses);
       } else {
         console.error('獲取全部產品失敗:', allProductList.message);
       }
@@ -68,12 +92,8 @@ const Main = () => {
     loadMainData();
   }, []);
 
-  const handleProductClick = (productId) => () => {
-    navigate(`/product/${productId}`);
-  };
-
   return (
-    <>
+    <div className="fhome">
       {banners.length > 0 && (
         <div className="slider">
           <Swiper
@@ -108,59 +128,102 @@ const Main = () => {
 
       <Marquee />
 
-      <div className="fhome">
-        <TitleBar
-          icon={BsHandbag}
-          titleText="電玩賞"
-          moreText="更多"
-          moreTextClick={redirectToProductPage}
-        />
-        <div className="fhome__list">
-          {products.length > 0 ? (
-            products
-              .slice(0, 6)
-              .map((product, index) => (
-                <ProductCard
-                  key={genRandom(24)}
-                  product={product}
-                  className="prouctCard--mall"
-                />
-              ))
-          ) : (
-            <>
-              <NoData />
-            </>
-          )}
-        </div>
+      <TitleBar icon={BsHandbag} titleText="電玩賞" />
+      {figureProducts.length > 0 ? (
+        <>
+          <div className="fhome__list">
+            {figureProducts.slice(0, 6).map((product) => (
+              <ProductCard key={genRandom(24)} product={product} />
+            ))}
+          </div>
+          <MoreButton
+            onClick={() => redirectToCategoryPage(PrizeCategory.FIGURE)}
+          />
+        </>
+      ) : (
+        <>
+          <NoData text="查無資料！" />
+        </>
+      )}
 
-        <TitleBar
-          icon={BsHandbag}
-          titleText="商城"
-          moreText="更多"
-          moreTextClick={redirectToMallPage}
-        />
+      <TitleBar icon={BsHandbag} titleText="3C賞" />
 
-        <div className="fhome__list">
-          {mallProducts.length > 0 ? (
-            mallProducts
-              .slice(0, 6)
-              .map((product, index) => (
-                <ProductCard
-                  key={genRandom(24)}
-                  product={product}
-                  isMall={true}
-                  className="productCard--mall"
-                />
-              ))
-          ) : (
-            <>
-              <NoData />
-            </>
-          )}
-        </div>
-      </div>
-    </>
+      {c3Products.length > 0 ? (
+        <>
+          <div className="fhome__list">
+            {c3Products.slice(0, 6).map((product) => (
+              <ProductCard key={genRandom(24)} product={product} />
+            ))}
+          </div>
+          <MoreButton
+            onClick={() => redirectToCategoryPage(PrizeCategory.C3)}
+          />
+        </>
+      ) : (
+        <>
+          <NoData text="查無資料！" />
+        </>
+      )}
+
+      <TitleBar icon={BsHandbag} titleText="商城" />
+
+      {mallProducts.length > 0 ? (
+        <>
+          <div className="fhome__list">
+            {mallProducts.slice(0, 6).map((product) => (
+              <ProductCard
+                key={genRandom(24)}
+                product={product}
+                isMall={true}
+                className="productCard--mall"
+              />
+            ))}
+          </div>
+          <MoreButton onClick={redirectToMallPage} />
+        </>
+      ) : (
+        <>
+          <NoData text="查無資料！" />
+        </>
+      )}
+      <TitleBar icon={BsHandbag} titleText="紅利賞" />
+
+      {bonusProducts.length > 0 ? (
+        <>
+          <div className="fhome__list">
+            {bonusProducts.slice(0, 6).map((product) => (
+              <ProductCard key={genRandom(24)} product={product} />
+            ))}
+          </div>
+          <MoreButton
+            onClick={() => redirectToCategoryPage(PrizeCategory.BONUS)}
+          />
+        </>
+      ) : (
+        <>
+          <NoData text="查無資料！" />
+        </>
+      )}
+    </div>
   );
 };
 
 export default Main;
+
+interface MoreButtonProps {
+  onClick: () => void;
+  text?: string;
+}
+
+const MoreButton: React.FC<MoreButtonProps> = ({ onClick, text = '更多' }) => {
+  return (
+    <div className="fhome__more">
+      <button onClick={onClick} className="fhome__more-btn">
+        {text}
+        <div className="fhome__more-icon">
+          <FaAngleRight />
+        </div>
+      </button>
+    </div>
+  );
+};

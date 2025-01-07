@@ -6,6 +6,7 @@ import { useAnimateDialog } from '@/context/frontend/AnimateDialogProvider';
 import { useDrawProductDialog } from '@/context/frontend/DrawProductDialogProvider';
 import AnimateDialog from './AnimateDialog';
 import DrawProductDialog from './DrawProductDialog';
+import { getImageUrl } from '@/utils/ImageUtils';
 
 interface DrawStepDialogProps {
   isOpen: boolean;
@@ -63,10 +64,11 @@ const DrawStepDialog: FC<DrawStepDialogProps> = ({
 
   return (
     <>
-      <div className="drawStepDialog">
-        <div className="drawStepDialog__skip" onClick={handleSkipClick}>
-          <p className="drawStepDialog__text">跳過</p>
-        </div>
+      <div className="drawStepDialog__img">
+        <img src={getImageUrl(drawData.product.imageUrls[0])} alt="" />
+      </div>
+      <div className="drawStepDialog__skip" onClick={handleSkipClick}>
+        <p className="drawStepDialog__text">跳過</p>
       </div>
 
       {animateDialogOpen && (

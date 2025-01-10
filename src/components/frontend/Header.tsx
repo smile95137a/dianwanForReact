@@ -112,8 +112,10 @@ const Header = () => {
   };
 
   useEffect(() => {
-    fetchUserInfo();
-  }, []);
+    if (isLogin) {
+      fetchUserInfo();
+    }
+  }, [isLogin]);
 
   return (
     <div className="fheader">

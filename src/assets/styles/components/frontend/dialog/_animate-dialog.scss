@@ -10,15 +10,26 @@ $root-block-name: '.animateDialog';
   justify-content: center;
   &__img {
     width: 400px;
+    height: 242px;
     position: relative;
     &-ticket {
       width: 100%;
       object-fit: contain;
+      position: absolute;
+      &--blank {
+        z-index: 10;
+      }
+      &--final {
+        z-index: 9;
+      }
     }
     &-animate {
       position: absolute;
-      width: 100%;
-      left: 0;
+      width: 2000px;
+      height: 484px;
+      top: -50%;
+      left: 100px;
+      z-index: 11;
     }
   }
   &__icon {
@@ -31,6 +42,11 @@ $root-block-name: '.animateDialog';
     transform: translateY(-50%);
     animation: slideright 2s cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite
       alternate both;
+    z-index: 12;
+  }
+
+  &--hide {
+    display: none;
   }
 }
 

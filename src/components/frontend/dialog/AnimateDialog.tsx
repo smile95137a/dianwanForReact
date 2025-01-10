@@ -26,6 +26,27 @@ const AnimateDialog: FC<AnimateDialogProps> = ({
   const [finalImageSrc, setFinalImageSrc] = useState('');
   const [isAnimationStarted, setIsAnimationStarted] = useState(false);
 
+  const [startX, setStartX] = useState(0); // 起始滑鼠位置
+  const [isSwiping, setIsSwiping] = useState(false); // 是否正在滑動
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setStartX(e.clientX);
+    setIsSwiping(true);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isSwiping) return;
+    const deltaX = e.clientX - startX;
+    if (deltaX > 100) {
+      handleStartAnimation();
+      setIsSwiping(false); // 防止重複觸發
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsSwiping(false);
+  };
+
   const onGifLoad = useCallback(() => {
     const duration = 2000;
     setShowFinalImage(true);
@@ -39,10 +60,11 @@ const AnimateDialog: FC<AnimateDialogProps> = ({
   }, [onClose]);
 
   const handleStartAnimation = useCallback(() => {
+    if (isAnimationStarted) return;
     setAnimateSrc(ticketImages.kujiAnime);
     setTimestamp(Date.now().toString());
     setIsAnimationStarted(true);
-  }, []);
+  }, [isAnimationStarted]);
 
   useEffect(() => {
     const gradeKey =
@@ -60,36 +82,39 @@ const AnimateDialog: FC<AnimateDialogProps> = ({
       onClose={onClose}
       className={`dialog--animate ${customClass}`}
     >
-      <div className="animateDialog">
-        {!isAnimationStarted ? (
-          <div className="animateDialog__img animateDialog__img--noAnimate">
-            <img
-              src={ticketImages.BLANK}
-              alt="Final Result"
-              className="animateDialog__img-ticket"
-              onClick={handleStartAnimation}
-            />
-            <div className="animateDialog__icon">
-              <BsHandIndex />
-            </div>
+      <div
+        className="animateDialog"
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp} // 防止滑鼠移出區域時未觸發 MouseUp
+      >
+        <div className="animateDialog__img">
+          <img
+            src={ticketImages.BLANK}
+            alt="Final Result"
+            className={`animateDialog__img-ticket animateDialog__img-ticket--blank ${
+              isAnimationStarted ? 'animateDialog--hide' : ''
+            }`}
+          />
+          <div
+            className={`animateDialog__icon ${
+              isAnimationStarted ? 'animateDialog--hide' : ''
+            }`}
+          >
+            <BsHandIndex />
           </div>
-        ) : (
-          <div className="animateDialog__img">
-            {showFinalImage && finalImageSrc && (
-              <img
-                src={finalImageSrc}
-                alt="Final Result"
-                className="animateDialog__img-ticket"
-              />
-            )}
-            <img
-              src={`${animateSrc}?t=${timestamp}`}
-              onLoad={onGifLoad}
-              alt="Animation"
-              className="animateDialog__img-animate"
-            />
-          </div>
-        )}
+          <img
+            src={finalImageSrc}
+            className="animateDialog__img-ticket animateDialog__img-ticket--final"
+          />
+          <img
+            src={`${animateSrc}?t=${timestamp}`}
+            onLoad={onGifLoad}
+            alt="Animation"
+            className="animateDialog__img-animate"
+          />
+        </div>
       </div>
     </Dialog>
   );

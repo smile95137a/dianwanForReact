@@ -118,7 +118,7 @@ const ProductDetailDialog: FC<ProductDetailDialogProps> = ({
         <p className="productDetailDialog__text productDetailDialog__text--title">
           產品詳情
         </p>
-        <div className="productDetailDialog__btns">
+        <div className="productDetailDialog__btns m-b-12">
           <MButton text={'新增商品類別'} click={handelAddPDialog} />
         </div>
         <div className="productDetailDialog__main">

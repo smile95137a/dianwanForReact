@@ -119,16 +119,48 @@ const AddProductDetailDialog: FC<AddProductDetailDialogProps> = ({
   }, [productDetail, reset]);
 
   const validateForm = async () => {
-    // const values = getValues();
-    // if (!values.productName.trim()) {
-    //   await openInfoDialog('系統提示', '商品名稱為必填項！');
-    //   return false;
-    // }
-    // if (values.quantity <= 0) {
-    //   await openInfoDialog('系統提示', '數量必須為正數！');
-    //   return false;
-    // }
-    return true;
+    const { productName, description, quantity, sliverPrice, probability } =
+      getValues();
+
+    try {
+      if (!productName.trim()) {
+        throw new Error('商品名稱為必填項！');
+      }
+
+      if (!description.trim()) {
+        throw new Error('描述為必填項！');
+      }
+
+      if (
+        quantity === undefined ||
+        isNaN(Number(quantity)) ||
+        Number(quantity) <= 0
+      ) {
+        throw new Error('數量必須為正數！');
+      }
+
+      if (
+        sliverPrice &&
+        (isNaN(Number(sliverPrice)) || Number(sliverPrice) < 0)
+      ) {
+        throw new Error('銀幣價格必須為非負數字！');
+      }
+      if (
+        probability === undefined ||
+        probability === '' ||
+        isNaN(Number(probability)) ||
+        Number(probability) < 0.0001 ||
+        Number(probability) > 0.9999
+      ) {
+        throw new Error('機率必須為介於 0.0001 和 0.9999 之間的有效數字！');
+      }
+      return true;
+    } catch (error) {
+      if (error instanceof Error) {
+        await openInfoDialog('系統提示', error.message);
+      }
+      return false;
+    }
   };
 
   const handleFormSubmit = async () => {

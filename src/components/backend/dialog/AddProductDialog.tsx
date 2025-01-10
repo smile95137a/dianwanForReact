@@ -90,7 +90,7 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
       sliverPrice: '',
       stockQuantity: 0,
       bonusPrice: '',
-      status: productStatusOptions.UNAVAILABLE,
+      status: ProductStatus.UNAVAILABLE,
       specification: '',
       categoryId: '',
       hasBanner: '',
@@ -99,8 +99,6 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
 
   useEffect(() => {
     if (isEdit && product) {
-      console.log(product);
-
       reset({
         productName: product.productName || '',
         description: product.description || '',
@@ -110,7 +108,7 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
         sliverPrice: product.sliverPrice || '',
         stockQuantity: product.stockQuantity || 0,
         bonusPrice: product.bonusPrice || '',
-        status: product.status || productStatusOptions.UNAVAILABLE,
+        status: product.status || ProductStatus.UNAVAILABLE,
         specification: product.specification || '',
         categoryId: product.categoryId || '',
         hasBanner: product.hasBanner || '',
@@ -160,11 +158,67 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
   };
 
   const validateForm = async () => {
+    const {
+      productName,
+      description,
+      productType,
+      prizeCategory,
+      price,
+      sliverPrice,
+      bonusPrice,
+      stockQuantity,
+      status,
+      categoryId,
+    } = getValues();
+
     try {
+      if (!productName.trim()) {
+        throw new Error('產品名稱為必填項！');
+      }
+      if (!description.trim()) {
+        throw new Error('描述為必填項！');
+      }
+      if (!productType) {
+        throw new Error('產品類型為必填項！');
+      }
+      if (productType === ProductType.PRIZE && !prizeCategory) {
+        throw new Error('一番賞類別為必填項！');
+      }
+      if (price === '' || isNaN(Number(price)) || Number(price) < 0) {
+        throw new Error('金幣價格必須為非負數字！');
+      }
+      if (
+        sliverPrice === '' ||
+        isNaN(Number(sliverPrice)) ||
+        Number(sliverPrice) < 0
+      ) {
+        throw new Error('銀幣價格必須為非負數字！');
+      }
+      if (
+        bonusPrice === '' ||
+        isNaN(Number(bonusPrice)) ||
+        Number(bonusPrice) < 0
+      ) {
+        throw new Error('紅利價格必須為非負數字！');
+      }
+      if (
+        stockQuantity === '' ||
+        isNaN(Number(stockQuantity)) ||
+        Number(stockQuantity) < 0
+      ) {
+        throw new Error('庫存必須為非負數字！');
+      }
+      if (!status) {
+        throw new Error('狀態為必填項！');
+      }
+      if (!categoryId) {
+        throw new Error('商品類別為必填項！');
+      }
       return true;
     } catch (error) {
-      if (error instanceof Error)
+      if (error instanceof Error) {
         await openInfoDialog('系統提示', error.message);
+      }
       return false;
     }
   };

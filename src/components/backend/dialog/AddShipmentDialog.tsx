@@ -111,11 +111,7 @@ const AddShipmentDialog: FC<AddShipmentDialogProps> = ({
     }
   };
   return (
-    <BDialog
-      isOpen={isOpen}
-      onClose={() => onClose(false)}
-      mainClassName="max-w-640"
-    >
+    <BDialog isOpen={isOpen} onClose={() => onClose(false)}>
       <div className="addShipmentDialog">
         <p className="addShipmentDialog__text addShipmentDialog__text--title">
           {isEdit ? '編輯運輸方式' : '新增運輸方式'}

@@ -35,10 +35,10 @@ const GrantRewardDialog: FC<GrantRewardDialogProps> = ({
   const validateForm = () => {
     const { silverAmount, bonusAmount } = getValues();
     try {
-      if (~~silverAmount < 0) {
+      if (~~silverAmount <= 0) {
         throw new Error('銀幣數量必須為非負數！');
       }
-      if (~~bonusAmount < 0) {
+      if (~~bonusAmount <= 0) {
         throw new Error('紅利數量必須為非負數！');
       }
     } catch (error) {

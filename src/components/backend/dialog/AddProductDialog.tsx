@@ -200,7 +200,11 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
   };
 
   return (
-    <BDialog isOpen={isOpen} onClose={() => onClose(false)}>
+    <BDialog
+      isOpen={isOpen}
+      onClose={() => onClose(false)}
+      mainClassName="max-w-640"
+    >
       <div className="addProductDialog">
         <p className="addProductDialog__text addProductDialog__text--title">
           {isEdit ? '編輯商品' : '新增商品'}

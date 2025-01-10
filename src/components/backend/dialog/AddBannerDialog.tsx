@@ -177,6 +177,7 @@ const AddBannerDialog: FC<AddBannerDialogProps> = ({
       isOpen={isOpen}
       onClose={() => onClose(false)}
       className={customClass}
+      mainClassName="max-w-640"
     >
       <div className="addBannerDialog">
         <p className="addBannerDialog__text addBannerDialog__text--title">

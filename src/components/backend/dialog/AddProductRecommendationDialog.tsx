@@ -198,7 +198,11 @@ const AddProductRecommendationDialog: FC<
   };
 
   return (
-    <BDialog isOpen={isOpen} onClose={() => onClose(false)}>
+    <BDialog
+      isOpen={isOpen}
+      onClose={() => onClose(false)}
+      mainClassName="max-w-640"
+    >
       <div className="addProductRecommendationDialog">
         <p className="addProductRecommendationDialog__text addProductRecommendationDialog__text--title">
           {isEdit ? '編輯推薦系列' : '新增推薦系列'}

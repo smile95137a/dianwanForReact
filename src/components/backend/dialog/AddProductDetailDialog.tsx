@@ -181,7 +181,11 @@ const AddProductDetailDialog: FC<AddProductDetailDialogProps> = ({
     setImages((prev) => prev.filter((_, i) => i !== index));
   };
   return (
-    <BDialog isOpen={isOpen} onClose={() => onClose(false)}>
+    <BDialog
+      isOpen={isOpen}
+      onClose={() => onClose(false)}
+      mainClassName="max-w-640"
+    >
       <div className="addProductDetailDialog">
         <p className="addProductDetailDialog__text addProductDetailDialog__text--title">
           {isEdit ? '編輯商品' : '新增商品'}

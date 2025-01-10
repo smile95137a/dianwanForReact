@@ -116,7 +116,11 @@ const AddMemberDialog: FC<AddMemberDialogProps> = ({
   };
 
   return (
-    <BDialog isOpen={isOpen} onClose={() => onClose(false)}>
+    <BDialog
+      isOpen={isOpen}
+      onClose={() => onClose(false)}
+      mainClassName="max-w-640"
+    >
       <div className="addMemberDialog">
         <p className="addMemberDialog__text addMemberDialog__text--title">
           新增會員

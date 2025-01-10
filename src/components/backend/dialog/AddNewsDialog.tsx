@@ -164,7 +164,11 @@ const AddNewsDialog: FC<AddNewsDialogProps> = ({
   };
 
   return (
-    <BDialog isOpen={isOpen} onClose={() => onClose(false)}>
+    <BDialog
+      isOpen={isOpen}
+      onClose={() => onClose(false)}
+      mainClassName="max-w-640"
+    >
       <div className="addNewsDialog">
         <p className="addNewsDialog__text addNewsDialog__text--title">
           {isEdit ? '編輯新聞' : '新增新聞'}

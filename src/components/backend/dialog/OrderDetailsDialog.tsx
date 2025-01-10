@@ -34,6 +34,7 @@ const OrderDetailsDialog: FC<OrderDetailsDialogProps> = ({
       isOpen={isOpen}
       onClose={() => onClose(false)}
       className={customClass}
+      mainClassName="max-w-640"
     >
       <div className="orderDetailsDialog">
         <p className="orderDetailsDialog__text orderDetailsDialog__text--title">

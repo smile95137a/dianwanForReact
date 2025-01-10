@@ -103,12 +103,13 @@ const ProductCategoryManagementDialog: FC<
       isOpen={isOpen}
       onClose={() => onClose(false)}
       className={customClass}
+      mainClassName="max-w-720"
     >
       <div className="productCategoryManagementDialog">
         <p className="productCategoryManagementDialog__text productCategoryManagementDialog__text--title">
           商品類別管理
         </p>
-        <div className="productCategoryManagementDialog__btns">
+        <div className="productCategoryManagementDialog__btns m-b-12">
           <MButton text={'新增商品類別'} click={handelAddPCDialog} />
         </div>
         <div className="productCategoryManagementDialog__main">

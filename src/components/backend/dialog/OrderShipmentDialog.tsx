@@ -71,6 +71,7 @@ const OrderShipmentDialog: FC<OrderShipmentDialogProps> = ({
       isOpen={isOpen}
       onClose={() => onClose(false)}
       className={customClass}
+      mainClassName="max-w-640"
     >
       <div className="orderShipmentDialog">
         <p className="orderShipmentDialog__text orderShipmentDialog__text--title">

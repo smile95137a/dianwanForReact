@@ -102,6 +102,7 @@ const GrantRewardDialog: FC<GrantRewardDialogProps> = ({
       isOpen={isOpen}
       onClose={() => onClose(false)}
       className={customClass}
+      mainClassName="max-w-640"
     >
       <div className="grantRewardDialog">
         <p className="grantRewardDialog__text grantRewardDialog__text--title">

@@ -91,7 +91,11 @@ const AddProductStoreCategoryDialog: FC<AddProductStoreCategoryDialogProps> = ({
   };
 
   return (
-    <BDialog isOpen={isOpen} onClose={() => onClose(false)}>
+    <BDialog
+      isOpen={isOpen}
+      onClose={() => onClose(false)}
+      mainClassName="max-w-640"
+    >
       <div className="addProductStoreCategoryDialog">
         <p className="addProductStoreCategoryDialog__text addProductStoreCategoryDialog__text--title">
           {isEdit ? '編輯商品類別' : '新增商品類別'}

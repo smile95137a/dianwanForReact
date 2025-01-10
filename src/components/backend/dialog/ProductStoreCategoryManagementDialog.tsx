@@ -102,6 +102,7 @@ const ProductStoreCategoryManagementDialog: FC<
       isOpen={isOpen}
       onClose={() => onClose(false)}
       className={customClass}
+      mainClassName="max-w-720"
     >
       <div className="productStoreCategoryManagementDialog">
         <p className="productStoreCategoryManagementDialog__text productStoreCategoryManagementDialog__text--title">

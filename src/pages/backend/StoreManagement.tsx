@@ -165,18 +165,20 @@ const StoreManagement = () => {
   return (
     <div className="storeManagement">
       <p className="storeManagement__title">商城管理</p>
-      <button
-        onClick={openStoreProductDialog}
-        className="storeManagement__btn m-b-12"
-      >
-        新增商品
-      </button>
-      <button
-        onClick={openProductStoreCategoryManagement}
-        className="storeManagement__btn m-b-12"
-      >
-        管理商品類別
-      </button>
+      <div className="flex gap-x-12">
+        <button
+          onClick={openStoreProductDialog}
+          className="storeManagement__btn m-b-12"
+        >
+          新增商品
+        </button>
+        <button
+          onClick={openProductStoreCategoryManagement}
+          className="storeManagement__btn m-b-12"
+        >
+          管理商品類別
+        </button>
+      </div>
       <div className="storeManagement__productFilter">
         篩選產品：
         <select

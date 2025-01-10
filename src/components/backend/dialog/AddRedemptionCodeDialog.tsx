@@ -112,7 +112,11 @@ const AddRedemptionCodeDialog: FC<AddRedemptionCodeDialogProps> = ({
   };
 
   return (
-    <BDialog isOpen={isOpen} onClose={() => onClose(false)}>
+    <BDialog
+      isOpen={isOpen}
+      onClose={() => onClose(false)}
+      mainClassName="max-w-640"
+    >
       <div className="addRedemptionCodeDialog">
         <p className="addRedemptionCodeDialog__text addRedemptionCodeDialog__text--title">
           選擇產品生成兌換碼

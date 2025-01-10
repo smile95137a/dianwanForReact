@@ -222,7 +222,7 @@
   flex-shrink: 0;
 }
 
-@for $i from 1 through 100 {
+@for $i from 1 through 2048 {
   .flex-basis-#{$i} {
     flex-basis: #{$i}#{'%'};
   }
@@ -278,6 +278,10 @@
     width: #{$i}#{'%'};
   }
 
+  .max-w-#{$i} {
+    max-width: #{$i}#{'px'};
+  }
+
   .gap-#{$i} {
     column-gap: #{$i}#{'px'};
     row-gap: #{$i}#{'px'};
@@ -303,6 +307,9 @@
   @media (max-width: 768px) {
     .w-sm-#{$i} {
       width: #{$i}#{'%'};
+    }
+    .max-w-sm-#{$i} {
+      max-width: #{$i}#{'px'};
     }
 
     .gap-sm-#{$i} {
@@ -331,7 +338,9 @@
     .w-md-#{$i} {
       width: #{$i}#{'%'};
     }
-
+    .max-w-md-#{$i} {
+      max-width: #{$i}#{'px'};
+    }
     .gap-md-#{$i} {
       column-gap: #{$i}#{'px'};
       row-gap: #{$i}#{'px'};
@@ -358,7 +367,9 @@
     .w-lg-#{$i} {
       width: #{$i}#{'%'};
     }
-
+    .max-w-lg-#{$i} {
+      max-width: #{$i}#{'px'};
+    }
     .gap-lg-#{$i} {
       column-gap: #{$i}#{'px'};
       row-gap: #{$i}#{'px'};

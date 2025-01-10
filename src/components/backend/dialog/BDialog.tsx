@@ -5,9 +5,18 @@ interface DialogProps {
   onClose: (result: boolean) => void;
   children: ReactNode;
   className?: string;
+  overlayClassName?: string;
+  mainClassName?: string;
 }
 
-const BDialog: FC<DialogProps> = ({ isOpen, onClose, children, className }) => {
+const BDialog: FC<DialogProps> = ({
+  isOpen,
+  onClose,
+  children,
+  className = '',
+  overlayClassName = '',
+  mainClassName = '',
+}) => {
   if (!isOpen) return null;
 
   const handleClose = (result: boolean) => {
@@ -15,12 +24,12 @@ const BDialog: FC<DialogProps> = ({ isOpen, onClose, children, className }) => {
   };
 
   return (
-    <div className={`bdialog ${className ? className : ''}`}>
+    <div className={`bdialog ${className}`}>
       <div
-        className="bdialog__overlay"
+        className={`bdialog__overlay ${overlayClassName}`}
         onClick={() => handleClose(false)}
       ></div>
-      <div className="bdialog__main">{children}</div>
+      <div className={`bdialog__main ${mainClassName}`}>{children}</div>
     </div>
   );
 };

@@ -15,7 +15,14 @@ import { useLoading } from '@/context/frontend/LoadingContext';
 import { getAllCategories } from '@/services/backend/StoreServices';
 import { getImageUrl } from '@/utils/ImageUtils';
 import NumberFormatter from '@/components/common/NumberFormatter';
-import { PrizeCategory } from '@/interfaces/product';
+import { PrizeCategory, ProductStatus } from '@/interfaces/product';
+const productStatusOptions: Record<ProductStatus, string> = {
+  [ProductStatus.AVAILABLE]: '上架',
+  [ProductStatus.UNAVAILABLE]: '下架',
+  [ProductStatus.NOT_AVAILABLE_YET]: '上架大賞已售完',
+  [ProductStatus.SOLD_OUT]: '上架已售完',
+};
+
 const ProductDataManagement = () => {
   enum ProductType {
     PRIZE = 'PRIZE',
@@ -46,6 +53,7 @@ const ProductDataManagement = () => {
   const [, setCategories] = useState<any[]>([]);
   const [filterProductType, setFilterProductType] = useState('');
   const [filterPrizeCategory, setFilterPrizeCategory] = useState('');
+  const [categoryNameMap, setCategoryNameMap] = useState<any>(new Map());
 
   const pagination = usePagination({
     list: filteredProducts,
@@ -89,6 +97,13 @@ const ProductDataManagement = () => {
       setLoading(false);
       if (success) {
         setCategories(data);
+        const mData = new Map(
+          data.map((category: any) => [
+            category.categoryId,
+            category.categoryName,
+          ])
+        );
+        setCategoryNameMap(mData);
       } else {
         setCategories([]);
       }
@@ -187,21 +202,48 @@ const ProductDataManagement = () => {
     openProductCategoryManagementDialog();
   };
 
+  const getPrizeCategoryDescription = (category: any) => {
+    switch (category) {
+      case PrizeCategory.FIGURE:
+        return '一番賞';
+      case PrizeCategory.C3:
+        return '家電一番賞';
+      case PrizeCategory.BONUS:
+        return '紅利一番賞';
+      case PrizeCategory.PRIZESELF:
+        return '自製賞';
+      case PrizeCategory.NONE:
+      default:
+        return '無';
+    }
+  };
+
+  const getCategoryName = (categoryId: number | null) => {
+    if (!categoryId) return '-';
+    return categoryNameMap.get(categoryId) || '-';
+  };
+
+  const getProductStatus = (status: ProductStatus): string => {
+    return productStatusOptions[status] || '未知狀態';
+  };
+
   return (
     <div className="productDataManagement">
       <p className="productDataManagement__title">產品系列管理</p>
-      <button
-        onClick={handleOpenProductDialog}
-        className="productDataManagement__btn m-b-12"
-      >
-        新增商品
-      </button>
-      <button
-        onClick={openProductCategoryManagement}
-        className="productDataManagement__btn m-b-12"
-      >
-        管理商品類別
-      </button>
+      <div className="flex gap-x-12">
+        <button
+          onClick={handleOpenProductDialog}
+          className="productDataManagement__btn m-b-12"
+        >
+          新增商品
+        </button>
+        <button
+          onClick={openProductCategoryManagement}
+          className="productDataManagement__btn m-b-12"
+        >
+          管理商品類別
+        </button>
+      </div>
       <div className="productDataManagement__productFilter">
         篩選產品：
         <select
@@ -263,7 +305,8 @@ const ProductDataManagement = () => {
                               <img
                                 className="productDataManagement__image"
                                 src={getImageUrl(x.imageUrls[0])}
-                                alt="圖片"
+                                width={80}
+                                height={80}
                               />
                             )}
                         </>
@@ -276,46 +319,52 @@ const ProductDataManagement = () => {
                     },
                     {
                       content: <>{x.productType}</>,
-                      dataTitle: '描述',
+                      dataTitle: '類型',
                     },
                     {
-                      content: <>{x.prizeCategory}</>,
-                      dataTitle: '價格',
+                      content: (
+                        <>{getPrizeCategoryDescription(x.prizeCategory)}</>
+                      ),
+                      dataTitle: '一番賞類別',
                     },
                     {
                       content: (
                         <>
-                          <NumberFormatter number={x.price} />
+                          <NumberFormatter number={~~x.price} />
                         </>
                       ),
-                      dataTitle: '售出數量',
+                      dataTitle: '金幣價格',
                     },
                     {
                       content: (
                         <>
-                          <NumberFormatter number={x.sliverPrice} />
+                          <NumberFormatter number={~~x.sliverPrice} />
                         </>
                       ),
-                      dataTitle: '售出數量',
+                      dataTitle: '銀幣價格',
                     },
                     {
                       content: (
                         <>
-                          <NumberFormatter number={x.bonusPrice} />
+                          <NumberFormatter number={~~x.bonusPrice} />
+                        </>
+                      ),
+                      dataTitle: '紅利價格',
+                    },
+                    {
+                      content: (
+                        <>
+                          <NumberFormatter number={~~x.stockQuantity} />
                         </>
                       ),
                       dataTitle: '庫存',
                     },
                     {
-                      content: <>{x.stockQuantity}</>,
-                      dataTitle: '尺寸 (寬x高x深)',
+                      content: <>{getProductStatus(x.status)}</>,
+                      dataTitle: '狀態',
                     },
                     {
-                      content: <>{x.status}</>,
-                      dataTitle: '類別',
-                    },
-                    {
-                      content: <></>,
+                      content: <>{getCategoryName(x.categoryId)}</>,
                       dataTitle: '類別',
                     },
                     {

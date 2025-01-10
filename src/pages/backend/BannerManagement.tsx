@@ -22,7 +22,7 @@ const BannerManagement = () => {
   ];
 
   const productTypeOptions = [
-    { value: 'PRIZE', label: '一番賞' },
+    { value: 'PRIZE', label: '電玩賞' },
     { value: 'GACHA', label: '扭蛋' },
     { value: 'BLIND_BOX', label: '盲盒' },
   ];

@@ -49,6 +49,12 @@ $root-block-name: '.newsManagement';
     }
   }
 
+  &__btns {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+  }
+
   &__btn {
     min-width: 120px;
     height: 40px;

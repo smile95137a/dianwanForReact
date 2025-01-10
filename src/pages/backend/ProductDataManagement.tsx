@@ -33,7 +33,7 @@ const ProductDataManagement = () => {
 
   const productTypeOptions = [
     { value: '', label: '請選擇' },
-    { value: ProductType.PRIZE, label: '一番賞' },
+    { value: ProductType.PRIZE, label: '電玩賞' },
     { value: ProductType.GACHA, label: '扭蛋' },
     { value: ProductType.BLIND_BOX, label: '盲盒' },
     { value: ProductType.CUSTMER_PRIZE, label: '自製獎品' },
@@ -41,8 +41,8 @@ const ProductDataManagement = () => {
 
   const prizeCategoryOptions = [
     { value: '', label: '請選擇' },
-    { value: PrizeCategory.FIGURE, label: '官方一番賞' },
-    { value: PrizeCategory.C3, label: '家電一番賞' },
+    { value: PrizeCategory.FIGURE, label: '官方電玩賞' },
+    { value: PrizeCategory.C3, label: '家電電玩賞' },
     { value: PrizeCategory.BONUS, label: '紅利賞' },
     { value: PrizeCategory.PRIZESELF, label: '自製賞' },
     { value: PrizeCategory.NONE, label: '無' },
@@ -205,11 +205,11 @@ const ProductDataManagement = () => {
   const getPrizeCategoryDescription = (category: any) => {
     switch (category) {
       case PrizeCategory.FIGURE:
-        return '一番賞';
+        return '電玩賞';
       case PrizeCategory.C3:
-        return '家電一番賞';
+        return '家電電玩賞';
       case PrizeCategory.BONUS:
-        return '紅利一番賞';
+        return '紅利電玩賞';
       case PrizeCategory.PRIZESELF:
         return '自製賞';
       case PrizeCategory.NONE:
@@ -283,7 +283,7 @@ const ProductDataManagement = () => {
                 { text: '圖片', className: '' },
                 { text: '產品名稱', className: '' },
                 { text: '類型', className: '' },
-                { text: '一番賞類別', className: '' },
+                { text: '電玩賞類別', className: '' },
                 { text: '金幣價格', className: '' },
                 { text: '銀幣價格', className: '' },
                 { text: '紅利價格', className: '' },
@@ -325,7 +325,7 @@ const ProductDataManagement = () => {
                       content: (
                         <>{getPrizeCategoryDescription(x.prizeCategory)}</>
                       ),
-                      dataTitle: '一番賞類別',
+                      dataTitle: '電玩賞類別',
                     },
                     {
                       content: (

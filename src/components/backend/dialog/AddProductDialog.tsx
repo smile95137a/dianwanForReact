@@ -58,7 +58,7 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
   }
 
   const productTypeOptions: Record<ProductType, string> = {
-    [ProductType.PRIZE]: '一番賞',
+    [ProductType.PRIZE]: '電玩賞',
     [ProductType.GACHA]: '扭蛋',
     [ProductType.BLIND_BOX]: '盲盒',
     [ProductType.CUSTMER_PRIZE]: '客製化抽獎',
@@ -73,8 +73,8 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
 
   const prizeCategoryOptions = [
     { value: '', label: '請選擇' },
-    { value: PrizeCategory.FIGURE, label: '官方一番賞' },
-    { value: PrizeCategory.C3, label: '家電一番賞' },
+    { value: PrizeCategory.FIGURE, label: '官方電玩賞' },
+    { value: PrizeCategory.C3, label: '家電電玩賞' },
     { value: PrizeCategory.BONUS, label: '紅利賞' },
     { value: PrizeCategory.PRIZESELF, label: '自製賞' },
     { value: PrizeCategory.NONE, label: '無' },
@@ -182,7 +182,7 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
         throw new Error('產品類型為必填項！');
       }
       if (productType === ProductType.PRIZE && !prizeCategory) {
-        throw new Error('一番賞類別為必填項！');
+        throw new Error('電玩賞類別為必填項！');
       }
       if (price === '' || isNaN(Number(price)) || Number(price) < 0) {
         throw new Error('金幣價格必須為非負數字！');
@@ -293,7 +293,7 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
           </div>
           <div className="flex">
             <div className="w-100">
-              <p className="addMemberDialog__text">一番賞類別:</p>
+              <p className="addMemberDialog__text">電玩賞類別:</p>
             </div>
             <FormSelect
               name="prizeCategory"

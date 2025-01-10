@@ -151,7 +151,7 @@ const AddBannerDialog: FC<AddBannerDialogProps> = ({
 
   const productTypeOptions = [
     { value: '', label: '請選擇' },
-    { value: ProductType.PRIZE, label: '一番賞' },
+    { value: ProductType.PRIZE, label: '電玩賞' },
     { value: ProductType.GACHA, label: '扭蛋' },
     { value: ProductType.BLIND_BOX, label: '盲盒' },
     { value: ProductType.CUSTMER_PRIZE, label: '自製獎品' },
@@ -159,8 +159,8 @@ const AddBannerDialog: FC<AddBannerDialogProps> = ({
 
   const prizeCategoryOptions = [
     { value: '', label: '請選擇' },
-    { value: PrizeCategory.FIGURE, label: '官方一番賞' },
-    { value: PrizeCategory.C3, label: '家電一番賞' },
+    { value: PrizeCategory.FIGURE, label: '官方電玩賞' },
+    { value: PrizeCategory.C3, label: '家電電玩賞' },
     { value: PrizeCategory.BONUS, label: '紅利賞' },
     { value: PrizeCategory.PRIZESELF, label: '自製賞' },
     { value: PrizeCategory.NONE, label: '無' },

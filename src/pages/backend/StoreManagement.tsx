@@ -225,13 +225,16 @@ const StoreManagement = () => {
                     {
                       content: (
                         <>
-                          {Array.isArray(x?.image) && x.image.length > 0 && (
-                            <img
-                              className="storeManagement__image"
-                              src={getImageUrl(x.image[0])}
-                              alt="圖片"
-                            />
-                          )}
+                          {Array.isArray(x?.imageUrl) &&
+                            x.imageUrl.length > 0 && (
+                              <img
+                                className="storeManagement__image"
+                                src={getImageUrl(x.imageUrl[0])}
+                                alt="圖片"
+                                width={80}
+                                height={80}
+                              />
+                            )}
                         </>
                       ),
                       dataTitle: '圖片',

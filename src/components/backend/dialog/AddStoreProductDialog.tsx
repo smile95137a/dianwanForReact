@@ -103,14 +103,92 @@ const AddStoreProductDialog: FC<AddStoreProductDialogProps> = ({
   };
 
   const validateForm = async () => {
+    const {
+      productName,
+      description,
+      price,
+      stockQuantity,
+      width,
+      height,
+      length,
+      specification,
+      specialPrice,
+      status,
+      categoryId,
+    } = getValues();
+
     try {
-      return true;
+      // 商品名稱 (Product Name)
+      if (!productName || !productName.trim()) {
+        throw new Error('商品名稱為必填項！');
+      }
+
+      // 商品描述 (Description)
+      if (!description || !description.trim()) {
+        throw new Error('商品描述為必填項！');
+      }
+
+      // 價格 (Price)
+      if (!price || isNaN(Number(price)) || Number(price) <= 0) {
+        throw new Error('價格必須為正數！');
+      }
+
+      // 數量 (Stock Quantity)
+      if (
+        !stockQuantity ||
+        isNaN(Number(stockQuantity)) ||
+        Number(stockQuantity) <= 0
+      ) {
+        throw new Error('數量必須為正數！');
+      }
+
+      // 寬度 (Width) - 必填且為正數
+      if (!width || isNaN(Number(width)) || Number(width) <= 0) {
+        throw new Error('寬度為必填項，且必須為正數！');
+      }
+
+      // 高度 (Height) - 必填且為正數
+      if (!height || isNaN(Number(height)) || Number(height) <= 0) {
+        throw new Error('高度為必填項，且必須為正數！');
+      }
+
+      // 深度 (Length) - 必填且為正數
+      if (!length || isNaN(Number(length)) || Number(length) <= 0) {
+        throw new Error('深度為必填項，且必須為正數！');
+      }
+
+      // 規格 (Specification)
+      if (specification && !specification.trim()) {
+        throw new Error('規格不可僅包含空白字元！');
+      }
+
+      // 特價 (Special Price)
+      if (
+        specialPrice !== '' &&
+        (isNaN(Number(specialPrice)) || Number(specialPrice) < 0)
+      ) {
+        throw new Error('特價必須為非負數或留空！');
+      }
+
+      // 狀態 (Status)
+      if (!status) {
+        throw new Error('狀態為必填項！');
+      }
+
+      // 類別 (Category)
+      if (!categoryId) {
+        throw new Error('商品類別為必填項！');
+      }
+
+      return true; // 驗證通過
     } catch (error) {
-      if (error instanceof Error)
+      if (error instanceof Error) {
         await openInfoDialog('系統提示', error.message);
-      return false;
+      }
+      return false; // 驗證失敗
     }
   };
+
   const handleSubmit = async () => {
     const values = getValues();
     if (await validateForm()) {

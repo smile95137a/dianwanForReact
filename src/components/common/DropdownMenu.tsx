@@ -46,6 +46,27 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
     navigate('/login');
   };
 
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
+
   useEffect(() => {
     if (isOpen && dropdownRef.current) {
       const dropdownRect = dropdownRef.current.getBoundingClientRect();

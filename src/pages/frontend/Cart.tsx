@@ -16,14 +16,16 @@ import { FormProvider, useForm } from 'react-hook-form';
 import CheckoutInfoForm from '@/components/frontend/CheckoutInfoForm';
 import { RootState } from '@/store';
 import { useSelector } from 'react-redux';
+import { useFrontendDialog } from '@/context/frontend/useFrontedDialog';
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [selectedItems, setSelectedItems] = useState<any[]>([]);
   const [shippingMethods, setShippingMethods] = useState<any[]>([]);
-
   const navigate = useNavigate();
   const { setLoading } = useLoading();
+  const { openInfoDialog } = useFrontendDialog();
+
   const isLogin = useSelector(
     (state: RootState) => state.frontend.auth.isLogin
   );
@@ -59,6 +61,8 @@ const Cart = () => {
     },
   });
   const invoice = methods.watch('invoice');
+  const watchShippingMethod = methods.watch('shippingMethod');
+
   const handleCheckout = () => {
     console.log(methods.getValues());
   };
@@ -94,11 +98,16 @@ const Cart = () => {
       if (response.success) {
         await loadCartItems();
       } else {
+        await openInfoDialog('系統消息', `添加購物車失敗: ${response.message}`);
         console.error('添加購物車失敗:', response.message);
       }
-    } catch (error) {
+    } catch (error: any) {
       setLoading(false);
       console.error('添加購物車時發生錯誤:', error);
+      await openInfoDialog(
+        '系統消息',
+        `添加購物車失敗: ${error.message || '未知錯誤'}`
+      );
     }
   };
 
@@ -131,13 +140,9 @@ const Cart = () => {
     );
   };
 
-  const totalProductAmount = cartItems
-    .filter((item) => selectedItems.includes(item.cartItemId))
-    .reduce((acc, item) => acc + item.totalPrice, 0);
-
   const totalProductSize = useMemo(() => {
     return cartItems
-      .filter((item) => selectedItems.includes(item.id)) // Assuming `id` is the unique identifier
+      .filter((item) => selectedItems.includes(item.id))
       .reduce((sum, item) => sum + item.size, 0);
   }, [cartItems, selectedItems]);
 
@@ -156,6 +161,13 @@ const Cart = () => {
     //   setShippingMethods([]);
     // }
   }, [totalProductSize]);
+
+  const getShippingPrice = useMemo(() => {
+    const selectedMethod = shippingMethods.find(
+      (method) => method.code === watchShippingMethod
+    );
+    return selectedMethod ? selectedMethod.shippingPrice : 0;
+  }, [shippingMethods, watchShippingMethod]);
 
   return (
     <FormProvider {...methods}>
@@ -231,7 +243,7 @@ const Cart = () => {
             </div>
             <div className="cart__main-other">
               <p className="cart__text">
-                $ <NumberFormatter number={100000} />
+                $ <NumberFormatter number={getShippingPrice} />
               </p>
             </div>
           </div>
@@ -325,20 +337,31 @@ const Cart = () => {
           <div className="cart__total-item">
             <p className="cart__text cart__text--title">商品：</p>
             <p className="cart__text cart__text--money">
-              <NumberFormatter number={totalProductAmount} />
+              <NumberFormatter
+                number={cartItems.reduce(
+                  (acc, item) => acc + item.totalPrice,
+                  0
+                )}
+              />
             </p>
           </div>
           <div className="cart__total-item">
             <p className="cart__text cart__text--title">運費：</p>
             <p className="cart__text cart__text--money">
-              $<NumberFormatter number={100000} />
+              $<NumberFormatter number={getShippingPrice} />
             </p>
           </div>
 
           <div className="cart__total-item m-t-36">
             <p className="cart__text cart__text--title">總金額：</p>
             <p className="cart__text cart__text--totalMoney">
-              $<NumberFormatter number={100000} />
+              ${' '}
+              <NumberFormatter
+                number={
+                  cartItems.reduce((acc, item) => acc + item.totalPrice, 0) +
+                  getShippingPrice
+                }
+              />
             </p>
           </div>
         </div>

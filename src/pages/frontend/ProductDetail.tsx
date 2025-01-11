@@ -20,6 +20,7 @@ import ticketImages from '@/data/ticketImagesData';
 import NumberFormatter from '@/components/common/NumberFormatter';
 import productContactImg from '@/assets/image/product-contact.png';
 import NoData from '@/components/frontend/NoData';
+import ProductCountdown from '@/components/frontend/ProductCountdown';
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -29,7 +30,6 @@ const ProductDetail = () => {
   const [activeTickets, setActiveTickets] = useState([]);
   const [showOption, setShowOption] = useState(false);
   const [endTimes, setEndTimes] = useState(null);
-  const [countdown, setCountdown] = useState(0);
   const {
     openInfoDialog,
     openDrawDialog,
@@ -46,31 +46,6 @@ const ProductDetail = () => {
   const remainingQuantity = useMemo(() => {
     return ticketList.filter((x: any) => !x.isDrawn).length;
   }, [ticketList]);
-
-  let countdownInterval: any = null;
-  const startCountdown = (endTime: any) => {
-    const endMoment = moment(endTime);
-    const now = moment();
-
-    const duration = endMoment.diff(now, 'seconds');
-    setCountdown(duration > 0 ? duration : 0);
-
-    if (countdownInterval) {
-      clearInterval(countdownInterval);
-    }
-
-    countdownInterval = setInterval(() => {
-      setCountdown((prevCountdown) => {
-        if (prevCountdown > 0) {
-          return prevCountdown - 1;
-        } else {
-          clearInterval(countdownInterval);
-          countdownInterval = null;
-          return 0;
-        }
-      });
-    }, 1000);
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,6 +65,10 @@ const ProductDetail = () => {
 
         if (drawStatusRes.success) {
           setTicketList(drawStatusRes.data.prizeNumberList);
+          if (productRes.data.productType === 'PRIZE') {
+            const endTime = drawStatusRes.data.endTimes || null;
+            if (endTime) setEndTimes(endTime);
+          }
         }
       } catch (error) {
         setLoading(false);
@@ -172,14 +151,10 @@ const ProductDetail = () => {
 
       if (success) {
         setTicketList(data.prizeNumberList);
-
-        // if (product.productType === 'PRIZE') {
-        //   const newEndTime = data.endTimes || null;
-        //   if (newEndTime) {
-        //     setEndTimes(newEndTime);
-        //     startCountdown(newEndTime);
-        //   }
-        // }
+        if (product?.productType === 'PRIZE') {
+          const endTime = data.data.endTimes || null;
+          if (endTime) setEndTimes(endTime);
+        }
       } else {
         openInfoDialog('系統消息', '系統錯誤');
       }
@@ -273,7 +248,13 @@ const ProductDetail = () => {
         </div>
         <div className="productDetail__awards-infos">
           <div className="productDetail__contact">
-            <img src={productContactImg} />
+            <a
+              href={'https://line.me'}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src={productContactImg} />
+            </a>
           </div>
         </div>
       </div>
@@ -283,6 +264,7 @@ const ProductDetail = () => {
         <div className="productDetail__text">
           剩餘數量：{~~remainingQuantity} / 總數量：{ticketList?.length || 0}
         </div>
+        {endTimes && <ProductCountdown endTime={endTimes} />}
       </div>
       <div
         className="productDetail__sign"

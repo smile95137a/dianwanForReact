@@ -55,13 +55,16 @@ const Main = () => {
       if (allProductList.success) {
         const allProducts = allProductList.data;
         const figures = allProducts.filter(
-          (p) => p.prizeCategory === PrizeCategory.FIGURE
+          (p) =>
+            p.status === 'AVAILABLE' && p.prizeCategory === PrizeCategory.FIGURE
         );
         const c3s = allProducts.filter(
-          (p) => p.prizeCategory === PrizeCategory.C3
+          (p) =>
+            p.status === 'AVAILABLE' && p.prizeCategory === PrizeCategory.C3
         );
         const bonuses = allProducts.filter(
-          (p) => p.prizeCategory === PrizeCategory.BONUS
+          (p) =>
+            p.status === 'AVAILABLE' && p.prizeCategory === PrizeCategory.BONUS
         );
 
         setFigureProducts(figures);

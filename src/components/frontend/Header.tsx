@@ -47,7 +47,7 @@ const navItems = [
     class: 'blue',
   },
   {
-    to: '/discountPrize',
+    to: '/specialPrize',
     icon: <FaCog />,
     label: '優惠賞',
     class: 'red',
@@ -181,7 +181,7 @@ const Header = () => {
                 </Link>
                 <Link
                   className="fheader__nav-item fheader__nav-item--box"
-                  to="/member-center"
+                  to="/prizeBox"
                 >
                   <div className="fheader__nav-item-icon">
                     <FaGift />
@@ -233,7 +233,7 @@ const Header = () => {
                   },
                   {
                     label: '賞品盒子',
-                    link: '/prize-box',
+                    link: '/prizeBox',
                     className: 'custom-class-2',
                     icon: <FaGift />,
                   },

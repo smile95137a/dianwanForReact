@@ -12,7 +12,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { BsHandbag } from 'react-icons/bs';
 import { FaSearch, FaSortAmountUpAlt, FaSortAmountUp } from 'react-icons/fa';
 
-const ProductRedPrize = () => {
+const ProductSpecialPrize = () => {
   const [sortOrder, setSortOrder] = useState('newest');
   const [searchTerm, setSearchTerm] = useState('');
   const [products, setProducts] = useState<any[]>([]);
@@ -154,7 +154,7 @@ const ProductRedPrize = () => {
 
           <div
             ref={categoryDropdownRef}
-            className={`fproduct__header-category ${
+            className={`fproduct__header-category fproduct__header-category--red ${
               isCategoryOpen ? 'fproduct__header-category--open' : ''
             }`}
           >
@@ -196,7 +196,7 @@ const ProductRedPrize = () => {
           <div className="fproduct__icon">
             <CircleIcon icon={BsHandbag} />
           </div>
-          <p className="fproduct__text">紅利賞</p>
+          <p className="fproduct__text">優惠賞</p>
         </div>
 
         <div className="fproduct__header-nav">
@@ -307,4 +307,4 @@ const ProductRedPrize = () => {
   );
 };
 
-export default ProductRedPrize;
+export default ProductSpecialPrize;

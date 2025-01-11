@@ -7,7 +7,6 @@ import { useFormContext } from 'react-hook-form';
 
 const CheckoutInfoForm = () => {
   const { register, watch, setValue } = useFormContext();
-
   // Billing States
   const [billCityOptions, setBillCityOptions] = useState<
     { value: string; label: string }[]
@@ -24,8 +23,18 @@ const CheckoutInfoForm = () => {
     { value: string; label: string }[]
   >([]);
 
+  const isSameAsBuyer = watch('sameAsBilling');
   const watchBillingCity = watch('billingCity');
   const watchShippingCity = watch('shippingCity');
+  const watchBillingData = watch([
+    'billingName',
+    'billingEmail',
+    'billingPhone',
+    'billingCity',
+    'billingArea',
+    'billingAddress',
+  ]);
+
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
@@ -65,6 +74,8 @@ const CheckoutInfoForm = () => {
   }, [watchBillingCity, setValue]);
 
   useEffect(() => {
+    console.log(watchShippingCity);
+
     if (watchShippingCity) {
       setValue('shippingArea', '');
       const areas = getAreaListByCityName(watchShippingCity);
@@ -79,6 +90,26 @@ const CheckoutInfoForm = () => {
       setShipAreaOptions([{ value: '', label: '行政區' }]);
     }
   }, [watchShippingCity, setValue]);
+
+  useEffect(() => {
+    if (isSameAsBuyer) {
+      const [
+        billingName,
+        billingEmail,
+        billingPhone,
+        billingCity,
+        billingArea,
+        billingAddress,
+      ] = watchBillingData;
+
+      setValue('shippingName', billingName);
+      setValue('shippingEmail', billingEmail);
+      setValue('shippingPhone', billingPhone);
+      setValue('shippingCity', billingCity);
+      setValue('shippingArea', billingArea);
+      setValue('shippingAddress', billingAddress);
+    }
+  }, [isSameAsBuyer]);
 
   return (
     <>
@@ -142,6 +173,13 @@ const CheckoutInfoForm = () => {
           </div>
         </div>
       </div>
+      <div className="cart__divider "></div>
+      <div className="flex">
+        <label>
+          <input type="checkbox" {...register('sameAsBilling')} />
+          同購買人資料
+        </label>
+      </div>
       <div className="flex  gap-x-12">
         <div className="w-50 w-md-100">
           <p className="checkoutInfoForm__text">收貨人姓名</p>
@@ -184,7 +222,7 @@ const CheckoutInfoForm = () => {
           </div>
           <div className="w-25 w-md-50">
             <select
-              {...register('shippingCity')}
+              {...register('shippingArea')}
               className="checkoutInfoForm__select"
             >
               {shipAreaOptions.map((option) => (

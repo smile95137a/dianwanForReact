@@ -16,6 +16,9 @@ $root-block-name: '.prizeBox';
       font-size: 24px;
       font-weight: 700;
     }
+    &--blue {
+      color: #2a88cb;
+    }
   }
   &__products {
     display: flex;
@@ -219,7 +222,7 @@ $root-block-name: '.prizeBox';
     }
 
     &--selectAll {
-      background: #eb9838;
+      background: #2a88cb;
       color: #fff;
       width: 120px;
       height: 48px;

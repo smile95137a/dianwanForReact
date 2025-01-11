@@ -59,7 +59,8 @@ const TicketConfirmDialog: FC<TicketConfirmDialogProps> = ({
     } catch (error) {
       setLoading(false);
       console.error('登入失敗:', error);
-      await openInfoDialog('系統消息', '系統問題，請稍後再嘗試。');
+      const errorMessage = error.response?.data?.message || '未知錯誤';
+      await openInfoDialog('系統消息', errorMessage);
     }
   };
 

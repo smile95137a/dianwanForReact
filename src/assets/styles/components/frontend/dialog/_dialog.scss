@@ -5,6 +5,7 @@ $root-block-style: '.downDialog';
   position: fixed;
   inset: 0;
   z-index: 99999998;
+  overflow: hidden;
   $p: &;
   $p__main: #{$p}__main;
 

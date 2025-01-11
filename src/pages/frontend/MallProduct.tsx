@@ -1,21 +1,26 @@
+import NumberFormatter from '@/components/common/NumberFormatter';
 import CircleIcon from '@/components/frontend/CircleIcon';
 import NoData from '@/components/frontend/NoData';
 import Pagination from '@/components/frontend/Pagination';
 import ProductCard from '@/components/frontend/ProductCard';
+import { useLoading } from '@/context/frontend/LoadingContext';
 import { usePagination } from '@/hooks/usePagination';
+import { getAllCategories } from '@/services/frontend/storeCategoryService';
 import { getPagedStoreProducts } from '@/services/frontend/storeProductService';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { BsHandbag } from 'react-icons/bs';
 import { FaSearch, FaSortAmountUpAlt, FaSortAmountUp } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
 
-const Product = () => {
+const MallProduct = () => {
   const [sortOrder, setSortOrder] = useState('newest');
   const [searchTerm, setSearchTerm] = useState('');
   const [products, setProducts] = useState<any[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
-
-  const navigate = useNavigate();
+  const [categories, setCategories] = useState<any[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const categoryDropdownRef = useRef<HTMLDivElement>(null);
+  const { setLoading } = useLoading();
 
   const pagination = usePagination({
     list: filteredProducts,
@@ -23,11 +28,29 @@ const Product = () => {
     initialPage: 1,
   });
 
+  const fetchCategories = async () => {
+    try {
+      setLoading(true);
+      const { success, message, data } = await getAllCategories();
+      setLoading(false);
+      if (success) {
+        setCategories(data);
+      } else {
+        console.log(message);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.log('Error fetching categories:', error);
+    }
+  };
+
   const fetchProducts = async () => {
     try {
       const { success, message, data } = await getPagedStoreProducts(0, 200);
       if (success) {
-        setProducts(data);
+        const filteredProducts = data;
+
+        setProducts(filteredProducts);
       } else {
         console.log(message);
       }
@@ -38,6 +61,7 @@ const Product = () => {
 
   useEffect(() => {
     fetchProducts();
+    fetchCategories();
   }, []);
 
   useEffect(() => {
@@ -71,31 +95,104 @@ const Product = () => {
         return priceB - priceA;
       });
     }
+    updatedProducts = updatedProducts.filter(
+      (product) =>
+        selectedCategories.length === 0 ||
+        selectedCategories.includes(product.categoryUUid)
+    );
 
     setFilteredProducts(updatedProducts);
     pagination.goToPage(1);
-  }, [searchTerm, sortOrder, products]);
+  }, [searchTerm, sortOrder, products, selectedCategories]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        categoryDropdownRef.current &&
+        !categoryDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsCategoryOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const toggleCategoryDropdown = () => setIsCategoryOpen(!isCategoryOpen);
+
+  const handleCategorySelection = (categoryUUid: number) => {
+    setSelectedCategories((prevSelected) =>
+      prevSelected.includes(categoryUUid)
+        ? prevSelected.filter((id) => id !== categoryUUid)
+        : [...prevSelected, categoryUUid]
+    );
+  };
   return (
     <div className="fMallProduct">
       <div className="fMallProduct__header">
-        <div className="fMallProduct__header-search">
-          <div className="fMallProduct__icon">
-            <FaSearch />
+        <div className="fMallProduct__header-inputs">
+          <div className="fMallProduct__header-search">
+            <div className="fMallProduct__icon">
+              <FaSearch />
+            </div>
+
+            <input
+              type="text"
+              placeholder="搜尋"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
 
-          <input
-            type="text"
-            placeholder="搜尋"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+          <div
+            ref={categoryDropdownRef}
+            className={`fMallProduct__header-category fMallProduct__header-category--orange ${
+              isCategoryOpen ? 'fMallProduct__header-category--open' : ''
+            }`}
+          >
+            <div
+              onClick={toggleCategoryDropdown}
+              className="fMallProduct__header-category__trigger"
+            >
+              請選擇商品
+            </div>
+            {isCategoryOpen && (
+              <div className="fMallProduct__header-category__content">
+                {categories.map((item) => (
+                  <label
+                    key={item.categoryUUid}
+                    htmlFor={`category-${item.categoryUUid}`}
+                    className={`fMallProduct__header-category__item ${
+                      selectedCategories.includes(item.categoryUUid)
+                        ? 'checked'
+                        : ''
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedCategories.includes(item.categoryUUid)}
+                      onChange={() =>
+                        handleCategorySelection(item.categoryUUid)
+                      }
+                      id={`category-${item.categoryUUid}`}
+                    />
+                    {item.categoryName}
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
+
         <div className="fMallProduct__header-title">
           <div className="fMallProduct__icon">
             <CircleIcon icon={BsHandbag} />
           </div>
-          <p className="fMallProduct__text">電玩賞</p>
+          <p className="fMallProduct__text">商城</p>
         </div>
 
         <div className="fMallProduct__header-nav">
@@ -147,7 +244,7 @@ const Product = () => {
         {filteredProducts.length > 0 && (
           <>
             {pagination.currentPageItems.map((product) => (
-              <div key={product.productCode} className="fMallProduct__item">
+              <div key={product.productId} className="fMallProduct__item">
                 <div className="fMallProduct__item-main">
                   <ProductCard
                     product={product}
@@ -175,4 +272,4 @@ const Product = () => {
   );
 };
 
-export default Product;
+export default MallProduct;

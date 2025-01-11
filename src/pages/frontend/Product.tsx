@@ -5,17 +5,12 @@ import Pagination from '@/components/frontend/Pagination';
 import ProductCard from '@/components/frontend/ProductCard';
 import { useLoading } from '@/context/frontend/LoadingContext';
 import { usePagination } from '@/hooks/usePagination';
+import { PrizeCategory } from '@/interfaces/product';
 import { getAllCategories } from '@/services/frontend/productCategoryService';
-import {
-  IProduct,
-  getAllProductList,
-} from '@/services/frontend/productService';
-import { getImageUrl } from '@/utils/ImageUtils';
-import { genRandom } from '@/utils/RandomUtils';
-import React, { useEffect, useState } from 'react';
+import { getAllProductList } from '@/services/frontend/productService';
+import React, { useEffect, useRef, useState } from 'react';
 import { BsHandbag } from 'react-icons/bs';
 import { FaSearch, FaSortAmountUpAlt, FaSortAmountUp } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
 
 const Product = () => {
   const [sortOrder, setSortOrder] = useState('newest');
@@ -25,6 +20,7 @@ const Product = () => {
   const [categories, setCategories] = useState<any[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const categoryDropdownRef = useRef<HTMLDivElement>(null);
   const { setLoading } = useLoading();
 
   const pagination = usePagination({
@@ -53,7 +49,13 @@ const Product = () => {
     try {
       const { success, message, data } = await getAllProductList();
       if (success) {
-        setProducts(data);
+        const filteredProducts = data.filter(
+          (item) =>
+            item.status === 'AVAILABLE' &&
+            item.prizeCategory === PrizeCategory.FIGURE
+        );
+
+        setProducts(filteredProducts);
       } else {
         console.log(message);
       }
@@ -108,7 +110,25 @@ const Product = () => {
     pagination.goToPage(1);
   }, [searchTerm, sortOrder, products, selectedCategories]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        categoryDropdownRef.current &&
+        !categoryDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsCategoryOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   const toggleCategoryDropdown = () => setIsCategoryOpen(!isCategoryOpen);
+
   const handleCategorySelection = (categoryUUid: number) => {
     setSelectedCategories((prevSelected) =>
       prevSelected.includes(categoryUUid)
@@ -134,6 +154,7 @@ const Product = () => {
           </div>
 
           <div
+            ref={categoryDropdownRef}
             className={`fproduct__header-category ${
               isCategoryOpen ? 'fproduct__header-category--open' : ''
             }`}

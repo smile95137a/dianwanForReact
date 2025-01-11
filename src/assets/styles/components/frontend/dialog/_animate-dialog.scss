@@ -25,11 +25,11 @@ $root-block-name: '.animateDialog';
     }
     &-animate {
       position: absolute;
-      width: 2000px;
-      height: 484px;
-      top: -50%;
-      left: 100px;
+      bottom: 0;
+      left: 0;
       z-index: 11;
+      width: 652px;
+      max-width: max-content;
     }
   }
   &__icon {

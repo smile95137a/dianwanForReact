@@ -4,6 +4,12 @@ $root-block-name: '.fproduct';
   $p: &;
   $p__text: #{$p}__text;
   $p__icon: #{$p}__icon;
+
+  $p__header-category: #{$p}__header-category;
+  $p__header-category__trigger: #{$p}__header-category__trigger;
+  $p__header-category__content: #{$p}__header-category__content;
+  $p__header-category__item: #{$p}__header-category__item;
+
   @include flex(center, null, column);
   padding: 0 0 64px 0;
   max-width: 1280px;
@@ -66,6 +72,24 @@ $root-block-name: '.fproduct';
 
     &-category {
       position: relative;
+      &--red {
+        #{$p__header-category} {
+        }
+
+        #{$p__header-category__trigger} {
+        }
+        #{$p__header-category__content} {
+        }
+        #{$p__header-category__item} {
+          border: 2px solid #eb4335;
+          color: #eb4335;
+          &.checked,
+          &:hover {
+            background-color: #eb4335;
+            border-color: #eb4335;
+          }
+        }
+      }
       &__trigger {
         cursor: pointer;
         min-width: 149px;

@@ -4,6 +4,12 @@ $root-block-name: '.fMallProduct';
   $p: &;
   $p__text: #{$p}__text;
   $p__icon: #{$p}__icon;
+
+  $p__header-category: #{$p}__header-category;
+  $p__header-category__trigger: #{$p}__header-category__trigger;
+  $p__header-category__content: #{$p}__header-category__content;
+  $p__header-category__item: #{$p}__header-category__item;
+
   @include flex(center, null, column);
   padding: 0 0 64px 0;
   max-width: 1280px;
@@ -27,6 +33,10 @@ $root-block-name: '.fMallProduct';
     @include screen(lg) {
       flex-direction: column;
       gap: 24px;
+    }
+    &-inputs {
+      display: flex;
+      gap: 8px;
     }
     &-search {
       width: 228px;
@@ -57,6 +67,97 @@ $root-block-name: '.fMallProduct';
       @include screen(lg) {
         width: 100%;
         order: 2;
+      }
+    }
+
+    &-category {
+      position: relative;
+      &--red {
+        #{$p__header-category} {
+        }
+
+        #{$p__header-category__trigger} {
+        }
+        #{$p__header-category__content} {
+        }
+        #{$p__header-category__item} {
+          border: 2px solid #eb4335;
+          color: #eb4335;
+          &.checked,
+          &:hover {
+            background-color: #eb4335;
+            border-color: #eb4335;
+          }
+        }
+      }
+      &--orange {
+        #{$p__header-category} {
+        }
+
+        #{$p__header-category__trigger} {
+        }
+        #{$p__header-category__content} {
+        }
+        #{$p__header-category__item} {
+          border: 2px solid #ff7f35;
+          color: #ff7f35;
+          &.checked,
+          &:hover {
+            background-color: #ff7f35;
+            border-color: #ff7f35;
+          }
+        }
+      }
+      &__trigger {
+        cursor: pointer;
+        min-width: 149px;
+        height: 40px;
+        border: 2px solid #2a88cb;
+        color: #2a88cb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50px;
+      }
+
+      &__content {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        z-index: 9999;
+        background-color: #ebffff;
+        box-shadow: 0px 12px 25px 0px #00000040;
+        padding: 8px 0;
+        width: 80vw;
+        min-height: 240px;
+        transform: translateX(calc(-50% + 149px));
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 24px;
+      }
+
+      &__item {
+        padding: 0 24px;
+        min-width: 148px;
+        height: 40px;
+
+        border-radius: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #2a88cb;
+        color: #2a88cb;
+        &.checked,
+        &:hover {
+          background-color: #2a88cb;
+          border-color: #2a88cb;
+          color: #fff;
+          cursor: pointer;
+        }
+        input {
+          display: none;
+        }
       }
     }
 
@@ -129,10 +230,9 @@ $root-block-name: '.fMallProduct';
     grid-template-columns: 1fr 1fr 1fr;
     gap: 48px;
     width: 100%;
-    @include screen(xs) {
+    @include screen(lg) {
       grid-template-columns: 1fr;
-      padding: 8px;
-      gap: 16px;
+      gap: 12px;
     }
   }
 
@@ -141,12 +241,25 @@ $root-block-name: '.fMallProduct';
   &__item {
     display: flex;
     gap: 12px;
+    position: relative;
+    @include screen(lg) {
+      flex-direction: column;
+    }
     &-main {
       flex: 1;
       height: 100%;
+      @include screen(lg) {
+        max-width: 192px;
+        max-height: 125px;
+        position: absolute;
+        top: 0;
+        z-index: 1;
+        overflow: hidden;
+      }
     }
     &-detail {
-      width: 262px;
+      width: 100%;
+      max-width: 262px;
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -158,6 +271,12 @@ $root-block-name: '.fMallProduct';
       background: #2a88cb;
       display: flex;
       padding: 12px 0;
+      @include screen(lg) {
+        flex-direction: column;
+        height: 125px;
+        position: absolute;
+        top: 0;
+      }
     }
     &-infoDetail {
       width: 50%;
@@ -168,6 +287,13 @@ $root-block-name: '.fMallProduct';
       &:first-child {
         border-right: 1px solid #fff;
       }
+      @include screen(lg) {
+        width: 100%;
+        text-align: right;
+        &:first-child {
+          border: 0;
+        }
+      }
       #{$p__text} {
         font-size: 16px;
         font-weight: 700;
@@ -175,6 +301,9 @@ $root-block-name: '.fMallProduct';
       }
     }
     &-list {
+      @include screen(lg) {
+        margin-top: 125px;
+      }
     }
     &-listItem {
       display: flex;

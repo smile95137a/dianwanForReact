@@ -3,10 +3,15 @@ $root-block-name: '.privacy';
 #{$root-block-name} {
   $p: &;
   $p__text: #{$p}__text;
-  padding: 48px;
-  @include flex;
-  flex-direction: column;
-  gap: 24px;
+  @include flex(null, null, column);
+  gap: 36px;
+  padding: 0 0 64px 0;
+  max-width: 1280px;
+  margin: 0 auto;
+
+  @include screen(lg) {
+    margin: 0 24px;
+  }
 
   #{$p__text} {
     color: #7c7c7c;
@@ -16,7 +21,7 @@ $root-block-name: '.privacy';
   &__item {
     &-title {
       #{$p__text} {
-        color: #eb9838;
+        color: #4385f4;
         font-weight: bold;
         font-size: 28px;
       }

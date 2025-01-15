@@ -15,6 +15,30 @@ import {
   uploadProductImg,
 } from '@/services/backend/ProductService';
 import { getImageUrl } from '@/utils/ImageUtils';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import CustomUploadAdapterPlugin from './CustomeUoload';
+const editorConfig = {
+  licenseKey: 'GPL',
+  toolbar: [
+    'heading',
+    '|',
+    'bold',
+    'italic',
+    'link',
+    'bulletedList',
+    'numberedList',
+    'blockQuote',
+    '|',
+    'uploadImage',
+    'undo',
+    'redo',
+  ],
+  image: {
+    toolbar: ['imageTextAlternative', 'imageStyle:full', 'imageStyle:side'],
+  },
+  extraPlugins: [CustomUploadAdapterPlugin],
+};
 
 interface AddProductDialogProps {
   isOpen: boolean;
@@ -80,7 +104,7 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
     { value: PrizeCategory.NONE, label: '無' },
   ];
 
-  const { control, reset, getValues } = useForm<any>({
+  const { control, reset, getValues, watch, setValue } = useForm<any>({
     defaultValues: {
       productName: '',
       description: '',
@@ -271,11 +295,21 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
             <FormInput name="productName" control={control} />
           </div>
 
-          <div className="flex">
+          <div className="flex flex-wrap">
             <div className="w-100">
               <p className="addMemberDialog__text">描述:</p>
             </div>
-            <FormInput name="description" control={control} />
+            <div className="w-100 editor-container">
+              <CKEditor
+                editor={ClassicEditor}
+                config={editorConfig}
+                data={watch('description')}
+                onChange={(_, editor) => {
+                  const data = editor.getData();
+                  setValue('description', data);
+                }}
+              />
+            </div>
           </div>
           <div className="flex">
             <div className="w-100">

@@ -13,6 +13,30 @@ import {
 import { useBackendDialog } from '@/context/backend/useBackendDialog';
 import { useLoading } from '@/context/frontend/LoadingContext';
 import { getImageUrl } from '@/utils/ImageUtils';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import CustomUploadAdapterPlugin from './CustomeUoload';
+const editorConfig = {
+  licenseKey: 'GPL',
+  toolbar: [
+    'heading',
+    '|',
+    'bold',
+    'italic',
+    'link',
+    'bulletedList',
+    'numberedList',
+    'blockQuote',
+    '|',
+    'uploadImage',
+    'undo',
+    'redo',
+  ],
+  image: {
+    toolbar: ['imageTextAlternative', 'imageStyle:full', 'imageStyle:side'],
+  },
+  extraPlugins: [CustomUploadAdapterPlugin],
+};
 
 interface AddStoreProductDialogProps {
   isOpen: boolean;
@@ -33,7 +57,7 @@ const AddStoreProductDialog: FC<AddStoreProductDialogProps> = ({
   const { setLoading } = useLoading();
   const [categories, setCategories] = useState([]);
   const [images, setImages] = useState<any[]>([]);
-  const { control, watch, reset, getValues } = useForm<any>({
+  const { control, reset, getValues, watch, setValue } = useForm<any>({
     defaultValues: {
       productName: '',
       description: '',
@@ -305,11 +329,21 @@ const AddStoreProductDialog: FC<AddStoreProductDialogProps> = ({
               step={0.1}
             />
           </div>
-          <div className="flex">
+          <div className="flex flex-wrap">
             <div className="w-100">
               <p className="addStoreProductDialog__text">規格:</p>
             </div>
-            <FormInput name="specification" control={control} />
+            <div className="w-100 editor-container">
+              <CKEditor
+                editor={ClassicEditor}
+                config={editorConfig}
+                data={watch('specification')}
+                onChange={(_, editor) => {
+                  const data = editor.getData();
+                  setValue('specification', data);
+                }}
+              />
+            </div>
           </div>
           <div className="flex">
             <div className="w-100">
@@ -323,11 +357,21 @@ const AddStoreProductDialog: FC<AddStoreProductDialogProps> = ({
               step={0.01}
             />
           </div>
-          <div className="flex">
+          <div className="flex flex-wrap">
             <div className="w-100">
               <p className="addStoreProductDialog__text">商品詳情:</p>
             </div>
-            <FormInput name="details" control={control} as="textarea" />
+            <div className="w-100 editor-container">
+              <CKEditor
+                editor={ClassicEditor}
+                config={editorConfig}
+                data={watch('details')}
+                onChange={(_, editor) => {
+                  const data = editor.getData();
+                  setValue('details', data);
+                }}
+              />
+            </div>
           </div>
           <div className="flex">
             <div className="w-100">

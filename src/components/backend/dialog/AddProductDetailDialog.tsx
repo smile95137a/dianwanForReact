@@ -119,16 +119,11 @@ const AddProductDetailDialog: FC<AddProductDetailDialogProps> = ({
   }, [productDetail, reset]);
 
   const validateForm = async () => {
-    const { productName, description, quantity, sliverPrice, probability } =
-      getValues();
+    const { productName, quantity, sliverPrice, probability } = getValues();
 
     try {
       if (!productName.trim()) {
         throw new Error('商品名稱為必填項！');
-      }
-
-      if (!description.trim()) {
-        throw new Error('描述為必填項！');
       }
 
       if (
@@ -229,20 +224,6 @@ const AddProductDetailDialog: FC<AddProductDetailDialogProps> = ({
                 <p className="addProductDetailDialog__text">商品名稱:</p>
               </div>
               <FormInput name="productName" control={control} />
-            </div>
-
-            <div className="flex">
-              <div className="w-100">
-                <p className="addProductDetailDialog__text">描述:</p>
-              </div>
-              <FormInput name="description" control={control} />
-            </div>
-
-            <div className="flex">
-              <div className="w-100">
-                <p className="addProductDetailDialog__text">備註:</p>
-              </div>
-              <FormInput name="note" control={control} />
             </div>
 
             <div className="flex">

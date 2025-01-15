@@ -186,9 +186,12 @@ const AddNewsDialog: FC<AddNewsDialogProps> = ({
             </div>
             <FormInput name="preview" control={control} />
           </div>
-          <div className="flex">
+
+          <div className="flex flex-wrap">
             <div className="w-100">
               <p className="addMemberDialog__text">內容:</p>
+            </div>
+            <div className="w-100 editor-container">
               <CKEditor
                 editor={ClassicEditor}
                 config={editorConfig}
@@ -200,6 +203,7 @@ const AddNewsDialog: FC<AddNewsDialogProps> = ({
               />
             </div>
           </div>
+
           <div className="flex">
             <div className="w-100">
               <p className="addMemberDialog__text">上傳圖片:</p>

@@ -89,11 +89,12 @@ const ProductCard = ({ isMall = false, product, className = '' }: any) => {
         </div>
         <div className="productCard__infos-data">
           <p className="productCard__text productCard__text--title">
-            {product.description}
-          </p>
-          <p className="productCard__text productCard__text--subtitle">
             {product.productName}
           </p>
+          <p
+            className="productCard__text productCard__text--subtitle"
+            dangerouslySetInnerHTML={{ __html: product?.description }}
+          />
         </div>
       </div>
     </div>

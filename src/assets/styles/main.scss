@@ -403,3 +403,6 @@
 .error-text {
   color: #fe4206 !important;
 }
+.editor-container .ck-editor__editable_inline {
+  min-height: 200px;
+}

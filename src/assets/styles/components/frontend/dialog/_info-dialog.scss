@@ -100,5 +100,7 @@ $root-block-name: '.infoDialog';
     flex: 1;
     margin: 0 auto;
     padding: 48px 0;
+    overflow: auto;
+    max-height: 300px;
   }
 }

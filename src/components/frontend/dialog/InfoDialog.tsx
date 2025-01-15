@@ -31,7 +31,11 @@ const InfoDialog: FC<infoDialogProps> = ({
         <div className="infoDialog__title">
           <p className="infoDialog__text">{title}</p>
         </div>
-        <div className="infoDialog__main">{content}</div>
+
+        <div
+          className="infoDialog__main"
+          dangerouslySetInnerHTML={{ __html: content }}
+        />
         <div className="infoDialog__footer">
           <div className="infoDialog__footer-btns">
             <div

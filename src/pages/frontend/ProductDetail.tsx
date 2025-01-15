@@ -167,6 +167,9 @@ const ProductDetail = () => {
   const handleImageClick = (imageUrl: string) => {
     openImgDialog(imageUrl);
   };
+  const handleGameRulesClick = async () => {
+    await openInfoDialog('遊戲規則', product.description);
+  };
 
   return (
     <div className="productDetail">
@@ -199,7 +202,10 @@ const ProductDetail = () => {
             )}
         </div>
         <div className="productDetail__infoOther">
-          <div className="productDetail__infoOther-item">
+          <div
+            className="productDetail__infoOther-item"
+            onClick={handleGameRulesClick}
+          >
             <p className="productDetail__icon">
               <MdChecklistRtl />
             </p>

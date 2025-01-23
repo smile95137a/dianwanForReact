@@ -1,11 +1,7 @@
 import { FC } from 'react';
 import BDialog from './BDialog';
-import MButton from '../MButton';
-import { useForm } from 'react-hook-form';
 import { useBackendDialog } from '@/context/backend/useBackendDialog';
 import { useLoading } from '@/context/frontend/LoadingContext';
-import { FormInput } from '../FormInput';
-import { updateSliver } from '@/services/backend/UserService';
 import BTable from '../btable/BTable';
 import BTableRow from '../btable/BTableRow';
 import { getImageUrl } from '@/utils/ImageUtils';
@@ -28,17 +24,17 @@ const OrderDetailsDialog: FC<OrderDetailsDialogProps> = ({
 }) => {
   const { openInfoDialog, openConfirmDialog } = useBackendDialog();
   const { setLoading } = useLoading();
+  console.log(order);
 
   return (
     <BDialog
       isOpen={isOpen}
       onClose={() => onClose(false)}
       className={customClass}
-      mainClassName="max-w-640"
     >
       <div className="orderDetailsDialog">
-        <p className="orderDetailsDialog__text orderDetailsDialog__text--title">
-          訂單明細 - 訂單號:
+        <p className="orderDetailsDialog__text orderDetailsDialog__text--title m-y-12">
+          訂單明細 - 訂單號:{order.id}
         </p>
 
         <div className="orderDetailsDialog__main">
@@ -60,7 +56,6 @@ const OrderDetailsDialog: FC<OrderDetailsDialogProps> = ({
                   {
                     content: (
                       <>
-                        {' '}
                         {detail.storeProduct?.storeProductId ||
                           detail.productDetailRes?.productDetailId ||
                           'N/A'}
@@ -69,7 +64,7 @@ const OrderDetailsDialog: FC<OrderDetailsDialogProps> = ({
                     dataTitle: '產品 ID',
                   },
                   {
-                    content: <>{detail.pname}</>,
+                    content: <>{detail.productDetailRes.pname}</>,
                     dataTitle: '商品名稱',
                   },
                   {

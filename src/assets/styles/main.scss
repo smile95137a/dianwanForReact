@@ -49,6 +49,9 @@
 @import 'components/backend/dialog/product-store-category-management-dialog';
 @import 'components/backend/dialog/product-category-management-dialog';
 @import 'components/backend/dialog/product-detail-dialog';
+@import 'components/backend/dialog/order-details-dialog';
+@import 'components/backend/dialog/order-shipment-dialog';
+@import 'components/backend/dialog/create-shipping-order-dialog';
 @import 'components/backend/b-input';
 @import 'components/backend/b-select';
 
@@ -426,13 +429,4 @@
   width: 10px;
   height: 10px;
   background-color: #00ffff;
-}
-p,
-span {
-  transition: transform 0.3s ease, color 0.3s ease; /* 增加平滑過渡效果 */
-}
-
-p:hover,
-span:hover {
-  transform: translateY(-5px); /* 讓文字浮起 */
 }

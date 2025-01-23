@@ -136,37 +136,40 @@ const VendorManagement = () => {
     <div className="vendorManagement">
       <Card>
         <div className="p-24">
-          <p className="vendorManagement__text vendorManagement__text--title">
-            報表金額管理
-          </p>
+          <p className="vendorManagement__title">報表金額管理</p>
 
-          <div className="vendorManagement__main">
-            {/* 報表選擇 */}
-            <FormSelect
-              name="reportType"
-              control={control}
-              label="選擇報表"
-              options={Object.keys(reportNameMap).map((key) => ({
-                value: key,
-                label: reportNameMap[key],
-              }))}
-            />
+          <div className="flex">
+            <div className="w-100 p-12">
+              <FormSelect
+                name="reportType"
+                control={control}
+                label="選擇報表"
+                options={Object.keys(reportNameMap).map((key) => ({
+                  value: key,
+                  label: reportNameMap[key],
+                }))}
+              />
+            </div>
+          </div>
 
-            {/* 分組類型 */}
-            <FormSelect
-              name="groupType"
-              control={control}
-              label="分組類型"
-              options={[
-                { value: 'day', label: '日' },
-                { value: 'week', label: '週' },
-                { value: 'month', label: '月' },
-                { value: 'year', label: '年' },
-              ]}
-            />
+          <div className="flex">
+            <div className="w-100 p-12">
+              <FormSelect
+                name="groupType"
+                control={control}
+                label="分組類型"
+                options={[
+                  { value: 'day', label: '日' },
+                  { value: 'week', label: '週' },
+                  { value: 'month', label: '月' },
+                  { value: 'year', label: '年' },
+                ]}
+              />
+            </div>
+          </div>
 
-            {/* 日期選擇 */}
-            <div className="flex">
+          <div className="flex">
+            <div className="w-50 p-12">
               <FormInput
                 name="startDate"
                 control={control}
@@ -174,6 +177,8 @@ const VendorManagement = () => {
                 label="開始日期"
                 placeholder="選擇開始日期"
               />
+            </div>
+            <div className="w-50 p-12">
               <FormInput
                 name="endDate"
                 control={control}
@@ -182,11 +187,10 @@ const VendorManagement = () => {
                 placeholder="選擇結束日期"
               />
             </div>
-
-            <div className="vendorManagement__btns">
-              <MButton text="查詢報表" click={handleSubmit} />
-              <MButton text="匯出 Excel" click={exportToExcel} />
-            </div>
+          </div>
+          <div className="vendorManagement__btns">
+            <MButton text="查詢報表" click={handleSubmit} />
+            <MButton text="匯出 Excel" click={exportToExcel} />
           </div>
         </div>
       </Card>

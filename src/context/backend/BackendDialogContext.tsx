@@ -40,6 +40,7 @@ export interface DialogContextType {
   openAddProductDialog: (isEdit?: boolean, product?: any) => Promise<boolean>;
   openOrderDetailsDialog: (order: any) => Promise<boolean>;
   openOrderShipmentDialog: (order: any) => Promise<boolean>;
+  openCreateShippingOrderDialog: (order: any) => Promise<boolean>;
   openProductDetailDialog: (
     product: any,
     customClass?: string

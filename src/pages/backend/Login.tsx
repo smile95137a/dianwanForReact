@@ -1,18 +1,19 @@
 import { useForm } from 'react-hook-form';
 import { FaUser, FaEye } from 'react-icons/fa';
 import { FormInput } from '@/components/backend/FormInput';
-import MButton from '@/components/backend/MButton';
 import { login } from '@/services/backend/AuthService';
 import { useDispatch } from 'react-redux';
 import { setAuthData } from '@/store/slices/backend/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { saveState } from '@/utils/Localstorage';
 import { useLoading } from '@/context/frontend/LoadingContext';
+import { useBackendDialog } from '@/context/backend/useBackendDialog';
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { setLoading } = useLoading();
+  const { openInfoDialog } = useBackendDialog();
 
   const { control, handleSubmit, formState, getValues } = useForm({
     defaultValues: {
@@ -36,10 +37,14 @@ const Login = () => {
           navigate('/admin/main');
         } else {
           console.log(message);
+          openInfoDialog('系統提示', message);
         }
-      } catch (error) {
+      } catch (error: any) {
         setLoading(false);
-        console.log(error);
+        console.error('登入失敗:', error);
+        const errorMessage =
+          error?.response?.data?.message || '發生未知錯誤，請稍後再試！';
+        openInfoDialog('系統提示', errorMessage);
       }
     }
   };

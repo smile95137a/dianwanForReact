@@ -13,7 +13,7 @@ $root-block-name: '.bheader';
   &__logo {
     width: 100px;
     @include flex(center, center, row);
-    color: #ec6ab1;
+    color: #2a88cb;
 
     &-img {
       width: 100%;
@@ -34,7 +34,7 @@ $root-block-name: '.bheader';
     &-icon {
       @include w_h(36px, 36px);
       padding: 8px;
-      color: #ec6ab1;
+      color: #2a88cb;
     }
   }
   &__user {
@@ -45,7 +45,7 @@ $root-block-name: '.bheader';
       flex: 1;
       @include flex(end, null, column);
       font-size: 14px;
-      color: #ec6ab1;
+      color: #2a88cb;
       #{$p__text} {
       }
     }
@@ -53,8 +53,23 @@ $root-block-name: '.bheader';
       @include w_h(38px, 100%);
       @include flex(center, center, column);
       border-radius: 50%;
-      color: #ec6ab1;
+      color: #2a88cb;
       background: hsla(270, 30%, 95%, 0.4);
+      cursor: pointer;
+    }
+  }
+
+  &__logout {
+    &-btn {
+      min-width: 60px;
+      height: 24px;
+      background: #fff;
+      border: 1px solid #6b9fd2;
+      outline: none;
+      border-radius: 4px;
+      color: #6b9fd2;
+      font-weight: bold;
+      letter-spacing: 2px;
       cursor: pointer;
     }
   }

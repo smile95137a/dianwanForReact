@@ -82,7 +82,7 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
   }
 
   const productTypeOptions: Record<ProductType, string> = {
-    [ProductType.PRIZE]: '電玩賞',
+    [ProductType.PRIZE]: '一番賞',
     [ProductType.GACHA]: '扭蛋',
     [ProductType.BLIND_BOX]: '盲盒',
     [ProductType.CUSTMER_PRIZE]: '客製化抽獎',
@@ -98,9 +98,9 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
   const prizeCategoryOptions = [
     { value: '', label: '請選擇' },
     { value: PrizeCategory.FIGURE, label: '官方電玩賞' },
-    { value: PrizeCategory.C3, label: '家電電玩賞' },
+    { value: PrizeCategory.C3, label: '3C賞' },
     { value: PrizeCategory.BONUS, label: '紅利賞' },
-    { value: PrizeCategory.PRIZESELF, label: '自製賞' },
+    { value: PrizeCategory.PRIZESELF, label: '優惠賞' },
     { value: PrizeCategory.NONE, label: '無' },
   ];
 
@@ -158,9 +158,8 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
   }, []);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      const files = Array.from(event.target.files);
-      setImages((prev) => [...prev, ...files]);
+    if (event.target.files && event.target.files.length > 0) {
+      setImages([event.target.files[0]]);
     }
   };
 
@@ -171,9 +170,8 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
   const handleBannerFileChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    if (event.target.files) {
-      const files = Array.from(event.target.files);
-      setBannerImages((prev) => [...prev, ...files]);
+    if (event.target.files && event.target.files.length > 0) {
+      setBannerImages([event.target.files[0]]); // 僅上傳單一橫幅圖片
     }
   };
 
@@ -193,6 +191,7 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
       stockQuantity,
       status,
       categoryId,
+      specification,
     } = getValues();
 
     try {
@@ -205,26 +204,34 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
       if (!productType) {
         throw new Error('產品類型為必填項！');
       }
-      if (productType === ProductType.PRIZE && !prizeCategory) {
+      if (!prizeCategory) {
         throw new Error('電玩賞類別為必填項！');
       }
-      if (price === '' || isNaN(Number(price)) || Number(price) < 0) {
-        throw new Error('金幣價格必須為非負數字！');
+
+      if (!specification.trim()) {
+        throw new Error('規格為必填項！');
       }
-      if (
-        sliverPrice === '' ||
-        isNaN(Number(sliverPrice)) ||
-        Number(sliverPrice) < 0
-      ) {
-        throw new Error('銀幣價格必須為非負數字！');
+      if (prizeCategory === PrizeCategory.BONUS) {
+        if (
+          bonusPrice === '' ||
+          isNaN(Number(bonusPrice)) ||
+          Number(bonusPrice) < 0
+        ) {
+          throw new Error('紅利價格必須為非負數字！');
+        }
+      } else {
+        if (price === '' || isNaN(Number(price)) || Number(price) < 0) {
+          throw new Error('金幣價格必須為非負數字！');
+        }
+        if (
+          sliverPrice === '' ||
+          isNaN(Number(sliverPrice)) ||
+          Number(sliverPrice) < 0
+        ) {
+          throw new Error('銀幣價格必須為非負數字！');
+        }
       }
-      if (
-        bonusPrice === '' ||
-        isNaN(Number(bonusPrice)) ||
-        Number(bonusPrice) < 0
-      ) {
-        throw new Error('紅利價格必須為非負數字！');
-      }
+
       if (
         stockQuantity === '' ||
         isNaN(Number(stockQuantity)) ||
@@ -235,9 +242,10 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
       if (!status) {
         throw new Error('狀態為必填項！');
       }
-      if (!categoryId) {
+      if (watch('productType') !== ProductType.GACHA && !categoryId) {
         throw new Error('商品類別為必填項！');
       }
+
       return true;
     } catch (error) {
       if (error instanceof Error) {
@@ -246,6 +254,7 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
       return false;
     }
   };
+
   const handleSubmit = async () => {
     const values = getValues();
     if (await validateForm()) {
@@ -263,14 +272,18 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
         }
 
         const productId = isEdit ? product.productId : data.productId;
-        setLoading(true);
 
-        uploadProductImg(images, productId).catch((error) => {
+        try {
+          await uploadProductImg(images, productId);
+        } catch (error) {
           console.error('上傳產品圖片失敗:', error);
-        });
-        uploadProductBannerImg(bannerImages, productId).catch((error) => {
+        }
+
+        try {
+          await uploadProductBannerImg(bannerImages, productId);
+        } catch (error) {
           console.error('上傳產品橫幅圖片失敗:', error);
-        });
+        }
 
         setLoading(false);
         await openInfoDialog('系統提示', isEdit ? '更新成功！' : '新增成功！');
@@ -341,25 +354,32 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
               options={prizeCategoryOptions}
             />
           </div>
+          {watch('prizeCategory') !== PrizeCategory.BONUS && (
+            <>
+              <div className="flex">
+                <div className="w-100">
+                  <p className="addMemberDialog__text">金幣價格:</p>
+                </div>
+                <FormInput name="price" control={control} />
+              </div>
+              <div className="flex">
+                <div className="w-100">
+                  <p className="addMemberDialog__text">銀幣價格:</p>
+                </div>
+                <FormInput name="sliverPrice" control={control} />
+              </div>
+            </>
+          )}
 
-          <div className="flex">
-            <div className="w-100">
-              <p className="addMemberDialog__text">金幣價格:</p>
+          {watch('prizeCategory') === PrizeCategory.BONUS && (
+            <div className="flex">
+              <div className="w-100">
+                <p className="addMemberDialog__text">紅利價格:</p>
+              </div>
+              <FormInput name="bonusPrice" control={control} />
             </div>
-            <FormInput name="price" control={control} />
-          </div>
-          <div className="flex">
-            <div className="w-100">
-              <p className="addMemberDialog__text">銀幣價格:</p>
-            </div>
-            <FormInput name="sliverPrice" control={control} />
-          </div>
-          <div className="flex">
-            <div className="w-100">
-              <p className="addMemberDialog__text">紅利價格:</p>
-            </div>
-            <FormInput name="bonusPrice" control={control} />
-          </div>
+          )}
+
           <div className="flex">
             <div className="w-100">
               <p className="addMemberDialog__text">狀態:</p>
@@ -382,22 +402,24 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
             <FormInput name="specification" control={control} />
           </div>
 
-          <div className="flex">
-            <div className="w-100">
-              <p className="addMemberDialog__text">商品類別:</p>
+          {watch('productType') !== ProductType.GACHA && (
+            <div className="flex">
+              <div className="w-100">
+                <p className="addMemberDialog__text">商品類別:</p>
+              </div>
+              <FormSelect
+                name="categoryId"
+                control={control}
+                options={[
+                  { value: '', label: '請選擇' },
+                  ...categories.map((cat: any) => ({
+                    value: cat.categoryId,
+                    label: cat.categoryName,
+                  })),
+                ]}
+              />
             </div>
-            <FormSelect
-              name="categoryId"
-              control={control}
-              options={[
-                { value: '', label: '請選擇' },
-                ...categories.map((cat: any) => ({
-                  value: cat.categoryId,
-                  label: cat.categoryName,
-                })),
-              ]}
-            />
-          </div>
+          )}
 
           <div className="flex">
             <div className="w-100">
@@ -409,15 +431,21 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
               accept="image/*"
               onChange={handleBannerFileChange}
             />
-            <div className="image-preview">
+          </div>
+          <div className="flex">
+            <div className="w-100 image-preview">
               {bannerImages.map((image, index) => (
                 <div key={index} className="image-item">
                   {typeof image === 'string' ? (
-                    <img
-                      src={getImageUrl(image)}
-                      alt="商品圖片"
-                      className="preview-image"
-                    />
+                    <div className="flex">
+                      <img
+                        src={getImageUrl(image)}
+                        alt="商品圖片"
+                        className="preview-image"
+                        width={40}
+                        height={40}
+                      />
+                    </div>
                   ) : (
                     <p>{image.name}</p>
                   )}
@@ -431,7 +459,6 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
               ))}
             </div>
           </div>
-
           <div className="flex">
             <div className="w-100">
               <p className="addMemberDialog__text">商品圖片:</p>
@@ -442,15 +469,21 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
               accept="image/*"
               onChange={handleFileChange}
             />
-            <div className="image-preview">
+          </div>
+          <div className="flex">
+            <div className="w-100 image-preview">
               {images.map((image, index) => (
                 <div key={index} className="image-item">
                   {typeof image === 'string' ? (
-                    <img
-                      src={getImageUrl(image)}
-                      alt="商品圖片"
-                      className="preview-image"
-                    />
+                    <div className="flex">
+                      <img
+                        src={getImageUrl(image)}
+                        alt="商品圖片"
+                        className="preview-image"
+                        width={40}
+                        height={40}
+                      />
+                    </div>
                   ) : (
                     <p>{image.name}</p>
                   )}

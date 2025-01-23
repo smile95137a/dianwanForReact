@@ -20,10 +20,17 @@ $root-block-name: '.footer';
   &__content {
     display: flex;
     gap: 48px;
+    @include screen(md) {
+      flex-direction: column;
+    }
   }
   &__socials {
     display: flex;
     justify-content: end;
+    @include screen(md) {
+      justify-content: center;
+      margin-bottom: 32px;
+    }
   }
 
   &__logo {
@@ -68,13 +75,14 @@ $root-block-name: '.footer';
 
   &__nav {
     @include flex;
-    column-gap: 32px;
+    gap: 32px;
     font-size: 16px;
     font-weight: 500;
     justify-content: space-between;
 
     @include screen(md) {
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       font-size: 14px;
       font-weight: 400;
     }
@@ -109,12 +117,19 @@ $root-block-name: '.footer';
     &-text {
       color: #7c7c7c;
     }
+    @include screen(md) {
+      justify-content: center;
+      margin-bottom: 32px;
+    }
   }
 
   &__footer {
     text-align: center;
   }
   &__link {
+    @include screen(md) {
+      text-align: center;
+    }
     &:hover {
       color: #2a88cb;
       transition: all 0.3s ease;

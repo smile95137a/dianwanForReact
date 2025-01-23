@@ -90,7 +90,7 @@ export const uploadProductImg = async (
       if (item instanceof File) {
         formData.append('files', item);
       } else if (typeof item === 'string') {
-        formData.append('existingUrls', item); // Adjust key if needed
+        formData.append('existingUrls', item);
       }
     });
 
@@ -121,7 +121,7 @@ export const uploadProductBannerImg = async (
       if (item instanceof File) {
         formData.append('files', item);
       } else if (typeof item === 'string') {
-        formData.append('existingUrls', item); // Adjust key if needed
+        formData.append('existingUrls', item);
       }
     });
 
@@ -307,7 +307,7 @@ export const uploadProductDetailImg = async (
       if (item instanceof File) {
         formData.append('files', item);
       } else if (typeof item === 'string') {
-        formData.append('existingUrls', item); // Adjust key if needed
+        formData.append('existingUrls', item);
       }
     });
 

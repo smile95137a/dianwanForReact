@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { RootState } from '@/store';
 import { clearAuthData } from '@/store/slices/frontend/authSlice';
 import NumberFormatter from './NumberFormatter';
-
+import iconG from '@/assets/image/di-icon-g.png';
+import iconS from '@/assets/image/di-icon-s.png';
 interface DropdownItem {
   label: string;
   link: string;
@@ -116,7 +117,29 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
               }`}
             >
               {item.icon && (
-                <span className="dropdown-menu__item-icon">{item.icon}</span>
+                <>
+                  {item.icon === 'G' && (
+                    <img
+                      src={iconG}
+                      className="dropdown-menu__item-icon"
+                      alt="Gold Icon"
+                    />
+                  )}
+                  {item.icon === 'S' && (
+                    <img
+                      src={iconS}
+                      className="dropdown-menu__item-icon"
+                      alt="Silver Icon"
+                    />
+                  )}
+                  {item.icon === 'B' && (
+                    <img
+                      src={iconS}
+                      className="dropdown-menu__item-icon"
+                      alt="Silver Icon"
+                    />
+                  )}
+                </>
               )}
               {item.coins !== undefined && (
                 <span className="dropdown-menu__item-coins">

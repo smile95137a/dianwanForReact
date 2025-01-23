@@ -14,6 +14,7 @@ import BTable from '../btable/BTable';
 import BTableRow from '../btable/BTableRow';
 import NoData from '../NoData';
 import Pagination from '../Pagination';
+import NumberFormatter from '@/components/common/NumberFormatter';
 
 interface ProductDetailDialogProps {
   isOpen: boolean;
@@ -77,8 +78,6 @@ const ProductDetailDialog: FC<ProductDetailDialogProps> = ({
   };
   const fetchProductDetails = async () => {
     try {
-      console.log(product);
-
       setLoading(true);
       const { success, data } = await getAllProductDetails();
       setLoading(false);
@@ -108,6 +107,8 @@ const ProductDetailDialog: FC<ProductDetailDialogProps> = ({
     }
   };
 
+  const totalQuantity = list.reduce((sum, detail) => sum + detail.quantity, 0);
+
   return (
     <BDialog
       isOpen={isOpen}
@@ -118,6 +119,10 @@ const ProductDetailDialog: FC<ProductDetailDialogProps> = ({
       <div className="productDetailDialog">
         <p className="productDetailDialog__text productDetailDialog__text--title">
           產品詳情
+        </p>
+        <p className="productDetailDialog__text productDetailDialog__text--total">
+          總數量：
+          <NumberFormatter number={~~totalQuantity} />
         </p>
         <div className="productDetailDialog__btns m-b-12">
           <MButton text={'新增商品類別'} click={handelAddPDialog} />
@@ -141,7 +146,11 @@ const ProductDetailDialog: FC<ProductDetailDialogProps> = ({
                       dataTitle: '商品名稱',
                     },
                     {
-                      content: <>{x.quantity}</>,
+                      content: (
+                        <>
+                          <NumberFormatter number={~~x.quantity} />
+                        </>
+                      ),
                       dataTitle: '數量',
                     },
                     {

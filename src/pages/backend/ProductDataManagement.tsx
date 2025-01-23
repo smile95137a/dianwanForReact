@@ -33,7 +33,7 @@ const ProductDataManagement = () => {
 
   const productTypeOptions = [
     { value: '', label: '請選擇' },
-    { value: ProductType.PRIZE, label: '電玩賞' },
+    { value: ProductType.PRIZE, label: '一番賞' },
     { value: ProductType.GACHA, label: '扭蛋' },
     { value: ProductType.BLIND_BOX, label: '盲盒' },
     { value: ProductType.CUSTMER_PRIZE, label: '自製獎品' },
@@ -42,9 +42,9 @@ const ProductDataManagement = () => {
   const prizeCategoryOptions = [
     { value: '', label: '請選擇' },
     { value: PrizeCategory.FIGURE, label: '官方電玩賞' },
-    { value: PrizeCategory.C3, label: '家電電玩賞' },
+    { value: PrizeCategory.C3, label: '3C賞' },
     { value: PrizeCategory.BONUS, label: '紅利賞' },
-    { value: PrizeCategory.PRIZESELF, label: '自製賞' },
+    { value: PrizeCategory.PRIZESELF, label: '優惠賞' },
     { value: PrizeCategory.NONE, label: '無' },
   ];
 
@@ -207,11 +207,11 @@ const ProductDataManagement = () => {
       case PrizeCategory.FIGURE:
         return '電玩賞';
       case PrizeCategory.C3:
-        return '家電電玩賞';
+        return '3C賞';
       case PrizeCategory.BONUS:
-        return '紅利電玩賞';
+        return '紅利賞';
       case PrizeCategory.PRIZESELF:
-        return '自製賞';
+        return '優惠賞';
       case PrizeCategory.NONE:
       default:
         return '無';
@@ -227,6 +227,16 @@ const ProductDataManagement = () => {
     return productStatusOptions[status] || '未知狀態';
   };
 
+  const productTypeTranslations: Record<ProductType, string> = {
+    [ProductType.PRIZE]: '一番賞',
+    [ProductType.GACHA]: '扭蛋',
+    [ProductType.BLIND_BOX]: '盲盒',
+    [ProductType.CUSTMER_PRIZE]: '自製獎品',
+  };
+
+  const getProductTypeName = (productType: ProductType): string => {
+    return productTypeTranslations[productType] || '未知類型';
+  };
   return (
     <div className="productDataManagement">
       <p className="productDataManagement__title">產品系列管理</p>
@@ -318,7 +328,7 @@ const ProductDataManagement = () => {
                       dataTitle: '產品名稱',
                     },
                     {
-                      content: <>{x.productType}</>,
+                      content: <>{getProductTypeName(x.productType)}</>,
                       dataTitle: '類型',
                     },
                     {

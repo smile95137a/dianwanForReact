@@ -107,7 +107,7 @@ const AddNewsDialog: FC<AddNewsDialogProps> = ({
     const { title, preview, content, author } = getValues();
     try {
       if (!title.trim()) throw new Error('標題為必填項！');
-      if (!preview.trim()) throw new Error('摘要為必填項！');
+      if (!preview.trim()) throw new Error('預覽為必填項！');
       if (!content.trim()) throw new Error('內容為必填項！');
       return true;
     } catch (error) {
@@ -119,9 +119,9 @@ const AddNewsDialog: FC<AddNewsDialogProps> = ({
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if (files) {
-      const newFiles = Array.from(files);
-      setValue('imageFiles', [...imageFiles, ...newFiles]);
+    if (files && files.length > 0) {
+      const newFile = files[0];
+      setValue('imageFiles', [newFile]);
     }
   };
 
@@ -243,22 +243,30 @@ const AddNewsDialog: FC<AddNewsDialogProps> = ({
               accept="image/*"
               onChange={handleImageUpload}
             />
-            <div className="image-preview">
-              {imageFiles.map((file, index) => (
-                <div key={index} className="image-item">
-                  <img src={URL.createObjectURL(file)} alt="圖片預覽" />
-                  <button
-                    type="button"
-                    onClick={() => removeImage(index)}
-                    className="remove-image"
-                  >
-                    移除
-                  </button>
-                </div>
-              ))}
+          </div>
+          <div className="flex">
+            <div className="w-100">
+              <div className="image-preview">
+                {imageFiles.map((file, index) => (
+                  <div key={index} className="image-item">
+                    <img
+                      src={URL.createObjectURL(file)}
+                      alt="圖片預覽"
+                      width={40}
+                      height={40}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeImage(index)}
+                      className="remove-image"
+                    >
+                      移除
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-
           <div className="flex">
             <div className="w-100">
               <p className="addMemberDialog__text">狀態:</p>

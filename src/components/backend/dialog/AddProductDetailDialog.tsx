@@ -91,7 +91,7 @@ const AddProductDetailDialog: FC<AddProductDetailDialogProps> = ({
       grade: 'A',
       sliverPrice: '',
       specification: '',
-      size: 10,
+      size: '',
       probability: '',
       isPrize: false,
     },
@@ -119,7 +119,14 @@ const AddProductDetailDialog: FC<AddProductDetailDialogProps> = ({
   }, [productDetail, reset]);
 
   const validateForm = async () => {
-    const { productName, quantity, sliverPrice, probability } = getValues();
+    const {
+      productName,
+      quantity,
+      sliverPrice,
+      probability,
+      specification,
+      size,
+    } = getValues();
 
     try {
       if (!productName.trim()) {
@@ -135,11 +142,21 @@ const AddProductDetailDialog: FC<AddProductDetailDialogProps> = ({
       }
 
       if (
-        sliverPrice &&
-        (isNaN(Number(sliverPrice)) || Number(sliverPrice) < 0)
+        sliverPrice === undefined ||
+        isNaN(Number(sliverPrice)) ||
+        Number(sliverPrice) <= 0
       ) {
-        throw new Error('銀幣價格必須為非負數字！');
+        throw new Error('銀幣價格必須為正數！');
       }
+
+      if (!specification.trim()) {
+        throw new Error('規格為必填項！');
+      }
+
+      if (!size) {
+        throw new Error('尺寸為必填項！');
+      }
+
       if (
         probability === undefined ||
         probability === '' ||
@@ -185,9 +202,13 @@ const AddProductDetailDialog: FC<AddProductDetailDialogProps> = ({
           ? productDetail.productDetailId
           : data.productDetailId;
         setLoading(true);
-        uploadProductDetailImg(images, productDetailId).catch((error) => {
+
+        try {
+          await uploadProductDetailImg(images, productDetailId);
+        } catch (error) {
           console.error('上傳產品圖片失敗:', error);
-        });
+        }
+
         setLoading(false);
         await openInfoDialog('系統提示', isEdit ? '更新成功！' : '新增成功！');
         onClose(true);
@@ -200,9 +221,8 @@ const AddProductDetailDialog: FC<AddProductDetailDialogProps> = ({
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      const files = Array.from(event.target.files);
-      setImages((prev) => [...prev, ...files]);
+    if (event.target.files && event.target.files.length > 0) {
+      setImages([event.target.files[0]]);
     }
   };
 

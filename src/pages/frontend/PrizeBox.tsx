@@ -250,12 +250,19 @@ const Cart = () => {
     loadCartItems();
   }, []);
 
-  const handleCheckboxChange = (itemId) => {
-    setSelectedItems((prevSelected) =>
-      prevSelected.includes(itemId)
-        ? prevSelected.filter((id) => id !== itemId)
-        : [...prevSelected, itemId]
-    );
+  const handleCheckboxChange = (item: any) => {
+    setSelectedItems((prevSelected) => {
+      const isSelected = prevSelected.some(
+        (selectedItem) => selectedItem.prizeCartItemId === item.prizeCartItemId
+      );
+
+      return isSelected
+        ? prevSelected.filter(
+            (selectedItem) =>
+              selectedItem.prizeCartItemId !== item.prizeCartItemId
+          )
+        : [...prevSelected, item];
+    });
   };
 
   const totalProductSize = useMemo(() => {
@@ -264,16 +271,6 @@ const Cart = () => {
         selectedItems.map((x) => x.prizeCartItemId).includes(item.id)
       )
       .reduce((sum, item) => sum + item.size, 0);
-  }, [cartItems, selectedItems]);
-
-  const totalProductPrice = useMemo(() => {
-    return cartItems
-      .filter((item) =>
-        selectedItems
-          .map((x) => x.prizeCartItemId)
-          .includes(item.prizeCartItemId)
-      )
-      .reduce((sum, item) => sum + item.totalPrice, 0);
   }, [cartItems, selectedItems]);
 
   const fetchShippingMethod = async () => {
@@ -294,34 +291,6 @@ const Cart = () => {
     );
     return selectedMethod ? selectedMethod.shippingPrice : 0;
   }, [shippingMethods, watchShippingMethod]);
-
-  const handleSelectStore = async () => {
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = 'https://logistics-stage.ecpay.com.tw/Express/map'; // 綠界物流地圖測試環境 URL
-
-    const params = {
-      MerchantID: '3002607',
-      MerchantTradeNo: `TRADE${Date.now()}`,
-      LogisticsType: 'CVS',
-      LogisticsSubType: 'UNIMART',
-      IsCollection: 'N',
-      ServerReplyURL: 'http://13.208.176.189:8081/api/logistics/callback',
-      ExtraData: genRandom(16),
-      Device: '0',
-    };
-
-    Object.entries(params).forEach(([key, value]) => {
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = key;
-      input.value = value.toString();
-      form.appendChild(input);
-    });
-
-    document.body.appendChild(form);
-    form.submit();
-  };
 
   const { uuid } = useParams();
 
@@ -351,10 +320,16 @@ const Cart = () => {
       );
     }
   };
+  const isAllSelected = useMemo(() => {
+    return cartItems.length > 0 && selectedItems.length === cartItems.length;
+  }, [cartItems, selectedItems]);
 
   const selectAllItems = () => {
-    const allItemIds = cartItems.map((item) => item.prizeCartItemId);
-    setSelectedItems(allItemIds);
+    if (isAllSelected) {
+      setSelectedItems([]);
+    } else {
+      setSelectedItems(cartItems);
+    }
   };
 
   const recycleItems = async () => {
@@ -365,11 +340,8 @@ const Cart = () => {
       }
 
       setLoading(true);
-      for (const itemId of selectedItems) {
-        const item = cartItems.find((item) => item.prizeCartItemId === itemId);
-        if (item) {
-          await removePrizeCartItem(item.prizeCartItemId);
-        }
+      for (const item of selectedItems) {
+        await removePrizeCartItem(item.prizeCartItemId);
       }
       setLoading(false);
       await openInfoDialog('系統消息', '已成功回收選中商品');
@@ -392,7 +364,7 @@ const Cart = () => {
 
         <div className="flex gap-x-24 m-b-12">
           <div className="prizeBox__btn--selectAll" onClick={selectAllItems}>
-            全選
+            {isAllSelected ? '取消全選' : '全選'}
           </div>
           <div className="prizeBox__btn--selectAll" onClick={recycleItems}>
             回收

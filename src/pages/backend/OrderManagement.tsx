@@ -5,12 +5,8 @@ import NoData from '@/components/backend/NoData';
 import Pagination from '@/components/backend/Pagination';
 import Card from '@/components/frontend/MCard';
 import { usePagination } from '@/hooks/usePagination';
-import {
-  getAllRedemptionCodes,
-  generateRedemptionCode,
-} from '@/services/backend/RedemptionService';
+
 import DateFormatter from '@/components/common/DateFormatter';
-import { getAllProductsByType } from '@/services/backend/ProductService';
 import { useLoading } from '@/context/frontend/LoadingContext';
 import {
   getAllOrder,
@@ -19,6 +15,7 @@ import {
 import NumberFormatter from '@/components/common/NumberFormatter';
 import MButton from '@/components/backend/MButton';
 import { useBackendDialog } from '@/context/backend/useBackendDialog';
+import { getShippingMethodName } from '@/enums/ShippingMethod';
 
 const OrderManagement = () => {
   const [orderList, setOrderList] = useState<any[]>([]);
@@ -34,8 +31,11 @@ const OrderManagement = () => {
   });
 
   const { setLoading } = useLoading();
-  const { openOrderDetailsDialog, openOrderShipmentDialog } =
-    useBackendDialog();
+  const {
+    openOrderDetailsDialog,
+    openOrderShipmentDialog,
+    openCreateShippingOrderDialog,
+  } = useBackendDialog();
 
   useEffect(() => {
     fetchOrderList();
@@ -48,9 +48,13 @@ const OrderManagement = () => {
   const fetchOrderList = async () => {
     try {
       setLoading(true);
-      const res = await getAllOrder();
+      const { success, data, message } = await getAllOrder();
       setLoading(false);
-      setOrderList(res);
+      if (success) {
+        setOrderList(data);
+      } else {
+        console.log(message);
+      }
     } catch (error) {
       setLoading(false);
       console.error('獲取商品列表失敗：', error);
@@ -59,7 +63,6 @@ const OrderManagement = () => {
 
   const applyFilters = () => {
     let updatedList = orderList;
-    console.log(updatedList);
 
     if (filter !== 'ALL') {
       updatedList = orderList.filter((order) => order.resultStatus === filter);
@@ -113,6 +116,9 @@ const OrderManagement = () => {
 
   const handleOrderShipmentDialog = (order: any) => {
     openOrderShipmentDialog(order);
+  };
+  const handleCreateShippingOrder = (order: any) => {
+    openCreateShippingOrderDialog(order);
   };
 
   return (
@@ -214,7 +220,9 @@ const OrderManagement = () => {
                       dataTitle: '總金額',
                     },
                     {
-                      content: <>{order.shippingMethod}</>,
+                      content: (
+                        <>{getShippingMethodName(order.shippingMethod)}</>
+                      ),
                       dataTitle: '運送方式',
                     },
                     {
@@ -243,7 +251,7 @@ const OrderManagement = () => {
                     },
                     {
                       content: (
-                        <>
+                        <div className="flex gap-12 flex-column">
                           <MButton
                             text={'查看訂單明細'}
                             click={() => handleOrderDetails(order)}
@@ -252,8 +260,11 @@ const OrderManagement = () => {
                             text={'出貨單'}
                             click={() => handleOrderShipmentDialog(order)}
                           />
-                          <MButton text={'建立物流訂單'} />
-                        </>
+                          <MButton
+                            text={'建立物流訂單'}
+                            click={() => handleCreateShippingOrder(order)}
+                          />
+                        </div>
                       ),
                       dataTitle: '操作',
                     },

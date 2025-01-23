@@ -125,7 +125,7 @@ const ProductRecommendation = () => {
                       dataTitle: '類別名稱',
                     },
                     {
-                      content: <DateFormatter date={recommand.createdAt} />,
+                      content: <DateFormatter date={recommand.createdDate} />,
                       dataTitle: '創造時間',
                     },
                     {

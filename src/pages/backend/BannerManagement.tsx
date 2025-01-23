@@ -117,7 +117,6 @@ const BannerManagement = () => {
                 { text: '圖片', className: '' },
                 { text: '狀態', className: '' },
                 { text: '發布日期', className: '' },
-                { text: '產品 ID', className: '' },
                 { text: '操作', className: '' },
               ]}
             >
@@ -146,13 +145,10 @@ const BannerManagement = () => {
                       dataTitle: '預覽',
                     },
                     {
-                      content: <>{getProductTypeLabel(banner.productType)}</>,
+                      content: <>{<DateFormatter date={banner.createdAt} />}</>,
                       dataTitle: '發布日期',
                     },
-                    {
-                      content: <>{banner.productId}</>,
-                      dataTitle: '狀態',
-                    },
+
                     {
                       content: (
                         <button

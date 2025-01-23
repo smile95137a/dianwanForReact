@@ -26,6 +26,8 @@ import { toggleSidebar } from '@/store/slices/frontend/uiSlice';
 import DropdownMenu from '../common/DropdownMenu';
 import { getUserInfo } from '@/services/frontend/userService';
 import NumberFormatter from '../common/NumberFormatter';
+import iconG from '@/assets/image/di-icon-g.png';
+import iconS from '@/assets/image/di-icon-s.png';
 
 const navItems = [
   {
@@ -274,15 +276,21 @@ const Header = () => {
               <>
                 <div className="fheader__nav-item-divider"></div>
                 <div className="fheader__nav-item fheader__nav-item--gold">
-                  <div className="fheader__nav-item-icon">G</div>
+                  <div className="fheader__nav-item-icon">
+                    <img src={iconG} alt="Gold Icon" />
+                  </div>
                   <NumberFormatter number={userBalance} />
                 </div>
                 <div className="fheader__nav-item fheader__nav-item--sliver">
-                  <div className="fheader__nav-item-icon">S</div>
+                  <div className="fheader__nav-item-icon">
+                    <img src={iconS} alt="Silver Icon" />
+                  </div>
                   <NumberFormatter number={userSliver} />
                 </div>
                 <div className="fheader__nav-item fheader__nav-item--bonus">
-                  <div className="fheader__nav-item-icon">利</div>
+                  <div className="fheader__nav-item-icon">
+                    <img src={iconS} alt="Silver Icon" />
+                  </div>
                   <NumberFormatter number={userBonus} />
                 </div>
                 <Link
@@ -333,7 +341,7 @@ const Header = () => {
                   },
                   {
                     label: 'Bonus Points',
-                    icon: '利',
+                    icon: 'B',
                     link: '#',
                     coins: userBonus,
                     className: 'bonus',

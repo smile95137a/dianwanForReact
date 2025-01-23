@@ -39,6 +39,8 @@ import { useProductStoreCategoryManagementDialog } from './ProductStoreCategoryM
 import ProductStoreCategoryManagementDialog from '@/components/backend/dialog/ProductStoreCategoryManagementDialog';
 import { useAddProductStoreCategoryDialog } from './AddProductStoreCategoryDialogProvider';
 import AddProductStoreCategoryDialog from '@/components/backend/dialog/AddProductStoreCategoryDialog';
+import { useCreateShippingOrderDialog } from './CreateShippingOrderDialogProvider';
+import CreateShippingOrderDialog from '@/components/backend/dialog/CreateShippingOrderDialog';
 
 interface DialogProviderProps {
   children: ReactNode;
@@ -211,6 +213,15 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
     closeAddProductStoreCategoryDialog,
     confirmAddProductStoreCategoryDialog,
   } = useAddProductStoreCategoryDialog();
+
+  const {
+    order: orderByCreateShippingOrderDialog,
+    createShippingOrderDialogOpen,
+    openCreateShippingOrderDialog,
+    closeCreateShippingOrderDialog,
+    confirmCreateShippingOrderDialog,
+  } = useCreateShippingOrderDialog();
+
   return (
     <BackendDialogContext.Provider
       value={{
@@ -233,6 +244,7 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
         openAddProductDetailDialog,
         openProductStoreCategoryManagementDialog,
         openAddProductStoreCategoryDialog,
+        openCreateShippingOrderDialog,
       }}
     >
       {children}
@@ -393,6 +405,15 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
               onClose={closeAddShipmentDialog}
               onConfirm={confirmAddShipmentDialog}
               customClass={addShipmentDialogCustomClass}
+            />
+          )}
+
+          {createShippingOrderDialogOpen && (
+            <CreateShippingOrderDialog
+              order={orderByCreateShippingOrderDialog}
+              isOpen={createShippingOrderDialogOpen}
+              onClose={closeCreateShippingOrderDialog}
+              onConfirm={confirmCreateShippingOrderDialog}
             />
           )}
 

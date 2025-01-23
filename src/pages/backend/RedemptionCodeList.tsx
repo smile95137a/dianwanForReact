@@ -5,10 +5,7 @@ import NoData from '@/components/backend/NoData';
 import Pagination from '@/components/backend/Pagination';
 import Card from '@/components/frontend/MCard';
 import { usePagination } from '@/hooks/usePagination';
-import {
-  getAllRedemptionCodes,
-  generateRedemptionCode,
-} from '@/services/backend/RedemptionService';
+import { getAllRedemptionCodes } from '@/services/backend/RedemptionService';
 import DateFormatter from '@/components/common/DateFormatter';
 import { getAllProductsByType } from '@/services/backend/ProductService';
 import { useBackendDialog } from '@/context/backend/useBackendDialog';
@@ -79,7 +76,10 @@ const RedemptionCodeList = () => {
   };
 
   const handleGenerateCode = async () => {
-    openAddRedemptionCodeDialog();
+    const result = await openAddRedemptionCodeDialog();
+    if (result) {
+      fetchCodes();
+    }
   };
   const applyFilters = () => {
     let codes = [...codeList];

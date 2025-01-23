@@ -109,7 +109,7 @@ const ProductCategoryManagementDialog: FC<
         <p className="productCategoryManagementDialog__text productCategoryManagementDialog__text--title">
           商品類別管理
         </p>
-        <div className="productCategoryManagementDialog__btns m-b-12">
+        <div className="productCategoryManagementDialog__btns m-y-12">
           <MButton text={'新增商品類別'} click={handelAddPCDialog} />
         </div>
         <div className="productCategoryManagementDialog__main">

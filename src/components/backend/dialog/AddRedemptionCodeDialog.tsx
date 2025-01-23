@@ -96,6 +96,7 @@ const AddRedemptionCodeDialog: FC<AddRedemptionCodeDialogProps> = ({
         setLoading(false);
         if (success) {
           await openInfoDialog('系統提示', '兌換碼生成成功！');
+          onConfirm();
         } else {
           const errorMessage = message || '生成兌換碼失敗，請稍後再試！';
           await openInfoDialog('系統提示', errorMessage);

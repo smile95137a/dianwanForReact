@@ -119,6 +119,7 @@ const AddStoreProductDialog: FC<AddStoreProductDialogProps> = ({
     if (event.target.files) {
       const files = Array.from(event.target.files);
       setImages((prev) => [...prev, ...files]);
+      event.target.value = '';
     }
   };
 
@@ -235,9 +236,13 @@ const AddStoreProductDialog: FC<AddStoreProductDialogProps> = ({
           ? storeProduct.storeProductId
           : data.storeProductId;
         setLoading(true);
-        uploadStoreProductImg(images, storeProductId).catch((error) => {
+
+        try {
+          await uploadStoreProductImg(images, storeProductId);
+        } catch (error) {
           console.error('上傳產品圖片失敗:', error);
-        });
+        }
+
         setLoading(false);
         await openInfoDialog('系統提示', isEdit ? '更新成功！' : '新增成功！');
         onConfirm();
@@ -409,23 +414,30 @@ const AddStoreProductDialog: FC<AddStoreProductDialogProps> = ({
               accept="image/*"
               onChange={handleFileChange}
             />
-            <div className="image-preview">
-              {images.map((image, index) => (
-                <div key={index} className="image-item">
-                  {typeof image === 'string' ? (
-                    <img
-                      src={getImageUrl(image)}
-                      alt="商品圖片"
-                      className="preview-image"
-                    />
-                  ) : (
-                    <p>{image.name}</p>
-                  )}
-                  <button type="button" onClick={() => removeImage(index)}>
-                    移除
-                  </button>
-                </div>
-              ))}
+          </div>
+
+          <div className="flex">
+            <div className="w-100">
+              <div className="image-preview">
+                {images.map((image, index) => (
+                  <div key={index} className="image-item">
+                    {typeof image === 'string' ? (
+                      <img
+                        src={getImageUrl(image)}
+                        alt="商品圖片"
+                        className="preview-image"
+                        width={40}
+                        height={40}
+                      />
+                    ) : (
+                      <p>{image.name}</p>
+                    )}
+                    <button type="button" onClick={() => removeImage(index)}>
+                      移除
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

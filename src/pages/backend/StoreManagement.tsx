@@ -158,8 +158,9 @@ const StoreManagement = () => {
     applyFilters();
   }, [selectedCategory, products]);
 
-  const openProductStoreCategoryManagement = () => {
-    openProductStoreCategoryManagementDialog();
+  const openProductStoreCategoryManagement = async () => {
+    await openProductStoreCategoryManagementDialog();
+    fetchCategories();
   };
 
   return (

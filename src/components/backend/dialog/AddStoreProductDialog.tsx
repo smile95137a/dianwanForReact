@@ -235,7 +235,9 @@ const AddStoreProductDialog: FC<AddStoreProductDialogProps> = ({
           ? storeProduct.storeProductId
           : data.storeProductId;
         setLoading(true);
-        await uploadStoreProductImg(images, storeProductId);
+        uploadStoreProductImg(images, storeProductId).catch((error) => {
+          console.error('上傳產品圖片失敗:', error);
+        });
         setLoading(false);
         await openInfoDialog('系統提示', isEdit ? '更新成功！' : '新增成功！');
         onConfirm();

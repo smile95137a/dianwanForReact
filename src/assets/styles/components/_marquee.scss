@@ -3,6 +3,7 @@ $root-block-name: '.marquee';
 #{$root-block-name} {
   $p: &;
   $p__text: #{$p}__text;
+
   @include w_h(100%, 68px);
   @include flex(center);
   overflow: hidden;
@@ -12,6 +13,7 @@ $root-block-name: '.marquee';
   border: 1px solid #7c7c7c;
   max-width: 1280px;
   margin: 36px auto;
+
   &__msg {
     position: relative;
     white-space: nowrap;
@@ -19,17 +21,20 @@ $root-block-name: '.marquee';
     height: 100%;
     @include flex(center);
     overflow: hidden;
-    #{$p__text} {
-      font-size: 18px;
-      font-weight: 400;
+    padding: 0 12px;
+
+    &-main {
       position: absolute;
-      left: 100vw;
-      width: max-content;
-      animation-name: marquee;
-      animation-timing-function: linear;
-      animation-iteration-count: infinite;
+      transition: transform 0.5s ease, opacity 0.5s ease;
+      opacity: 1;
+
+      &.animate {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
     }
   }
+
   &__logo {
     width: 106px;
     height: 100%;
@@ -37,24 +42,7 @@ $root-block-name: '.marquee';
     align-items: center;
     justify-content: center;
     background: linear-gradient(180deg, #d9d9d9 0%, #515151 100%);
-
     color: #fff;
     font-size: 32px;
-  }
-
-  &--sticky {
-    position: fixed;
-    top: 0;
-    z-index: 1000;
-    width: 100%;
-  }
-}
-
-@keyframes marquee {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(calc(-100% - 100vw), 0, 0);
   }
 }

@@ -101,6 +101,11 @@ $root-block-name: '.fheader';
       font-size: 20px;
       gap: 12px;
 
+      &:hover {
+        color: #2a88cb;
+        transition: all 0.3s ease;
+      }
+
       &--member,
       &--box,
       &--gold,
@@ -201,5 +206,39 @@ $root-block-name: '.fheader';
     height: 36px;
     border-radius: 50px;
     border: 1px solid;
+  }
+  &__marquee {
+    @include w_h(100%, 61px);
+    @include flex(center);
+    overflow: hidden;
+    white-space: nowrap;
+    background: #85ffff;
+    position: relative;
+
+    #{$p__text} {
+      font-size: 18px;
+      font-weight: 400;
+      position: absolute;
+      left: 100vw;
+      width: max-content;
+      animation-name: marquee1;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    &--sticky {
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+      width: 100%;
+    }
+  }
+}
+@keyframes marquee1 {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(calc(-100% - 100vw), 0, 0);
   }
 }

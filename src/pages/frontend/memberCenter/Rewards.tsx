@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MemberCenterCoins from '@/components/frontend/memberCenter/MemberCenterCoins';
 import NumberFormatter from '@/components/common/NumberFormatter';
-import c1 from '@/assets/image/coin-1.png'; // Path to your image
 import { useLoading } from '@/context/frontend/LoadingContext';
 import { getTotalConsumeAmount } from '@/services/frontend/paymentService';
 
@@ -65,7 +64,7 @@ const Rewards: React.FC = () => {
         {rewards.map((reward, index) => (
           <div className="memberCenter__rewardsCoins-item" key={index}>
             <div className="memberCenter__rewardsCoins-icon">
-              <img src={c1} alt="Reward Icon" />
+              {/* <img src={c1} alt="Reward Icon" /> */}
             </div>
 
             <div className="memberCenter__rewardsCoins-title">

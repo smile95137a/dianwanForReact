@@ -7,30 +7,17 @@ $root-block-name: '.deposit';
   &__item {
     @include flex(center, center, column);
     width: 100%;
-    padding: 24px 0;
+    padding: 64px 0;
     border-radius: 30px;
-    background-color: #fff8f0;
+    background-color: #c0ffff;
     &-radio {
       display: none;
-      + label::before {
-        font-family: 'Font Awesome 6 Free';
-        content: '\f0c8';
-        font-size: 30px;
-        color: #fe4206;
-      }
-      &:checked + label::before {
-        content: '\f14a';
-        color: #fe4206;
-        font-weight: 900;
-      }
     }
 
     &.active {
-      border: 2px solid #eb9838;
-      background: #fdf4eb;
-      .deposit__item-icon {
-        color: #eb9838;
-      }
+      border: 2px solid #2a88cb;
+      background: #2a88cb;
+      color: #85ffff;
     }
     &-img {
       img {
@@ -55,19 +42,7 @@ $root-block-name: '.deposit';
       font-size: 60px;
       font-weight: 400;
       position: relative;
-      background: linear-gradient(272.26deg, #e5d36a -1.05%, #cf8046 98.1%);
-      -webkit-background-clip: text;
-      color: transparent;
-
-      &::after {
-        content: attr(data-text);
-        left: 0;
-        position: absolute;
-        text-shadow: -2px 0 1px #000, 0 2px 1px #000, 2px 0 1px #000,
-          0 -2px 1px #000;
-        top: 0;
-        z-index: -1; /* this slides the shadow behind its parent (the actual text) */
-      }
+      color: #2a88cb;
     }
   }
   &__btns {
@@ -80,14 +55,14 @@ $root-block-name: '.deposit';
     width: 170px;
     height: 53px;
     border-radius: 50px;
-    border: 2px solid #000000;
     cursor: pointer;
     @include flex(center, center);
 
     font-size: 25px;
     font-weight: 400;
     transition: opacity 0.3s ease, transform 0.3s ease;
-    background: #fed706;
+    background: #4285f4;
+    color: #fff;
     @include screen(md) {
       width: 157px;
       height: 34px;

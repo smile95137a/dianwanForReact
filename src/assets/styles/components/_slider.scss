@@ -1,6 +1,7 @@
 $root-block-name: '.slider';
 
 #{$root-block-name} {
+  position: relative;
   $p: &;
   $p__text: #{$p}__text;
   $p__item: #{$p}__item;
@@ -11,13 +12,13 @@ $root-block-name: '.slider';
   overflow: hidden;
   &__item {
     position: relative;
+    height: 100%;
     &-img {
       max-height: 400px;
       display: block;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      // object-position: top;
     }
 
     &::after {
@@ -45,6 +46,11 @@ $root-block-name: '.slider';
       right: 0;
     }
   }
+}
+
+.mySwiper {
+  height: 100%;
+  padding-bottom: 24px;
 }
 
 .swiper-slide {

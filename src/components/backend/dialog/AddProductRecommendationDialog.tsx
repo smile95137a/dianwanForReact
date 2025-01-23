@@ -4,11 +4,6 @@ import MButton from '../MButton';
 import { useForm } from 'react-hook-form';
 import { useBackendDialog } from '@/context/backend/useBackendDialog';
 import { useLoading } from '@/context/frontend/LoadingContext';
-import { FormInput } from '../FormInput';
-import {
-  createShippingMethod,
-  updateShippingMethod,
-} from '@/services/backend/ShipService';
 import { getAllProducts } from '@/services/backend/ProductService';
 import {
   createRecommendationMapping,

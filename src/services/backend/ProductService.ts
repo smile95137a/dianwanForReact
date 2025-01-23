@@ -433,6 +433,20 @@ export const deleteCategory = async (
   }
 };
 
+export const deleteProductDetail = async (
+  id: string
+): Promise<ApiResponse<void>> => {
+  try {
+    const response = await api.delete<ApiResponse<void>>(
+      `${productDetailPath}/delete/${id}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error(`Error deleting category by ID: ${id}`, error);
+    throw error;
+  }
+};
+
 // Utility function for generating image URLs
 export const getImageUrl = (imagePath: string): string => {
   return `${process.env.VITE_BASE_API_URL3}/img${imagePath}`;

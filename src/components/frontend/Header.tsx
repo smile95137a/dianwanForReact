@@ -117,6 +117,121 @@ const Header = () => {
     }
   }, [isLogin]);
 
+  useEffect(() => {
+    processMarqueeData();
+
+    marqueeInterval.current = setInterval(() => {
+      processMarqueeData();
+    }, 20000);
+
+    return () => {
+      if (marqueeInterval.current) {
+        clearInterval(marqueeInterval.current);
+      }
+    };
+  }, []);
+
+  const calculateAnimationDuration = () => {
+    const textList = marqueeMessageData.map((x: any) =>
+      x.list.map(({ grade, name }: any) => `${grade}賞 ${name}`).join(' 和 ')
+    );
+    const concatenatedText = textList.join('');
+    const textLength = concatenatedText.length;
+
+    const targetSpeed = 100;
+    const containerWidth = window.innerWidth;
+
+    const totalDistance = Math.max(containerWidth, textLength * 10);
+    const duration = totalDistance / targetSpeed;
+
+    return `${duration}s`;
+  };
+
+  const getColor = (index: number) => {
+    const colors = ['#5889ff', '#ff7b58'];
+    return colors[index % colors.length];
+  };
+
+  const getMarqueeMsg = (list: any[]) => {
+    return list.map(({ grade, name }) => `${grade}賞 ${name}`).join(' 和 ');
+  };
+  //
+  const [isSticky, setIsSticky] = useState(false);
+  const [marqueeMessageData, setMarqueeMessageData] = useState<any[]>([]);
+  const marqueeInterval = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const threshold = 100;
+      setIsSticky(window.scrollY >= threshold);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const processMarqueeData = async () => {
+    try {
+      const { success, data } = await getAllMarquees();
+      if (success) {
+        if (Object.keys(data).length > 0) {
+          const currentTime = moment();
+          const result = Object.keys(data).map((key) =>
+            data[key].map((marquee: any) => {
+              const createDate = moment(marquee.createDate);
+              const updatedDate = createDate.add(60, 'seconds');
+              const shouldDisplay = updatedDate.isAfter(currentTime);
+              return {
+                ...marquee,
+                shouldDisplay,
+              };
+            })
+          );
+
+          const transformedData = result.map((group) => {
+            const title = group[0]?.username;
+            return {
+              title,
+              list: group,
+            };
+          });
+
+          const filteredGroup = transformedData.filter(
+            (x) => x.list.length > 0 && x.list[0].shouldDisplay
+          );
+
+          const lastData =
+            filteredGroup.length === 0
+              ? [transformedData[transformedData.length - 1]]
+              : filteredGroup;
+
+          setMarqueeMessageData(lastData);
+        } else {
+          console.error('Unable to fetch marquee data or request failed');
+        }
+      }
+    } catch (error) {
+      console.error('Failed to fetch marquee data:', error);
+    }
+  };
+
+  useEffect(() => {
+    processMarqueeData();
+
+    marqueeInterval.current = setInterval(() => {
+      processMarqueeData();
+    }, 20000);
+
+    return () => {
+      if (marqueeInterval.current) {
+        clearInterval(marqueeInterval.current);
+      }
+    };
+  }, []);
+
   return (
     <div className="fheader">
       <div className="fheader__main">
@@ -244,7 +359,33 @@ const Header = () => {
             </>
           )}
         </div>
-      </div>
+      </div>{' '}
+      {marqueeMessageData.length > 0 && (
+        <div
+          className={`fheader__marquee ${
+            isSticky ? 'fheader__marquee--sticky' : ''
+          }`}
+        >
+          <p
+            className="fheader__text"
+            style={{ animationDuration: calculateAnimationDuration() }}
+          >
+            {marqueeMessageData.map((item, index) => (
+              <span key={index}>
+                🎉恭喜🎉
+                <span style={{ color: getColor(0), fontWeight: 'bold' }}>
+                  {item.title}
+                </span>
+                中獎 中獎的獎項為
+                <span style={{ color: getColor(1), fontWeight: 'bold' }}>
+                  {getMarqueeMsg(item.list)}
+                </span>
+                請大家一起恭喜他 ~
+              </span>
+            ))}
+          </p>
+        </div>
+      )}
     </div>
   );
 };

@@ -6,7 +6,8 @@ $root-block-name: '.infoDialog';
 
   @include w_h(100%, 100%);
   @include flex(null, null, column);
-
+  overflow: auto;
+  max-height: 80vh;
   &__header {
     display: flex;
     justify-content: center;
@@ -100,7 +101,5 @@ $root-block-name: '.infoDialog';
     flex: 1;
     margin: 0 auto;
     padding: 48px 0;
-    overflow: auto;
-    max-height: 300px;
   }
 }

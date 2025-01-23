@@ -7,8 +7,15 @@ import TitleBar from '../../components/frontend/TitleBar';
 import { BsHandbag } from 'react-icons/bs';
 import { getImageUrl } from '@/utils/ImageUtils';
 import ticketImg from '@/assets/image/kujiblank.png';
-import moment from 'moment';
-import { FaCheck, FaChevronDown, FaThumbtack, FaTimes } from 'react-icons/fa';
+import iconG from '@/assets/image/di-icon-g.png';
+import iconS from '@/assets/image/di-icon-s.png';
+import {
+  FaCheck,
+  FaChevronDown,
+  FaRegCheckCircle,
+  FaThumbtack,
+  FaTimes,
+} from 'react-icons/fa';
 import { MdChecklistRtl, MdOutlineOfflineBolt } from 'react-icons/md';
 import { useFrontendDialog } from '@/context/frontend/useFrontedDialog';
 import { useSelector } from 'react-redux';
@@ -30,6 +37,9 @@ const ProductDetail = () => {
   const [activeTickets, setActiveTickets] = useState([]);
   const [showOption, setShowOption] = useState(false);
   const [endTimes, setEndTimes] = useState(null);
+  const [isCustmerPrize, setIsCustmerPrize] = useState(false);
+  const [showBouns, setShowBouns] = useState(false);
+  const [inputCode, setInputCode] = useState('');
   const {
     openInfoDialog,
     openDrawDialog,
@@ -57,6 +67,11 @@ const ProductDetail = () => {
         setLoading(false);
         if (productRes.success) {
           setProduct(productRes.data);
+          const isCustomer = productRes.data.productType === 'CUSTMER_PRIZE';
+          const isBonus = productRes.data.prizeCategory === 'BONUS';
+
+          setIsCustmerPrize(isCustomer);
+          setShowBouns(isBonus);
         }
 
         if (productDetailRes.success) {
@@ -82,14 +97,23 @@ const ProductDetail = () => {
 
   const handleCheckboxChange = (ticket: any) => {
     setShowOption(true);
-    setActiveTickets((prev: any) => {
-      const isActive = prev.some(
-        (t: any) => t.prizeNumberId === ticket.prizeNumberId
+
+    const isActive = activeTickets.some(
+      (x) => x.prizeNumberId === ticket.prizeNumberId
+    );
+    if (isActive) {
+      setActiveTickets((prev) =>
+        prev.filter((x) => x.prizeNumberId !== ticket.prizeNumberId)
       );
-      return isActive
-        ? prev.filter((t: any) => t.prizeNumberId !== ticket.prizeNumberId)
-        : [...prev, ticket];
-    });
+    } else if (isCustmerPrize) {
+      if (activeTickets.length >= 1) {
+        alert('最多一個。');
+      } else {
+        setActiveTickets((prev) => [...prev, ticket]);
+      }
+    } else {
+      setActiveTickets((prev) => [...prev, ticket]);
+    }
   };
 
   const getTicketImg = (ticket: any) => {
@@ -114,7 +138,7 @@ const ProductDetail = () => {
     setShowOption(false);
   };
 
-  const handleConfirm = (typeNum: any) => async () => {
+  const handleExchange = (typeNum: any) => async () => {
     if (!isLogin) {
       await openInfoDialog('系統消息', '請先登入');
       return;
@@ -125,7 +149,20 @@ const ProductDetail = () => {
       return;
     }
 
-    const data = await openTicketConfirmDialog(typeNum, product, activeTickets);
+    if (isCustmerPrize) {
+      if (!inputCode.trim()) {
+        await openInfoDialog('系統通知', '請輸入代碼');
+        return;
+      }
+    }
+
+    const data = await openTicketConfirmDialog(
+      isCustmerPrize,
+      inputCode,
+      typeNum,
+      product,
+      activeTickets
+    );
     try {
       if (data) {
         const qu = remainingQuantity - activeTickets.length;
@@ -136,7 +173,6 @@ const ProductDetail = () => {
           drawItemList: data,
         });
         await fetchDrawStatus();
-
         await openDrawDialog({ remainingQuantity: qu, data });
       }
     } catch (error: any) {
@@ -152,7 +188,7 @@ const ProductDetail = () => {
       if (success) {
         setTicketList(data.prizeNumberList);
         if (product?.productType === 'PRIZE') {
-          const endTime = data.data.endTimes || null;
+          const endTime = data.endTimes || null;
           if (endTime) setEndTimes(endTime);
         }
       } else {
@@ -169,6 +205,17 @@ const ProductDetail = () => {
   };
   const handleGameRulesClick = async () => {
     await openInfoDialog('遊戲規則', product.description);
+  };
+
+  const handleAboutClick = async () => {
+    await openInfoDialog(
+      '遊戲規則',
+      `<p>快來加入我們，感受「電玩賞」帶來的全新抽獎體驗！</p>
+        <p>《電玩賞》專為喜愛數位娛樂的您打造，讓您在家中就能輕鬆參與抽獎，感受心跳加速的刺激時刻！我們的獎品涵蓋熱門手游帳號、稀有遊戲資源，以及廣受歡迎的3C電子產品，總有一項會成為您心中的夢幻之選。</p>
+        <p>只需輕鬆線上儲值，就能解鎖超值優惠，享受更高的中獎機率和專屬折扣。無需前往實體店鋪，讓我們直接將您的專屬驚喜送到您家門口！</p>
+        <p>不管是尋找夢幻稀有帳號，還是追求極致科技好物，「電玩賞」都能滿足您的願望！更有多重活動與限定特典，讓您在參與的同時享受更多驚喜！</p>
+        <p>趕快加入「電玩賞」的行列，測試您的運氣，成為下一位大獎得主！</p>`
+    );
   };
 
   return (
@@ -211,7 +258,10 @@ const ProductDetail = () => {
             </p>
             <p className="productDetail__text">遊戲規則</p>
           </div>
-          <div className="productDetail__infoOther-item">
+          <div
+            className="productDetail__infoOther-item"
+            onClick={handleAboutClick}
+          >
             <p className="productDetail__icon">
               <FaThumbtack />
             </p>
@@ -219,6 +269,21 @@ const ProductDetail = () => {
           </div>
         </div>
       </div>
+      {isCustmerPrize && (
+        <div className="productDetail__inputCode">
+          <label htmlFor="inputCode" className="productDetail__label">
+            請輸入代碼：
+          </label>
+          <input
+            id="inputCode"
+            type="text"
+            value={inputCode}
+            onChange={(e) => setInputCode(e.target.value)}
+            className="productDetail__input"
+            placeholder="輸入您的代碼"
+          />
+        </div>
+      )}
       <TitleBar icon={BsHandbag} titleText="獎項" showMore={false} />
       <div className="productDetail__awards">
         <div className="productDetail__awards-list">
@@ -265,7 +330,6 @@ const ProductDetail = () => {
         </div>
       </div>
       <TitleBar icon={BsHandbag} titleText="籤桶" showMore={false} />
-
       <div className="productDetail__remainingQuantity">
         <div className="productDetail__text">
           剩餘數量：{~~remainingQuantity} / 總數量：{ticketList?.length || 0}
@@ -299,10 +363,12 @@ const ProductDetail = () => {
               onChange={() => handleCheckboxChange(ticket)}
               disabled={ticket.isDrawn}
             />
-            <img
-              src={getTicketImg(ticket)}
-              className="productDetail__ticket-img"
-            />
+            <div className="productDetail__ticket-img">
+              <div className="productDetail__ticket-img-active">
+                <FaRegCheckCircle />
+              </div>
+              <img src={getTicketImg(ticket)} />
+            </div>
             <p className="productDetail__text">{ticket.number}</p>
           </label>
         ))}
@@ -315,29 +381,36 @@ const ProductDetail = () => {
           </div>
         </div>
       )}
-
       <div className="productDetail__action">
-        {product?.prizeCategory !== PrizeCategory.BONUS ? (
+        {isCustmerPrize ? (
+          <div
+            className="productDetail__action-btn productDetail__action-btn--confirm"
+            onClick={handleExchange(4)}
+          >
+            <FaCheck />
+            代碼兌換
+          </div>
+        ) : product?.prizeCategory !== PrizeCategory.BONUS ? (
           <>
             <div
               className="productDetail__action-btn productDetail__action-btn--confirm"
-              onClick={handleConfirm(1)}
+              onClick={handleExchange(1)}
             >
-              <FaCheck />
-              金幣確認
+              <img src={iconG} alt="Gold Icon" />
+              代幣確認
             </div>
             <div
               className="productDetail__action-btn productDetail__action-btn--confirm"
-              onClick={handleConfirm(2)}
+              onClick={handleExchange(2)}
             >
-              <FaCheck />
-              銀幣確認
+              <img src={iconS} alt="Gold Icon" />
+              點數確認
             </div>
           </>
         ) : (
           <div
             className="productDetail__action-btn productDetail__action-btn--confirm"
-            onClick={handleConfirm(3)}
+            onClick={handleExchange(3)}
           >
             <FaCheck />
             紅利確認

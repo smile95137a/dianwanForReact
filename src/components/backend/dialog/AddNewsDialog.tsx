@@ -15,6 +15,7 @@ import { NewsStatus } from '@/services/backend/NewsService';
 import { FormInput } from '../FormInput';
 import { FormSelect } from '../FormSelect';
 import CustomUploadAdapterPlugin from './CustomeUoload';
+
 interface AddNewsDialogProps {
   isOpen: boolean;
   onClose: (result: boolean) => void;
@@ -61,6 +62,9 @@ const AddNewsDialog: FC<AddNewsDialogProps> = ({
       author: '',
       imageFiles: [] as File[],
       imageUrls: [] as string[],
+      startDate: null, // 新增
+      endDate: null, // 新增
+      isDisplayOnHome: null, // 新增
     },
   });
 
@@ -78,6 +82,9 @@ const AddNewsDialog: FC<AddNewsDialogProps> = ({
       author: '',
       imageFiles: [],
       imageUrls: [],
+      startDate: null,
+      endDate: null,
+      isDisplayOnHome: null,
     };
 
     if (isEdit && news) {
@@ -88,6 +95,9 @@ const AddNewsDialog: FC<AddNewsDialogProps> = ({
       defaultValues.author = news.author || '';
       defaultValues.imageFiles = news.imageFiles || [];
       defaultValues.imageUrls = news.imageUrls || [];
+      defaultValues.startDate = news.startDate || null;
+      defaultValues.endDate = news.endDate || null;
+      defaultValues.isDisplayOnHome = news.isDisplayOnHome || null;
     }
 
     reset(defaultValues);
@@ -124,13 +134,32 @@ const AddNewsDialog: FC<AddNewsDialogProps> = ({
 
   const handleSubmit = async () => {
     if (await validateForm()) {
-      const { title, preview, content, status, author, imageUrls } =
-        getValues();
+      const {
+        title,
+        preview,
+        content,
+        status,
+        author,
+        imageUrls,
+        startDate,
+        endDate,
+        isDisplayOnHome,
+      } = getValues();
       const formData = new FormData();
 
       formData.append(
         'newsReq',
-        JSON.stringify({ title, preview, content, status, author, imageUrls })
+        JSON.stringify({
+          title,
+          preview,
+          content,
+          status,
+          author,
+          imageUrls,
+          startDate,
+          endDate,
+          isDisplayOnHome,
+        })
       );
 
       imageFiles.forEach((file) => {
@@ -240,6 +269,40 @@ const AddNewsDialog: FC<AddNewsDialogProps> = ({
               options={[
                 { value: NewsStatus.AVAILABLE, label: '可用' },
                 { value: NewsStatus.UNAVAILABLE, label: '不可用' },
+              ]}
+            />
+          </div>
+
+          <div className="flex">
+            <div className="w-100">
+              <p className="addMemberDialog__text">起始日期:</p>
+            </div>
+
+            <FormInput
+              name="startDate"
+              type="datetime-local"
+              control={control}
+            />
+          </div>
+
+          <div className="flex">
+            <div className="w-100">
+              <p className="addMemberDialog__text">結束日期:</p>
+            </div>
+
+            <FormInput name="endDate" type="datetime-local" control={control} />
+          </div>
+
+          <div className="flex">
+            <div className="w-100">
+              <p className="addMemberDialog__text">是否顯示於首頁:</p>
+            </div>
+            <FormSelect
+              name="isDisplayOnHome"
+              control={control}
+              options={[
+                { value: true, label: '是' },
+                { value: false, label: '否' },
               ]}
             />
           </div>

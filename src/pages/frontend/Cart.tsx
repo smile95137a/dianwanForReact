@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import logoImg from '@/assets/image/logo.png';
+import React, { useEffect, useMemo, useState } from 'react';
 import NumberFormatter from '@/components/common/NumberFormatter';
 import { FaMinus, FaPlus, FaTrash } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useLoading } from '@/context/frontend/LoadingContext';
 import { getCart } from '@/services/frontend/cartService';
 import { getImageUrl } from '@/utils/ImageUtils';
@@ -17,6 +16,14 @@ import CheckoutInfoForm from '@/components/frontend/CheckoutInfoForm';
 import { RootState } from '@/store';
 import { useSelector } from 'react-redux';
 import { useFrontendDialog } from '@/context/frontend/useFrontedDialog';
+import { genRandom } from '@/utils/RandomUtils';
+import { payCartItem } from '@/services/frontend/orderService';
+import { getUserInfo } from '@/services/frontend/userService';
+import {
+  createAndSubmitForm,
+  generateBaseFormData,
+  generateCheckMacValue,
+} from '@/utils/EcpayUtils';
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState<any[]>([]);
@@ -58,20 +65,184 @@ const Cart = () => {
       vehicle: '',
       donationCode: '',
       sameAsBilling: false,
+      shopId: '',
+      shopName: '',
+      shopAddress: '',
     },
   });
   const invoice = methods.watch('invoice');
   const watchShippingMethod = methods.watch('shippingMethod');
 
-  const handleCheckout = () => {
-    console.log(methods.getValues());
+  const validateForm = () => {
+    try {
+      const values = methods.getValues();
+
+      // 驗證購買人資訊
+      if (!values.billingName.trim()) {
+        throw new Error('請填寫購買人姓名');
+      }
+      if (!values.billingEmail.trim()) {
+        throw new Error('請填寫購買人電子郵件');
+      }
+      if (!/^\S+@\S+\.\S+$/.test(values.billingEmail)) {
+        throw new Error('購買人電子郵件格式不正確');
+      }
+      if (!values.billingPhone.trim()) {
+        throw new Error('請填寫購買人聯絡電話');
+      }
+      if (!/^\d{10}$/.test(values.billingPhone)) {
+        throw new Error('購買人電話格式不正確，請輸入 10 位數字');
+      }
+
+      if (!values.billingCity.trim()) {
+        throw new Error('請選擇購買人城市');
+      }
+      if (!values.billingArea.trim()) {
+        throw new Error('請選擇購買人地區');
+      }
+      if (!values.billingAddress.trim()) {
+        throw new Error('請填寫購買人地址');
+      }
+      // 驗證運送資訊
+      if (!values.shippingName.trim()) {
+        throw new Error('請填寫收件人姓名');
+      }
+      if (!values.shippingEmail.trim()) {
+        throw new Error('請填寫收件人電子郵件');
+      }
+      if (!/^\S+@\S+\.\S+$/.test(values.shippingEmail)) {
+        throw new Error('收件人電子郵件格式不正確');
+      }
+      if (!values.shippingPhone.trim()) {
+        throw new Error('請填寫收件人聯絡電話');
+      }
+      if (!/^\d{10}$/.test(values.shippingPhone)) {
+        throw new Error('收件人電話格式不正確，請輸入 10 位數字');
+      }
+
+      if (!values.shippingCity.trim()) {
+        throw new Error('請選擇收件人城市');
+      }
+      if (!values.shippingArea.trim()) {
+        throw new Error('請選擇收件人地區');
+      }
+      if (!values.shippingAddress.trim()) {
+        throw new Error('請填寫收件人地址');
+      }
+
+      // 驗證發票資訊
+      if (values.invoice === 'donation' && !values.donationCode.trim()) {
+        throw new Error('請填寫愛心碼');
+      }
+      if (values.invoice === 'mobileCarrier' && !values.vehicle.trim()) {
+        throw new Error('請填寫手機載具號碼');
+      }
+
+      // 驗證付款方式
+      if (!values.paymentMethod) {
+        throw new Error('請選擇付款方式');
+      }
+
+      // 驗證寄送方式
+      if (!values.shippingMethod) {
+        throw new Error('請選擇寄送方式');
+      }
+      if (
+        ['sevenEleven', 'family'].includes(values.shippingMethod) &&
+        !values.shopId
+      ) {
+        throw new Error('請選擇門市');
+      }
+
+      return true; // 通過驗證
+    } catch (error) {
+      if (error instanceof Error) {
+        openInfoDialog('系統提示', error.message);
+      } else {
+        openInfoDialog('系統提示', '未知錯誤，請稍後再試！');
+      }
+      return false;
+    }
   };
+
+  const handleCheckout = async () => {
+    // 驗證表單
+    if (!validateForm()) {
+      return;
+    }
+    const values = methods.getValues();
+    if (
+      ['sevenEleven', 'family'].includes(values.shippingMethod) &&
+      !values.shopId
+    ) {
+      await openInfoDialog('系統通知', `請選擇門市！`);
+      return;
+    }
+
+    const payCart = {
+      ...values,
+      cartItemIds: selectedItems.map((x) => x.cartItemId),
+    };
+
+    try {
+      setLoading(true);
+      const { success, data } = await payCartItem(payCart);
+      const { data: userInfo } = await getUserInfo();
+      setLoading(false);
+
+      if (success) {
+        if (values.paymentMethod === '1') {
+          const formData = generateBaseFormData(
+            totalProductPrice + getShippingPrice
+          );
+          formData.MerchantTradeNo = data.orderNumber;
+          formData.ChoosePayment = 'Credit';
+          formData.ReturnURL =
+            'http://13.208.176.189:8081/payment/paymentCallback2';
+          formData.TradeDesc = `商城 - 信用卡結帳 ${data.orderNumber}`;
+          formData.ItemName = selectedItems.map((x) => x.productName).join('#');
+          const cmv = generateCheckMacValue(formData);
+
+          createAndSubmitForm(
+            'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5',
+            { ...formData, CheckMacValue: cmv }
+          );
+        } else if (values.paymentMethod === '2') {
+          const formData = generateBaseFormData(
+            totalProductPrice + getShippingPrice
+          );
+          formData.MerchantTradeNo = data.orderNumber;
+          formData.ChoosePayment = 'ATM';
+          formData.ReturnURL =
+            'http://13.208.176.189:8081/payment/paymentCallback2';
+          formData.TradeDesc = `商城 - ATM ${data.orderNumber}`;
+          formData.ItemName = selectedItems.map((x) => x.productName).join('#');
+          const cmv = generateCheckMacValue(formData);
+          createAndSubmitForm(
+            'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5',
+            { ...formData, CheckMacValue: cmv }
+          );
+        }
+      } else {
+        await openInfoDialog('系統消息', '支付失敗');
+      }
+    } catch (error) {
+      console.error('支付異常:', error);
+      await openInfoDialog('系統消息', '支付失敗');
+    }
+  };
+
   const loadCartItems = async () => {
     try {
       setLoading(true);
       const { success, data } = await getCart();
       setLoading(false);
       if (success) {
+        if (!data || data.length === 0) {
+          await openInfoDialog('系統消息', '購物車無商品，跳轉至首頁');
+          navigate('/main');
+          return;
+        }
         setCartItems(data);
       } else {
         console.error('Failed to load cart items.');
@@ -142,8 +313,18 @@ const Cart = () => {
 
   const totalProductSize = useMemo(() => {
     return cartItems
-      .filter((item) => selectedItems.includes(item.id))
+      .filter((item) =>
+        selectedItems.map((x) => x.cartItemId).includes(item.id)
+      )
       .reduce((sum, item) => sum + item.size, 0);
+  }, [cartItems, selectedItems]);
+
+  const totalProductPrice = useMemo(() => {
+    return cartItems
+      .filter((item) =>
+        selectedItems.map((x) => x.cartItemId).includes(item.cartItemId)
+      )
+      .reduce((sum, item) => sum + item.totalPrice, 0);
   }, [cartItems, selectedItems]);
 
   const fetchShippingMethod = async () => {
@@ -156,10 +337,6 @@ const Cart = () => {
   };
   useEffect(() => {
     fetchShippingMethod();
-    // if (totalProductSize > 0) {
-    // } else {
-    //   setShippingMethods([]);
-    // }
   }, [totalProductSize]);
 
   const getShippingPrice = useMemo(() => {
@@ -169,18 +346,56 @@ const Cart = () => {
     return selectedMethod ? selectedMethod.shippingPrice : 0;
   }, [shippingMethods, watchShippingMethod]);
 
+  const handleSelectStore = async () => {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'https://logistics-stage.ecpay.com.tw/Express/map'; // 綠界物流地圖測試環境 URL
+
+    const params = {
+      MerchantID: '3002607',
+      MerchantTradeNo: `TRADE${Date.now()}`,
+      LogisticsType: 'CVS',
+      LogisticsSubType: 'UNIMART',
+      IsCollection: 'N',
+      ServerReplyURL: 'http://13.208.176.189:8081/api/logistics/callback',
+      ExtraData: genRandom(16),
+      Device: '0',
+    };
+
+    Object.entries(params).forEach(([key, value]) => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = value.toString();
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+  };
+
+  const { uuid } = useParams();
+
+  const fetchData = async () => {};
+
+  useEffect(() => {
+    fetchData();
+  }, [uuid]);
+
   return (
     <FormProvider {...methods}>
       <div className="cart">
         <p className="cart__text cart__text--title m-b-24">商品資訊</p>
         <div className="cart__products">
           {cartItems.map((item: any, index) => (
-            <div key={index} className="cart__product">
+            <div key={genRandom(32)} className="cart__product">
               <div className="cart__product-item cart__product-item--selected">
                 <input
                   type="checkbox"
-                  checked={selectedItems.includes(item.cartItemId)}
-                  onChange={() => handleCheckboxChange(item.cartItemId)}
+                  checked={selectedItems
+                    .map((x) => x.cartItemId)
+                    .includes(item.cartItemId)}
+                  onChange={() => handleCheckboxChange(item)}
                 />
               </div>
               <div className="cart__product-item cart__product-item--img">
@@ -226,7 +441,7 @@ const Cart = () => {
             </div>
             <div className="cart__main-content">
               {shippingMethods.map((option) => (
-                <div key={option.name} className="cart__content">
+                <div key={genRandom(32)} className="cart__content">
                   <div className="cart__content-main">
                     <input
                       type="radio"
@@ -248,6 +463,16 @@ const Cart = () => {
             </div>
           </div>
           <div className="cart__divider "></div>
+          {(watchShippingMethod === 'sevenEleven' ||
+            watchShippingMethod === 'family') && (
+            <>
+              <p className="cart__text cart__text--title m-y-24">選擇門市</p>
+              <button type="button" className="cart__btn">
+                請選擇門市
+              </button>
+              <div className="cart__divider"></div>
+            </>
+          )}
           <CheckoutInfoForm />
         </div>
         <p className="cart__text cart__text--title  m-y-24">優惠及結帳</p>
@@ -264,7 +489,7 @@ const Cart = () => {
                     className="checkoutInfoForm__select"
                   >
                     {invoiceInfoOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
+                      <option key={genRandom(32)} value={option.value}>
                         {option.label}
                       </option>
                     ))}
@@ -316,7 +541,7 @@ const Cart = () => {
             </div>
             <div className="cart__main-content">
               {paymentOptions.map((option) => (
-                <div className="cart__content">
+                <div className="cart__content" key={genRandom(32)}>
                   <div className="cart__content-main">
                     <input
                       type="radio"
@@ -337,12 +562,7 @@ const Cart = () => {
           <div className="cart__total-item">
             <p className="cart__text cart__text--title">商品：</p>
             <p className="cart__text cart__text--money">
-              <NumberFormatter
-                number={cartItems.reduce(
-                  (acc, item) => acc + item.totalPrice,
-                  0
-                )}
-              />
+              <NumberFormatter number={totalProductPrice} />
             </p>
           </div>
           <div className="cart__total-item">
@@ -356,12 +576,7 @@ const Cart = () => {
             <p className="cart__text cart__text--title">總金額：</p>
             <p className="cart__text cart__text--totalMoney">
               ${' '}
-              <NumberFormatter
-                number={
-                  cartItems.reduce((acc, item) => acc + item.totalPrice, 0) +
-                  getShippingPrice
-                }
-              />
+              <NumberFormatter number={totalProductPrice + getShippingPrice} />
             </p>
           </div>
         </div>

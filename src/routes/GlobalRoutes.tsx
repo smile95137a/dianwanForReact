@@ -44,6 +44,7 @@ import RestPwd from '@/pages/frontend/RestPwd';
 import Product3C from '@/pages/frontend/Product3C';
 import ProductRedPrize from '@/pages/frontend/ProductRedPrize';
 import ProductSpecialPrize from '@/pages/frontend/ProductSpecialPrize';
+import Deposit from '@/pages/frontend/memberCenter/Deposit';
 
 const FrontendRoutes: RouteObject[] = [
   {
@@ -76,6 +77,7 @@ const FrontendRoutes: RouteObject[] = [
           { path: 'profile-edit', element: <ProfileEdit /> },
           { path: 'purchase-history', element: <PurchaseHistory /> },
           { path: 'rewards', element: <Rewards /> },
+          { path: 'deposit', element: <Deposit /> },
         ],
       },
       { path: 'news', element: <News /> },

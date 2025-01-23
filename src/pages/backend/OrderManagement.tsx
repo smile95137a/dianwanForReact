@@ -48,13 +48,9 @@ const OrderManagement = () => {
   const fetchOrderList = async () => {
     try {
       setLoading(true);
-      const { success, data, message } = await getAllOrder();
+      const res = await getAllOrder();
       setLoading(false);
-      if (success) {
-        setOrderList(data);
-      } else {
-        console.log(message);
-      }
+      setOrderList(res);
     } catch (error) {
       setLoading(false);
       console.error('獲取商品列表失敗：', error);
@@ -63,6 +59,7 @@ const OrderManagement = () => {
 
   const applyFilters = () => {
     let updatedList = orderList;
+    console.log(updatedList);
 
     if (filter !== 'ALL') {
       updatedList = orderList.filter((order) => order.resultStatus === filter);

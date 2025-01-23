@@ -9,121 +9,66 @@ const Privacy = () => {
         </div>
         <div className="privacy__item-main">
           <p className="privacy__text">
-            非常歡迎您光臨「電玩賞網站」（以下簡稱本網站），為了讓您能夠安心使用本網站的各項服務與資訊，特此向您說明本網站的隱私權保護政策，以保障您的權益，請您詳閱下列內容：
+            關於個人資料保護，請參閱以下電玩賞網站的隱私權聲明(以下簡稱本網站)
+          </p>
+          <p className="privacy__text">
+            為了支持個人資料保護，維護個人隱私權，本網站謹以下列聲明，向您說明本網站蒐集個人資料之目的、類別、利用範圍及方式、以及您所得行使之權利等事項；
+          </p>
+          <p className="privacy__text">
+            如果您對於本網站的隱私權聲明、以下相關告知事項、或與個人資料保護有關之相關事項有任何疑問，可以和電玩賞官方賴客服聯絡，將儘快回覆說明。
           </p>
         </div>
       </div>
 
       <div className="privacy__item">
         <div className="privacy__item-title">
-          <p className="privacy__text">隱私權保護政策的適用範圍</p>
+          <p className="privacy__text">一、引言</p>
         </div>
         <div className="privacy__item-main">
           <p className="privacy__text">
-            隱私權保護政策內容，包括本網站如何處理在您使用網站服務時收集到的個人識別資料。隱私權保護政策不適用於本網站以外的相關連結網站，也不適用於非本網站所委託或參與管理的人員。
+            1.1 本網站認真看待其依據適用之隱私權及個人資料保護相關法律及規範
+            (下稱「隱私權法」)下的責任，並致力於尊重本網站及行動應用程式所有使用者的隱私權和關切點(我們將本平台以及我們在本平台中提供的服務統稱為「本服務」)。向我們註冊帳戶使用本服務之使用者，包含買方及賣方(個別及統稱「使用者」、「您」或「您們」)，我們瞭解您委託給我們的個人資料極為重要，並認為妥善管理、保護及處理您的個人資料是我們的責任。此隱私權政策(下稱「隱私權政策」或「政策」)旨在協助您瞭解我們目前和未來會如何蒐集、使用、揭露及/或處理您提供給我們及/或我們所擁有和您有關的個人資料，以及協助您在向我們提供任何個人資料之前作出明智的決定。請仔細閱讀本隱私權政策。
+          </p>
+          <p className="privacy__text">
+            1.2
+            「個人資料」是指有關個人不論真實與否的資料，該個人可透過該資料，或透過該資料與其他組織持有或可能有權限存取資料，予以識別。個人資料常見的例子包括姓名、住址和聯絡資訊。
+          </p>
+          <p className="privacy__text">
+            1.3
+            若您使用本服務、向我們註冊帳戶、造訪我們的平台或存取本服務，即表示您知悉並同意接受本隱私權政策概述之作法、要求及/或政策，並特此同意我們蒐集、使用、揭露及/或處理此處所述之個人資料。若您不同意您的個人資料依此隱私權政策所述之方式進行處理，請勿使用我們的服務或存取本平台。如果我們變更隱私權政策，我們會透過包括在本網站上公佈這些變更或是修改過的隱私權政策等方式通知您。我們保留隨時修改本隱私權政策的權利。在適用法律允許範圍內，您繼續使用本服務或本平台之行為，包括訂購商品，應視為瞭解並同意本隱私權政策之修改。
+          </p>
+          <p className="privacy__text">
+            1.4
+            本隱私權政策與其他適用於我們蒐集、儲存、利用、揭露或處理您的個人資料有關的通知、合約條款、同意條款一併適用而非排除適用後者，除非我們另有明示聲明。
+          </p>
+          <p className="privacy__text">
+            1.5 本隱私權政策適用於使用本服務的買賣雙方，除非另有明示排除。
           </p>
         </div>
       </div>
 
       <div className="privacy__item">
         <div className="privacy__item-title">
-          <p className="privacy__text">個人資料的蒐集、處理及利用方式</p>
+          <p className="privacy__text">二、蒐集個人資料的目的與用途：</p>
         </div>
         <div className="privacy__item-main">
           <p className="privacy__text">
-            1.當您造訪本網站或使用本網站所提供之功能服務時，我們將視該服務功能性質，請您提供必要的個人資料，並在該特定目的範圍內處理及利用您的個人資料；非經您書面同意，本網站不會將個人資料用於其他用途。
+            2.1
+            我們僅會在提供商品銷售、金融交易授權、物流配送、贈獎活動、會員權益通知、或其他附隨以上各樣服務及其他「電玩賞網站」未來所有可能衍生之及相關服務時，為作業之必要運用您的個人資料：
+            •物流寄送：我們會於提供客戶商品銷售、物流配送等履行訂單之服務，提供配送資料予合作廠商及物流商。
+            金融交易授權：您所提供之基本資料、帳務資料及其他必要資料，將於金融交易過程(包含信用卡授權)中，提供予金融機構以完成金融交易及相關業務。
+            •其他業務附隨事項：依據以上所述服務目的、贈獎活動、會員相關權益通知，及您在使用「電玩賞」其他服務，有同意之前提下，於必要範圍內進行相關運用。
           </p>
           <p className="privacy__text">
-            2.本網站在您使用服務信箱、問卷調查等互動性功能時，會保留您所提供的姓名、電子郵件地址、聯絡方式及使用時間等。
-          </p>
-          <p className="privacy__text">
-            3.於一般瀏覽時，伺服器會自行記錄相關行徑，包括您使用連線設備的IP位址、使用時間、使用的瀏覽器、瀏覽及點選資料記錄等，做為我們增進網站服務的參考依據，此記錄為內部應用，決不對外公佈。
-          </p>
-          <p className="privacy__text">
-            4.為提供精確的服務，我們會將收集的問卷調查內容進行統計與分析，分析結果之統計數據或說明文字呈現，除供內部研究外，我們會視需要公佈統計數據及說明文字，但不涉及特定個人之資料。
+            2.2
+            依據法務部頒佈之「個人資料保護法之特定目的及個人資料之類別」，本網站蒐集、處理、利用及保有您個人資料之特定目的如：行銷、非公務機關依法定義務所進行個人資料之蒐集處理及利用、信用卡、現金卡、轉帳卡或電子票證業務、或其他法律關係事務、消費者、客戶管理與服務、消費者保護、商業與技術資訊、採購與供應管理、票券業務、智慧財產權、光碟管理及其他相關行政、傳播行政與管理。
           </p>
         </div>
       </div>
 
       <div className="privacy__item">
         <div className="privacy__item-title">
-          <p className="privacy__text">個人資料權利行使方式</p>
-        </div>
-        <div className="privacy__item-main">
-          <p className="privacy__text">
-            1.當您在本網站中註冊成為會員後，您可以隨時利用您的帳號和密碼登入本網站「會員中心」功能，對您填寫的會員個人資料，進行查閱、製給複本、補充、更正及刪除。
-          </p>
-          <p className="privacy__text">
-            2.您若需要刪除帳號，可透過會員中心刪除或是客服信件提出刪除需求。請注意，在您選擇刪除所註冊之會員帳號後，您將無法再以該帳號登入本網站。
-          </p>
-          <p className="privacy__text">
-            3.如您為本網站會員，視為您同意本站隱私權保護政策各項條款，本站將不另外以書面方式徵求您的同意，如您不同意本隱私權保護政策各項條款，亦可以隨時提出刪除會員帳號需求。
-          </p>
-          <p className="privacy__text">
-            4.以下情形，本服務將以停止蒐集、處理或利用個人資料之方式代替刪除個人資料：
-          </p>
-          <p className="privacy__text">有法令規定。</p>
-          <p className="privacy__text">有契約約定之保存期限。</p>
-          <p className="privacy__text">
-            有理由說明刪除時將侵害當事人保護利益。
-          </p>
-        </div>
-      </div>
-
-      <div className="privacy__item">
-        <div className="privacy__item-title">
-          <p className="privacy__text">資料之保護</p>
-        </div>
-        <div className="privacy__item-main">
-          <p className="privacy__text">
-            1.本網站主機均設有防火牆、防毒系統等相關的各項資訊安全設備及必要的安全防護措施，加以保護網站及您的個人資料採用嚴格的保護措施，只由經過授權的人員才能接觸您的個人資料，相關處理人員皆簽有保密合約，如有違反保密義務者，將會受到相關的法律處分。
-          </p>
-          <p className="privacy__text">
-            2.如因業務需要有必要委託其他單位提供服務時，本網站亦會嚴格要求其遵守保密義務，並且採取必要檢查程序以確定其將確實遵守。
-          </p>
-        </div>
-      </div>
-
-      <div className="privacy__item">
-        <div className="privacy__item-title">
-          <p className="privacy__text">網站對外的相關連結</p>
-        </div>
-        <div className="privacy__item-main">
-          <p className="privacy__text">
-            本網站的網頁提供其他網站的網路連結，您也可經由本網站所提供的連結，點選進入其他網站。但該連結網站不適用本網站的隱私權保護政策，您必須參考該連結網站中的隱私權保護政策。
-          </p>
-        </div>
-      </div>
-
-      <div className="privacy__item">
-        <div className="privacy__item-title">
-          <p className="privacy__text">與第三人共用個人資料之政策</p>
-        </div>
-        <div className="privacy__item-main">
-          <p className="privacy__text">
-            本網站絕不會提供、交換、出租或出售任何您的個人資料給其他個人、團體、私人企業或公務機關，但有法律依據或合約義務者，不在此限。
-          </p>
-          <p className="privacy__text">前項但書之情形包括不限於：</p>
-          <div className="m-l-40">
-            <p className="privacy__text">經由您書面同意。</p>
-            <p className="privacy__text">法律明文規定。</p>
-            <p className="privacy__text">
-              為免除您生命、身體、自由或財產上之危險。
-            </p>
-            <p className="privacy__text">
-              與公務機關或學術研究機構合作，基於公共利益為統計或學術研究而有必要，且資料經過提供者處理或蒐集著依其揭露方式無從識別特定之當事人。
-            </p>
-            <p className="privacy__text">
-              當您在網站的行為，違反服務條款或可能損害或妨礙網站與其他使用者權益或導致任何人遭受損害時，經網站管理單位研析揭露您的個人資料是為了辨識、聯絡或採取法律行動所必要者。
-            </p>
-            <p className="privacy__text">有利於您的權益。</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="privacy__item">
-        <div className="privacy__item-title">
-          <p className="privacy__text">Cookie之使用</p>
+          <p className="privacy__text">三、Cookie之使用</p>
         </div>
         <div className="privacy__item-main">
           <p className="privacy__text">
@@ -132,13 +77,60 @@ const Privacy = () => {
           </p>
         </div>
       </div>
+
+      <div className="privacy__item">
+        <div className="privacy__item-title">
+          <p className="privacy__text">四、資料之保護</p>
+        </div>
+        <div className="privacy__item-main">
+          <p className="privacy__text">
+            本網站主機均設有防火牆、防毒系統等相關的各項資訊安全設備及必要的安全防護措施，加以保護網站及您的個人資料採用嚴格的保護措施，只由經過授權的人員才能接觸您的個人資料，相關處理人員皆簽有保密合約，如有違反保密義務者，將會受到相關的法律處分。
+          </p>
+          <p className="privacy__text">
+            如因業務需要有必要委託其他單位提供服務時，本網站亦會嚴格要求其遵守保密義務，並且採取必要檢查程序以確定其將確實遵守。
+          </p>
+        </div>
+      </div>
+
+      <div className="privacy__item">
+        <div className="privacy__item-title">
+          <p className="privacy__text">五、客戶資料正確性之影響</p>
+        </div>
+        <div className="privacy__item-main">
+          <p className="privacy__text">
+            1.
+            在此提醒您，如未提供真實的個人資料，無法享受各項相應的會員優惠服務；如您提供之個人資料錯誤，亦不受此隱私權政策之聲明保護。
+            2.
+            為使相關服務得以順利提供或使相關交易得以順利完成並履行完畢，若您不願意提供各該服務或交易所要求的相關個人資料予「電玩賞」，並同意本網站就該等個人資料依法令規定以及本隱私權相關內容聲明，「電玩賞」將尊重您的決定，但依照各該服務之性質或條件，您可能因此無法使用該等服務或完成相關交易。
+          </p>
+        </div>
+      </div>
+
+      <div className="privacy__item">
+        <div className="privacy__item-title">
+          <p className="privacy__text">六、帳號刪除</p>
+        </div>
+        <div className="privacy__item-main">
+          <p className="privacy__text">註銷帳號以前，請先確認</p>
+          <p className="privacy__text">1. 購買商品已全部完成出貨</p>
+          <p className="privacy__text">
+            2. 殘點已完成退款
+            若想註銷帳號，請聯繫官方賴作申請，並提供您的相關資料(姓名、會員ID與連絡電話)，這邊將協助您做後續動作。
+          </p>
+          <p className="privacy__text">
+            •
+            帳號刪除為永久且不可逆的。成功刪除帳號後，您將無法恢復此帳號、登入或查看購物紀錄。
+          </p>
+        </div>
+      </div>
+
       <div className="privacy__item">
         <div className="privacy__item-title">
           <p className="privacy__text">隱私權保護政策之修正</p>
         </div>
         <div className="privacy__item-main">
           <p className="privacy__text">
-            本網站隱私權保護政策將因應需求隨時進行修正，修正後的條款將刊登於網站上。
+            本網站隱私權保護政策將因應需求隨時進行修正，修正後的條款將刊登於網站上
           </p>
         </div>
       </div>

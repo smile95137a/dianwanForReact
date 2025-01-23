@@ -61,6 +61,7 @@
 @import 'components/frontend/dialog/draw-product-dialog';
 @import 'components/frontend/dialog/info-dialog';
 @import 'components/frontend/dialog/img-dialog';
+@import 'components/frontend/dialog/news-banner-dialog';
 @import 'components/frontend/dialog/restPwd-dialog';
 @import 'components/frontend/f-pagination';
 @import 'components/frontend/checkoutInfoForm';
@@ -405,4 +406,33 @@
 }
 .editor-container .ck-editor__editable_inline {
   min-height: 200px;
+}
+/* 确保分页点位于滑块下方 */
+.swiper-pagination {
+  position: absolute;
+  bottom: 0 !important; /* 根据需要调整负值的大小 */
+}
+
+/* 设置分页点的样式 */
+.swiper-pagination-bullet {
+  background-color: #a6a6a6;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* 当前激活的分页点样式 */
+.swiper-pagination-bullet-active {
+  width: 10px;
+  height: 10px;
+  background-color: #00ffff;
+}
+p,
+span {
+  transition: transform 0.3s ease, color 0.3s ease; /* 增加平滑過渡效果 */
+}
+
+p:hover,
+span:hover {
+  transform: translateY(-5px); /* 讓文字浮起 */
 }

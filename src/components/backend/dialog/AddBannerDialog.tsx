@@ -6,7 +6,6 @@ import { FormSelect } from '../FormSelect';
 import { getAllProductsByType } from '@/services/backend/ProductService';
 import { useBackendDialog } from '@/context/backend/useBackendDialog';
 import { useLoading } from '@/context/frontend/LoadingContext';
-import { generateRedemptionCode } from '@/services/backend/RedemptionService';
 import { createBanner } from '@/services/backend/BannerService';
 
 interface AddBannerDialogProps {

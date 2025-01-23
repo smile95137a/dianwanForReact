@@ -114,4 +114,10 @@ $root-block-name: '.footer';
   &__footer {
     text-align: center;
   }
+  &__link {
+    &:hover {
+      color: #2a88cb;
+      transition: all 0.3s ease;
+    }
+  }
 }

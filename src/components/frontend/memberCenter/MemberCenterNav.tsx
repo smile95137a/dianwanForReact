@@ -23,6 +23,11 @@ const navItems = [
     icon: <FaReceipt />,
     label: '訂單記錄',
   },
+  {
+    path: '/member-center/deposit',
+    icon: <FaReceipt />,
+    label: '會員儲值',
+  },
 ];
 
 const MemberCenterNav = () => {

@@ -11,7 +11,8 @@ import TitleBar from '../../components/frontend/TitleBar';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import { Navigation } from 'swiper/modules';
+import 'swiper/css/pagination';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { getPagedStoreProducts } from '@/services/frontend/storeProductService';
 import NoData from '@/components/frontend/NoData';
 import { useLoading } from '@/context/frontend/LoadingContext';
@@ -20,6 +21,8 @@ import { genRandom } from '@/utils/RandomUtils';
 import Marquee from '@/components/frontend/Marquee';
 import { PrizeCategory } from '@/interfaces/product';
 import { FaAngleRight } from 'react-icons/fa6';
+import { getDisplayNews } from '@/services/frontend/newsService';
+import { useFrontendDialog } from '@/context/frontend/useFrontedDialog';
 const Main = () => {
   const navigate = useNavigate();
   const [banners, setBanners] = useState<any[]>([]);
@@ -30,6 +33,8 @@ const Main = () => {
 
   const [mallProducts, setMallProducts] = useState<any[]>([]);
   const { setLoading } = useLoading();
+  const { openNewsBannerDialog } = useFrontendDialog();
+
   const redirectToCategoryPage = (category: PrizeCategory) => {
     if (category === PrizeCategory.FIGURE) {
       navigate(`/gamePrize`);
@@ -93,18 +98,40 @@ const Main = () => {
 
   useEffect(() => {
     loadMainData();
+    fetchDisplayNews();
   }, []);
 
+  const fetchDisplayNews = async () => {
+    try {
+      const { success, message, data } = await getDisplayNews();
+      if (success) {
+        if (data.length > 0) {
+          openNewsBannerDialog(data);
+        }
+      } else {
+        console.log(message);
+      }
+    } catch (error) {
+      console.error('Error fetching display news:', error);
+    }
+  };
+
   return (
-    <div className="fhome">
+    <>
       {banners.length > 0 && (
         <div className="slider">
           <Swiper
             slidesPerView={1}
-            centeredSlides={true}
-            spaceBetween={30}
+            spaceBetween={10}
             navigation
-            modules={[Navigation]}
+            autoplay={{
+              delay: 3000,
+              disableOnInteraction: false,
+            }}
+            pagination={{
+              clickable: true,
+            }}
+            modules={[Navigation, Pagination, Autoplay]}
             loop={true}
             className="mySwiper"
             breakpoints={{
@@ -127,87 +154,88 @@ const Main = () => {
             ))}
           </Swiper>
         </div>
-      )}
+      )}{' '}
+      <div className="fhome">
+        <Marquee />
 
-      <Marquee />
+        <TitleBar icon={BsHandbag} titleText="電玩賞" />
+        {figureProducts.length > 0 ? (
+          <>
+            <div className="fhome__list">
+              {figureProducts.slice(0, 6).map((product) => (
+                <ProductCard key={genRandom(24)} product={product} />
+              ))}
+            </div>
+            <MoreButton
+              onClick={() => redirectToCategoryPage(PrizeCategory.FIGURE)}
+            />
+          </>
+        ) : (
+          <>
+            <NoData text="查無資料！" />
+          </>
+        )}
 
-      <TitleBar icon={BsHandbag} titleText="電玩賞" />
-      {figureProducts.length > 0 ? (
-        <>
-          <div className="fhome__list">
-            {figureProducts.slice(0, 6).map((product) => (
-              <ProductCard key={genRandom(24)} product={product} />
-            ))}
-          </div>
-          <MoreButton
-            onClick={() => redirectToCategoryPage(PrizeCategory.FIGURE)}
-          />
-        </>
-      ) : (
-        <>
-          <NoData text="查無資料！" />
-        </>
-      )}
+        <TitleBar icon={BsHandbag} titleText="3C賞" />
 
-      <TitleBar icon={BsHandbag} titleText="3C賞" />
+        {c3Products.length > 0 ? (
+          <>
+            <div className="fhome__list">
+              {c3Products.slice(0, 6).map((product) => (
+                <ProductCard key={genRandom(24)} product={product} />
+              ))}
+            </div>
+            <MoreButton
+              onClick={() => redirectToCategoryPage(PrizeCategory.C3)}
+            />
+          </>
+        ) : (
+          <>
+            <NoData text="查無資料！" />
+          </>
+        )}
 
-      {c3Products.length > 0 ? (
-        <>
-          <div className="fhome__list">
-            {c3Products.slice(0, 6).map((product) => (
-              <ProductCard key={genRandom(24)} product={product} />
-            ))}
-          </div>
-          <MoreButton
-            onClick={() => redirectToCategoryPage(PrizeCategory.C3)}
-          />
-        </>
-      ) : (
-        <>
-          <NoData text="查無資料！" />
-        </>
-      )}
+        <TitleBar icon={BsHandbag} titleText="商城" />
 
-      <TitleBar icon={BsHandbag} titleText="商城" />
+        {mallProducts.length > 0 ? (
+          <>
+            <div className="fhome__list">
+              {mallProducts.slice(0, 6).map((product) => (
+                <ProductCard
+                  key={genRandom(24)}
+                  product={product}
+                  isMall={true}
+                  className="productCard--mall"
+                />
+              ))}
+            </div>
+            <MoreButton onClick={redirectToMallPage} />
+          </>
+        ) : (
+          <>
+            <NoData text="查無資料！" />
+          </>
+        )}
+        <TitleBar icon={BsHandbag} titleText="紅利賞" />
 
-      {mallProducts.length > 0 ? (
-        <>
-          <div className="fhome__list">
-            {mallProducts.slice(0, 6).map((product) => (
-              <ProductCard
-                key={genRandom(24)}
-                product={product}
-                isMall={true}
-                className="productCard--mall"
-              />
-            ))}
-          </div>
-          <MoreButton onClick={redirectToMallPage} />
-        </>
-      ) : (
-        <>
-          <NoData text="查無資料！" />
-        </>
-      )}
-      <TitleBar icon={BsHandbag} titleText="紅利賞" />
-
-      {bonusProducts.length > 0 ? (
-        <>
-          <div className="fhome__list">
-            {bonusProducts.slice(0, 6).map((product) => (
-              <ProductCard key={genRandom(24)} product={product} />
-            ))}
-          </div>
-          <MoreButton
-            onClick={() => redirectToCategoryPage(PrizeCategory.BONUS)}
-          />
-        </>
-      ) : (
-        <>
-          <NoData text="查無資料！" />
-        </>
-      )}
-    </div>
+        {bonusProducts.length > 0 ? (
+          <>
+            <div className="fhome__list">
+              {bonusProducts.slice(0, 6).map((product) => (
+                <ProductCard key={genRandom(24)} product={product} />
+              ))}
+            </div>
+            <MoreButton
+              onClick={() => redirectToCategoryPage(PrizeCategory.BONUS)}
+            />
+          </>
+        ) : (
+          <>
+            <NoData text="查無資料！" />
+          </>
+        )}
+      </div>
+    </>
   );
 };
 

@@ -128,11 +128,11 @@ $root-block-name: '.productCard';
     height: 87.54px;
 
     &-status {
-      padding: 10px 20px;
+      padding: 10px 10px;
       position: relative;
       &--active {
         width: 100%;
-        max-width: 120px;
+        max-width: 80px;
         background: #2a88cb;
         display: flex;
         align-items: center;
@@ -145,7 +145,7 @@ $root-block-name: '.productCard';
         }
         #{$p__text} {
           color: #ffffff;
-          font-size: 20px;
+          font-size: 16px;
           font-weight: 700;
         }
       }
@@ -159,13 +159,14 @@ $root-block-name: '.productCard';
       #{$p__text} {
         color: #2a88cb;
         &--title {
-          font-size: 12px;
+          font-size: 20px;
           font-weight: 700;
-          @include line-clamp(1);
+          @include line-clamp(2);
         }
 
         &--subtitle {
-          font-size: 20px;
+          font-size: 12px;
+
           font-weight: 700;
           @include line-clamp(1);
         }

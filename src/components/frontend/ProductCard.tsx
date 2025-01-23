@@ -27,7 +27,7 @@ const ProductCard = ({ isMall = false, product, className = '' }: any) => {
             </p>
             <p className="productCard__text">/</p>
             <p className="productCard__text">
-              <NumberFormatter number={~~product.stockQuantity} />
+              <NumberFormatter number={~~product.detailStockQuantity} />
             </p>
           </div>
         )}
@@ -94,7 +94,7 @@ const ProductCard = ({ isMall = false, product, className = '' }: any) => {
           <p
             className="productCard__text productCard__text--subtitle"
             dangerouslySetInnerHTML={{ __html: product?.description }}
-          />
+          ></p>
         </div>
       </div>
     </div>

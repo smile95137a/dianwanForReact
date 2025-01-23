@@ -246,7 +246,6 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
       return false;
     }
   };
-
   const handleSubmit = async () => {
     const values = getValues();
     if (await validateForm()) {
@@ -256,6 +255,7 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
         const { success, data, message } = isEdit
           ? await updateProduct2({ productId: product.productId, ...values })
           : await createProduct2(values);
+
         if (!success) {
           setLoading(false);
           await openInfoDialog('系統提示', message || '產品創建失敗');
@@ -264,8 +264,14 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
 
         const productId = isEdit ? product.productId : data.productId;
         setLoading(true);
-        await uploadProductImg(images, productId);
-        await uploadProductBannerImg(bannerImages, productId);
+
+        uploadProductImg(images, productId).catch((error) => {
+          console.error('上傳產品圖片失敗:', error);
+        });
+        uploadProductBannerImg(bannerImages, productId).catch((error) => {
+          console.error('上傳產品橫幅圖片失敗:', error);
+        });
+
         setLoading(false);
         await openInfoDialog('系統提示', isEdit ? '更新成功！' : '新增成功！');
         onConfirm();

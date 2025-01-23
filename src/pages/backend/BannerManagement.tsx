@@ -9,10 +9,10 @@ import { useLoading } from '@/context/frontend/LoadingContext';
 import { usePagination } from '@/hooks/usePagination';
 import {
   Banner,
-  BannerStatus,
   deleteBanner,
   getAllBanners,
 } from '@/services/backend/BannerService';
+import { getImageUrl } from '@/utils/ImageUtils';
 import React, { useEffect, useState } from 'react';
 
 const BannerManagement = () => {
@@ -114,7 +114,7 @@ const BannerManagement = () => {
           <div className="bannerManagement__list-content">
             <BTable
               headers={[
-                { text: 'ID', className: '' },
+                { text: '圖片', className: '' },
                 { text: '狀態', className: '' },
                 { text: '發布日期', className: '' },
                 { text: '產品 ID', className: '' },
@@ -125,7 +125,22 @@ const BannerManagement = () => {
                 <BTableRow
                   key={index}
                   data={[
-                    { content: <>{banner.bannerId}</>, dataTitle: 'ID' },
+                    {
+                      content: (
+                        <>
+                          {Array.isArray(banner?.imageUrls) &&
+                            banner.imageUrls.length > 0 && (
+                              <img
+                                className="productDataManagement__image"
+                                src={getImageUrl(banner.imageUrls[0])}
+                                width={80}
+                                height={80}
+                              />
+                            )}
+                        </>
+                      ),
+                      dataTitle: '圖片',
+                    },
                     {
                       content: <>{getStatusLabel(banner.status)}</>,
                       dataTitle: '預覽',

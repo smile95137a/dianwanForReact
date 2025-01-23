@@ -50,3 +50,17 @@ export const getProductDetailById = async (
     throw error;
   }
 };
+
+export const deleteProductDetail = async (
+  productDetailId: any
+): Promise<ApiResponse<void>> => {
+  try {
+    const response = await api.delete<ApiResponse<void>>(
+      `${basePath}/delete/${productDetailId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error('deleteProductDetail 錯誤:', error);
+    throw error;
+  }
+};

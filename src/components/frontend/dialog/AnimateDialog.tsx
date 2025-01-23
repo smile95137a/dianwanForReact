@@ -3,15 +3,14 @@ import Dialog from './Dialog';
 import ticketImages from '@/data/ticketImagesData';
 import { BsHandIndex } from 'react-icons/bs';
 import ticketAnimateImages from '@/data/tickeAnimatetImagesData';
+import { getImageUrl } from '@/utils/ImageUtils';
 
 interface AnimateDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
   customClass?: string;
-  drawData: {
-    level: keyof typeof ticketImages;
-  };
+  drawData: any;
 }
 
 const AnimateDialog: FC<AnimateDialogProps> = ({
@@ -37,8 +36,8 @@ const AnimateDialog: FC<AnimateDialogProps> = ({
 
     const deltaX = x - startX;
     const newIndex = Math.min(
-      Math.max(1, baseIndex + Math.floor(deltaX / 15)),
-      24
+      Math.max(1, baseIndex + Math.floor(deltaX / 20)),
+      30
     );
 
     if (newIndex !== animateIndex) {
@@ -79,13 +78,15 @@ const AnimateDialog: FC<AnimateDialogProps> = ({
 
   useEffect(() => {
     const gradeKey =
-      typeof drawData.level === 'string' &&
-      ticketImages[drawData.level.toUpperCase() as keyof typeof ticketImages]
-        ? (drawData.level.toUpperCase() as keyof typeof ticketImages)
+      typeof drawData.item.level === 'string' &&
+      ticketImages[
+        drawData.item.level.toUpperCase() as keyof typeof ticketImages
+      ]
+        ? (drawData.item.level.toUpperCase() as keyof typeof ticketImages)
         : '';
 
     setFinalImageSrc(gradeKey ? ticketImages[gradeKey] : '');
-  }, [drawData]);
+  }, [drawData.item]);
 
   return (
     <Dialog
@@ -94,33 +95,60 @@ const AnimateDialog: FC<AnimateDialogProps> = ({
       className={`dialog--animate ${customClass}`}
     >
       <div className="animateDialog">
-        <div
-          className="animateDialog__img"
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          <div
-            className={`animateDialog__icon ${
-              isSwiping ? 'animateDialog--hide' : ''
-            }`}
-          >
-            <BsHandIndex />
-          </div>
+        <div className="animateDialog__bg">
           <img
-            src={finalImageSrc}
-            className="animateDialog__img-ticket animateDialog__img-ticket--final"
-          />
-          <img
-            src={ticketAnimateImages[`kujiAnimate${animateIndex}`]}
-            alt={`Animation Frame ${animateIndex}`}
-            className="animateDialog__img-animate"
+            src={getImageUrl(drawData.drawData.product.imageUrls[0])}
+            alt=""
           />
         </div>
+        <div className="animateDialog__infos">
+          <div className="animateDialog__info animateDialog__info--title">
+            <p className="animateDialog__text animateDialog__text--title">
+              {drawData.drawData.product.productName}
+            </p>
+          </div>
+          <div className="animateDialog__info animateDialog__info--sub">
+            <p className="animateDialog__text">
+              剩餘{drawData.totalLength - drawData.index}張獎籤
+            </p>
+            <p className="animateDialog__text">
+              保護還有
+              <span className="animateDialog__text animateDialog__text--red">
+                297
+              </span>
+              秒
+            </p>
+          </div>
+        </div>
+        <div className="animateDialog__imgs">
+          <div
+            className="animateDialog__img"
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            <div
+              className={`animateDialog__icon ${
+                isSwiping ? 'animateDialog--hide' : ''
+              }`}
+            >
+              <BsHandIndex />
+            </div>
+            <img
+              src={finalImageSrc}
+              className="animateDialog__img-ticket animateDialog__img-ticket--final"
+            />
+            <img
+              src={ticketAnimateImages[`kujiAnimate${animateIndex}`]}
+              alt={`Animation Frame ${animateIndex}`}
+              className="animateDialog__img-animate"
+            />
+          </div>
+        </div>{' '}
       </div>
     </Dialog>
   );

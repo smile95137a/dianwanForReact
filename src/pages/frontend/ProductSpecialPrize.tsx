@@ -7,12 +7,15 @@ import { useLoading } from '@/context/frontend/LoadingContext';
 import { usePagination } from '@/hooks/usePagination';
 import { PrizeCategory } from '@/interfaces/product';
 import { getAllCategories } from '@/services/frontend/productCategoryService';
-import { getAllProductList } from '@/services/frontend/productService';
+import {
+  getAllProductList,
+  getProductByType,
+} from '@/services/frontend/productService';
 import React, { useEffect, useRef, useState } from 'react';
 import { BsHandbag } from 'react-icons/bs';
 import { FaSearch, FaSortAmountUpAlt, FaSortAmountUp } from 'react-icons/fa';
 
-const ProductSpecialPrize = () => {
+const Product = () => {
   const [sortOrder, setSortOrder] = useState('newest');
   const [searchTerm, setSearchTerm] = useState('');
   const [products, setProducts] = useState<any[]>([]);
@@ -29,43 +32,47 @@ const ProductSpecialPrize = () => {
     initialPage: 1,
   });
 
-  const fetchCategories = async () => {
-    try {
-      setLoading(true);
-      const { success, message, data } = await getAllCategories();
-      setLoading(false);
-      if (success) {
-        setCategories(data);
-      } else {
-        console.log(message);
-      }
-    } catch (error) {
-      setLoading(false);
-      console.log('Error fetching categories:', error);
-    }
-  };
-
-  const fetchProducts = async () => {
-    try {
-      const { success, message, data } = await getAllProductList();
-      if (success) {
-        const filteredProducts = data.filter(
-          (item) =>
-            item.status === 'AVAILABLE' &&
-            item.prizeCategory === PrizeCategory.BONUS
-        );
-        setProducts(filteredProducts);
-      } else {
-        console.log(message);
-      }
-    } catch (err) {
-      console.error('Error fetching products:', err);
-    }
-  };
-
   useEffect(() => {
-    fetchProducts();
-    fetchCategories();
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+
+        // 使用 Promise.all 並行請求數據
+        const [productResponse, categoryResponse] = await Promise.all([
+          getProductByType('4'),
+          getAllCategories(),
+        ]);
+
+        if (productResponse.success) {
+          const filteredProducts = productResponse.data.filter(
+            (item) => item.status === 'AVAILABLE'
+          );
+          setProducts(filteredProducts);
+
+          const relatedCategoryIds = new Set(
+            filteredProducts.map((product) => product.categoryUUid)
+          );
+
+          if (categoryResponse.success) {
+            const filteredCategories = categoryResponse.data.filter(
+              (category) => relatedCategoryIds.has(category.categoryUUid)
+            );
+            setCategories(filteredCategories);
+          } else {
+            console.log(categoryResponse.message);
+          }
+        } else {
+          console.log(productResponse.message);
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -196,7 +203,7 @@ const ProductSpecialPrize = () => {
           <div className="fproduct__icon">
             <CircleIcon icon={BsHandbag} />
           </div>
-          <p className="fproduct__text">優惠賞</p>
+          <p className="fproduct__text">電玩賞</p>
         </div>
 
         <div className="fproduct__header-nav">
@@ -307,4 +314,4 @@ const ProductSpecialPrize = () => {
   );
 };
 
-export default ProductSpecialPrize;
+export default Product;

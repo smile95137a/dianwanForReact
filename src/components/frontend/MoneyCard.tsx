@@ -1,6 +1,7 @@
 import React from 'react';
 import NumberFormatter from '../common/NumberFormatter';
-
+import iconG from '@/assets/image/di-icon-g.png';
+import iconS from '@/assets/image/di-icon-s.png';
 type MoneyCardProps = {
   className: string;
   logoText: string;
@@ -18,7 +19,11 @@ const MoneyCard: React.FC<MoneyCardProps> = ({
     <div className={`productCard__money ${className}`}>
       <div className="productCard__money-main">
         <div className="productCard__money-logo">
-          <div className="productCard__money-text">{logoText}</div>
+          {logoText === 'G' && <img src={iconG} alt="Gold Icon" />}
+          {logoText === 'S' && <img src={iconS} alt="Silver Icon" />}
+          {logoText === 'B' && (
+            <div className="productCard__money-text">{logoText}</div>
+          )}
         </div>
         <div className="productCard__money-price">
           <div className="productCard__money-text">

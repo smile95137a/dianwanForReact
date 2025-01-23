@@ -46,11 +46,16 @@ const DrawStepDialog: FC<DrawStepDialogProps> = ({
     const handleDrawDataUpdate = async () => {
       if (drawData) {
         if (Array.isArray(drawData.drawItemList)) {
-          for (const x of drawData.drawItemList) {
-            await openAnimateDialog(x);
-            await delay(500);
+          for (const [index, x] of drawData.drawItemList.entries()) {
+            await openAnimateDialog({
+              drawData,
+              item: x,
+              index,
+              totalLength: drawData.drawItemList.length,
+            });
+            await delay(300);
             await openDrawProductDialog(x);
-            await delay(500);
+            await delay(300);
           }
           onClose();
         }
@@ -62,9 +67,6 @@ const DrawStepDialog: FC<DrawStepDialogProps> = ({
 
   return (
     <>
-      <div className="drawStepDialog__img">
-        <img src={getImageUrl(drawData.product.imageUrls[0])} alt="" />
-      </div>
       <div className="drawStepDialog__skip" onClick={handleSkipClick}>
         <p className="drawStepDialog__text">跳過</p>
       </div>

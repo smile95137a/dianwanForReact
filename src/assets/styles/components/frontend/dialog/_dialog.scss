@@ -23,6 +23,7 @@ $root-block-style: '.downDialog';
   &--animate {
     #{$p__main} {
       background: transparent;
+      border-radius: 0;
     }
   }
 

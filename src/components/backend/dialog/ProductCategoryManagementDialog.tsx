@@ -143,9 +143,7 @@ const ProductCategoryManagementDialog: FC<
                             />
                             <MButton
                               text={'刪除'}
-                              click={() =>
-                                handleDeleteCategory(category.categoryId)
-                              }
+                              click={() => handleDeleteCategory(category)}
                             />
                           </div>
                         </>

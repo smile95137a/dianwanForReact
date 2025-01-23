@@ -185,7 +185,9 @@ const AddProductDetailDialog: FC<AddProductDetailDialogProps> = ({
           ? productDetail.productDetailId
           : data.productDetailId;
         setLoading(true);
-        await uploadProductDetailImg(images, productDetailId);
+        uploadProductDetailImg(images, productDetailId).catch((error) => {
+          console.error('上傳產品圖片失敗:', error);
+        });
         setLoading(false);
         await openInfoDialog('系統提示', isEdit ? '更新成功！' : '新增成功！');
         onClose(true);

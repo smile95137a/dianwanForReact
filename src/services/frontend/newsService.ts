@@ -23,3 +23,12 @@ export const getNewsById = async (
     throw error;
   }
 };
+export const getDisplayNews = async (): Promise<ApiResponse<News[]>> => {
+  try {
+    const response = await api.get<ApiResponse<News[]>>(`${basePath}/display`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching display news:', error);
+    throw error;
+  }
+};

@@ -15,6 +15,8 @@ import { useDrawStepDialog } from './DrawStepDialogProvider';
 import DrawStepDialog from '@/components/frontend/dialog/DrawStepDialog';
 import { useImgDialog } from './ImgDialogProvider';
 import ImgDialog from '@/components/frontend/dialog/ImgDialog';
+import { useNewsBannerDialog } from './NewsBannerDialogProvider';
+import NewsBannerDialog from '@/components/frontend/dialog/NewsBannerDialog';
 
 interface DialogProviderProps {
   children: ReactNode;
@@ -32,6 +34,8 @@ export const FrontendDialogProvider: FC<DialogProviderProps> = ({
   } = useConfirmDialog();
 
   const {
+    isCustmerPrize,
+    inputCode,
     payType,
     productData,
     ticketList,
@@ -85,6 +89,15 @@ export const FrontendDialogProvider: FC<DialogProviderProps> = ({
     imgUrl,
   } = useImgDialog();
 
+  const {
+    newsBannerDialogOpen,
+    customClass: NewsBannerDialogCustomClass,
+    openNewsBannerDialog,
+    closeNewsBannerDialog,
+    confirmNewsBannerDialog,
+    newsBannerData,
+  } = useNewsBannerDialog();
+
   return (
     <FrontDialogContext.Provider
       value={{
@@ -95,6 +108,7 @@ export const FrontendDialogProvider: FC<DialogProviderProps> = ({
         openTicketConfirmDialog,
         openDrawStepDialog,
         openImgDialog,
+        openNewsBannerDialog,
       }}
     >
       {children}
@@ -111,6 +125,8 @@ export const FrontendDialogProvider: FC<DialogProviderProps> = ({
           )}
           {ticketConfirmDialogOpen && (
             <TicketConfirmDialog
+              isCustmerPrize={isCustmerPrize}
+              inputCode={inputCode}
               payType={payType}
               productData={productData}
               ticketList={ticketList}
@@ -166,6 +182,16 @@ export const FrontendDialogProvider: FC<DialogProviderProps> = ({
               onConfirm={confirmImgDialog}
               customClass={imgDialogCustomClass}
               imgUrl={imgUrl}
+            />
+          )}
+
+          {newsBannerDialogOpen && (
+            <NewsBannerDialog
+              isOpen={newsBannerDialogOpen}
+              onClose={closeNewsBannerDialog}
+              onConfirm={confirmNewsBannerDialog}
+              customClass={NewsBannerDialogCustomClass}
+              newsBannerData={newsBannerData}
             />
           )}
         </>,

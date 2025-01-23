@@ -10,12 +10,18 @@ export interface DialogContextType {
     customClass?: string
   ) => Promise<void>;
   openTicketConfirmDialog: (
+    isCustmerPrize: boolean,
+    inputCode: string,
     payType: any,
     productData: any,
     ticketList: any[]
   ) => Promise<any>;
   openDrawStepDialog: (drawData: any, customClass?: string) => Promise<boolean>;
   openImgDialog: (imgUrl: any, customClass?: string) => Promise<boolean>;
+  openNewsBannerDialog: (
+    newsBannerData: any,
+    customClass?: string
+  ) => Promise<boolean>;
 }
 
 export const FrontDialogContext = createContext<DialogContextType | undefined>(

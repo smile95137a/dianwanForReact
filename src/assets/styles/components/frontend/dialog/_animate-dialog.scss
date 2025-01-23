@@ -6,8 +6,58 @@ $root-block-name: '.animateDialog';
   $p__icon: #{$p}__icon;
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  border: 1px solid #85ffff;
+  padding: 10px;
+  position: relative;
+  &__bg {
+    position: absolute;
+    inset: 0;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__infos {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 58px;
+    background: #85ffff;
+    padding: 6px;
+    position: relative;
+    z-index: 3;
+  }
+  &__info {
+    &--title {
+      #{$p__text} {
+        &--title {
+          font-size: 32px;
+          font-weight: 700;
+        }
+      }
+    }
+
+    &--sub {
+      display: flex;
+      justify-content: space-between;
+      #{$p__text} {
+        &--red {
+          color: #eb4335;
+        }
+      }
+    }
+  }
+  &__imgs {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   &__img {
     width: 400px;
     height: 242px;

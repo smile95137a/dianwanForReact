@@ -8,11 +8,13 @@ import { useLoading } from '@/context/frontend/LoadingContext';
 import { useFrontendDialog } from '@/context/frontend/useFrontedDialog';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { executeDraw } from '@/services/frontend/drawService';
+import { executeDraw, redeemCode } from '@/services/frontend/drawService';
 interface TicketConfirmDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: (data) => void;
+  isCustmerPrize: boolean;
+  inputCode: string;
   payType: any;
   productData: any;
   ticketList: any[];
@@ -24,6 +26,8 @@ const TicketConfirmDialog: FC<TicketConfirmDialogProps> = ({
   isOpen,
   onClose,
   onConfirm,
+  isCustmerPrize,
+  inputCode,
   payType,
   productData,
   ticketList,
@@ -44,11 +48,24 @@ const TicketConfirmDialog: FC<TicketConfirmDialogProps> = ({
   const onSubmit = async (values: any) => {
     try {
       setLoading(true);
-      const { success, data, message } = await executeDraw(
-        productData.productId,
-        ticketList?.map((x: any) => x.number),
-        payType
-      );
+
+      let response;
+      if (isCustmerPrize) {
+        response = await redeemCode({
+          productId: productData.productId,
+          prizeNumbers: ticketList.map((x: any) => x.number),
+          payType,
+          code: inputCode,
+        });
+      } else {
+        response = await executeDraw(
+          productData.productId,
+          ticketList.map((x: any) => x.number),
+          payType
+        );
+      }
+
+      const { success, data, message } = response;
       setLoading(false);
       if (success) {
         onConfirm(data);

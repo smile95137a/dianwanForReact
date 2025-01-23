@@ -14,9 +14,9 @@ const Footer = () => {
           </div>
           <div className="footer__main">
             <div className="footer__nav">
-              <Link to="/about" className="footer__link">
-                關於我們
-              </Link>
+              <div className="footer__link">
+                <a href="https://forms.gle/y16f8XU3L42Gszi3A">合作咨詢</a>
+              </div>
               <Link to="/faq" className="footer__link">
                 常見問題
               </Link>

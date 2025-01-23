@@ -3,6 +3,7 @@ import BDialog from './BDialog';
 import MButton from '../MButton';
 import {
   deleteCategory,
+  deleteProductDetail,
   getAllProductDetails,
 } from '@/services/backend/ProductService';
 import { useBackendDialog } from '@/context/backend/useBackendDialog';
@@ -59,7 +60,7 @@ const ProductDetailDialog: FC<ProductDetailDialogProps> = ({
     if (result) {
       try {
         setLoading(true);
-        const { success } = await deleteCategory(categoryId);
+        const { success } = await deleteProductDetail(categoryId);
         setLoading(false);
         if (success) {
           await openInfoDialog('系統提示', '產品類別 已成功刪除！');
@@ -157,7 +158,7 @@ const ProductDetailDialog: FC<ProductDetailDialogProps> = ({
                             />
                             <MButton
                               text={'刪除'}
-                              click={() => handleDelete(x.categoryId)}
+                              click={() => handleDelete(x.productDetailId)}
                             />
                           </div>
                         </>

@@ -22,6 +22,21 @@ $root-block-style: '.downDialog';
     }
   }
 
+  &--orderShipmentDialog {
+    width: 100vw;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    #{$p__main} {
+      position: relative;
+      width: 100vw;
+      height: auto;
+      top: 0;
+      left: 0;
+      transform: none;
+    }
+  }
+
   &__overlay {
     position: absolute;
     inset: 0;

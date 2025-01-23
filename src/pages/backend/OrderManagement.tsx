@@ -114,8 +114,15 @@ const OrderManagement = () => {
     openOrderDetailsDialog(order);
   };
 
-  const handleOrderShipmentDialog = (order: any) => {
-    openOrderShipmentDialog(order);
+  const handleOrderShipmentDialog = async (order: any) => {
+    const rootElement = document.getElementById('root');
+    if (rootElement) {
+      rootElement.style.display = 'none'; // 隐藏 root
+    }
+    await openOrderShipmentDialog(order);
+    if (rootElement) {
+      rootElement.style.display = ''; // 恢复显示 root
+    }
   };
   const handleCreateShippingOrder = (order: any) => {
     openCreateShippingOrderDialog(order);

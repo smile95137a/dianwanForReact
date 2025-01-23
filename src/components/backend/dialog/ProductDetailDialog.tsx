@@ -113,7 +113,7 @@ const ProductDetailDialog: FC<ProductDetailDialogProps> = ({
     <BDialog
       isOpen={isOpen}
       onClose={() => onClose(false)}
-      className={customClass}
+      customClassName={customClass}
       mainClassName="max-w-640"
     >
       <div className="productDetailDialog">

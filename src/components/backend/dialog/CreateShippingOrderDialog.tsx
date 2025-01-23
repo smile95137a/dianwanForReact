@@ -127,7 +127,7 @@ const CreateShippingOrderDialog: FC<CreateShippingOrderDialogProps> = ({
     <BDialog
       isOpen={isOpen}
       onClose={() => onClose(false)}
-      className={customClass}
+      customClassName={customClass}
       mainClassName="max-w-640"
     >
       <div className="createShippingOrderDialog">

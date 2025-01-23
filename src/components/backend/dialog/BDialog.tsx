@@ -4,7 +4,7 @@ interface DialogProps {
   isOpen: boolean;
   onClose: (result: boolean) => void;
   children: ReactNode;
-  className?: string;
+  customClassName?: string;
   overlayClassName?: string;
   mainClassName?: string;
 }
@@ -13,7 +13,7 @@ const BDialog: FC<DialogProps> = ({
   isOpen,
   onClose,
   children,
-  className = '',
+  customClassName = '',
   overlayClassName = '',
   mainClassName = '',
 }) => {
@@ -24,7 +24,7 @@ const BDialog: FC<DialogProps> = ({
   };
 
   return (
-    <div className={`bdialog ${className}`}>
+    <div className={`bdialog ${customClassName}`}>
       <div
         className={`bdialog__overlay ${overlayClassName}`}
         onClick={() => handleClose(false)}

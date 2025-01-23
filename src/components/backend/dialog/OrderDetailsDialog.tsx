@@ -30,7 +30,7 @@ const OrderDetailsDialog: FC<OrderDetailsDialogProps> = ({
     <BDialog
       isOpen={isOpen}
       onClose={() => onClose(false)}
-      className={customClass}
+      customClassName={`${customClass} bdialog--orderDetailsDialog `}
     >
       <div className="orderDetailsDialog">
         <p className="orderDetailsDialog__text orderDetailsDialog__text--title m-y-12">

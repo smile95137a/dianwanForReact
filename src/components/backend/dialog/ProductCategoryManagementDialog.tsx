@@ -102,7 +102,7 @@ const ProductCategoryManagementDialog: FC<
     <BDialog
       isOpen={isOpen}
       onClose={() => onClose(false)}
-      className={customClass}
+      customClassName={customClass}
       mainClassName="max-w-720"
     >
       <div className="productCategoryManagementDialog">

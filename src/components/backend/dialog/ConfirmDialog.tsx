@@ -24,7 +24,7 @@ const ConfirmDialog: FC<ConfirmDialogProps> = ({
     <BDialog
       isOpen={isOpen}
       onClose={onClose}
-      className={`${customClass} bdialog--bconfirmDialog`}
+      customClassName={`${customClass} bdialog--bconfirmDialog`}
     >
       <div className="bconfirmDialog">
         <div className="bconfirmDialog__icon">

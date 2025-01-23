@@ -20,7 +20,7 @@ const InfoDialog: FC<InfoDialogProps> = ({
     <BDialog
       isOpen={isOpen}
       onClose={onClose}
-      className={`${customClass} bdialog--binfoDialog`}
+      customClassName={`${customClass} bdialog--binfoDialog`}
     >
       <div className="binfoDialog">
         <div className="binfoDialog__icon">

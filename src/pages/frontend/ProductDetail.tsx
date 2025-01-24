@@ -24,9 +24,10 @@ import { useLoading } from '@/context/frontend/LoadingContext';
 import { PrizeCategory } from '@/interfaces/product';
 import ticketImages from '@/data/ticketImagesData';
 import NumberFormatter from '@/components/common/NumberFormatter';
-import productContactImg from '@/assets/image/product-contact.png';
+import productContactImg from '@/assets/image/di-p-info.png';
 import NoData from '@/components/frontend/NoData';
 import ProductCountdown from '@/components/frontend/ProductCountdown';
+import SocialLinks from '@/components/common/SocialLinks';
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -69,7 +70,9 @@ const ProductDetail = () => {
         setProduct(productRes.data);
         const isCustomer = productRes.data.productType === 'CUSTMER_PRIZE';
         const isBonus = productRes.data.prizeCategory === 'BONUS';
-
+        if (productRes.data.status !== 'AVAILABLE') {
+          navigate('/main');
+        }
         setIsCustmerPrize(isCustomer);
         setShowBouns(isBonus);
       }
@@ -312,13 +315,19 @@ const ProductDetail = () => {
         </div>
         <div className="productDetail__awards-infos">
           <div className="productDetail__contact">
-            <a
-              href={'https://line.me'}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <div className="productDetail__contact-img">
               <img src={productContactImg} />
-            </a>
+            </div>
+
+            <div className="productDetail__contact-title">客服資訊</div>
+            <div className="productDetail__contact-content">
+              平台操作或抽獎問題
+              <br />
+              聯繫官方資訊
+            </div>
+            <div className="productDetail__contact-social">
+              <SocialLinks />
+            </div>
           </div>
         </div>
       </div>

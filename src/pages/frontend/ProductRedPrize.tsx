@@ -43,7 +43,9 @@ const Product = () => {
         if (productResponse.success) {
           const filteredProducts = productResponse.data.filter(
             (item) =>
-              item.status === 'AVAILABLE' &&
+              (item.status === 'AVAILABLE' ||
+                item.status === 'NOT_AVAILABLE_YET') &&
+              item.productType === 'PRIZE' &&
               item.prizeCategory === PrizeCategory.BONUS
           );
           setProducts(filteredProducts);

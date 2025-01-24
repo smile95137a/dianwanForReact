@@ -45,10 +45,10 @@ const Product = () => {
 
         if (productResponse.success) {
           const filteredProducts = productResponse.data.filter(
-            (item) => item.status === 'AVAILABLE'
+            (item) =>
+              item.status === 'AVAILABLE' || item.status === 'NOT_AVAILABLE_YET'
           );
           setProducts(filteredProducts);
-
           const relatedCategoryIds = new Set(
             filteredProducts.map((product) => product.categoryUUid)
           );

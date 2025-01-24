@@ -12,6 +12,7 @@ import iconS from '@/assets/image/di-icon-s.png';
 import {
   FaCheck,
   FaChevronDown,
+  FaChevronUp,
   FaRegCheckCircle,
   FaThumbtack,
   FaTimes,
@@ -381,6 +382,14 @@ const ProductDetail = () => {
           <div className="productDetail__more-btn">
             <span>展開</span>
             <FaChevronDown />
+          </div>
+        </div>
+      )}
+      {expanded && (
+        <div className="productDetail__more" onClick={toggleExpand}>
+          <div className="productDetail__more-btn">
+            <span>收合</span>
+            <FaChevronUp />
           </div>
         </div>
       )}

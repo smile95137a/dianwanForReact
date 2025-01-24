@@ -86,12 +86,30 @@ $root-block-name: '.productDetail';
     padding-top: 24px;
     @include flex(center, center);
     gap: 48px;
+
     &-item {
       @include flex(center, center);
       gap: 12px;
       border: 1px solid #ffffff;
       padding: 8px 24px;
       border-radius: 50px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+
+      &:hover {
+        background: #ffffff;
+        border-color: #a6c7d6;
+
+        #{$p__icon} {
+          color: #ffffff;
+          background: #a6c7d6;
+        }
+
+        #{$p__text} {
+          color: #a6c7d6;
+        }
+      }
+
       #{$p__icon} {
         width: 34px;
         height: 34px;
@@ -100,6 +118,7 @@ $root-block-name: '.productDetail';
         @include flex(center, center);
         color: #a6c7d6;
       }
+
       #{$p__text} {
         font-size: 20px;
         font-weight: 500;
@@ -107,6 +126,7 @@ $root-block-name: '.productDetail';
       }
     }
   }
+
   //
   &__awards {
     padding: 60px 0;
@@ -318,10 +338,12 @@ $root-block-name: '.productDetail';
     align-items: center;
     justify-content: center;
     gap: 12px;
+
     @include screen(md) {
       display: grid;
       grid-template-columns: 1fr 1fr;
     }
+
     &-btn {
       min-width: 104px;
       padding: 0 24px;
@@ -334,18 +356,39 @@ $root-block-name: '.productDetail';
       align-items: center;
       justify-content: center;
       gap: 4px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+
       img {
         width: 39px;
         height: 39px;
       }
+
       &--confirm {
         background: #f74343;
+
+        &:hover {
+          background: #e03131;
+          box-shadow: 0 4px 10px rgba(247, 67, 67, 0.6);
+        }
       }
+
       &--all {
         background: #ff7f35;
+
+        &:hover {
+          background: #e06f2d;
+          box-shadow: 0 4px 10px rgba(255, 127, 53, 0.6);
+        }
       }
+
       &--rest {
         background: #2a88cb;
+
+        &:hover {
+          background: #206fad;
+          box-shadow: 0 4px 10px rgba(42, 136, 203, 0.6);
+        }
       }
     }
   }

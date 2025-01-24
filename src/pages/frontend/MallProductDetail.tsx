@@ -13,6 +13,7 @@ import NumberFormatter from '@/components/common/NumberFormatter';
 import {
   FaCartPlus,
   FaChevronDown,
+  FaChevronUp,
   FaMinus,
   FaPlus,
   FaRegHeart,
@@ -344,6 +345,14 @@ const MallProductDetail = () => {
               <div className="mall-product__tab-more-btn">
                 <span>展開更多</span>
                 <FaChevronDown />
+              </div>
+            </div>
+          )}
+          {!expanded && (
+            <div className="mall-product__tab-more" onClick={toggleExpand}>
+              <div className="mall-product__tab-more-btn">
+                <span>收合</span>
+                <FaChevronUp />
               </div>
             </div>
           )}

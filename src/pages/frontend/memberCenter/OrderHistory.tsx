@@ -8,6 +8,8 @@ import { useLoading } from '@/context/frontend/LoadingContext';
 import { usePagination } from '@/hooks/usePagination';
 import { queryOrder } from '@/services/frontend/orderService';
 import Pagination from '@/components/frontend/Pagination';
+import { getShipStatusByKey } from '@/enums/ShipmentStatus';
+import { useFrontendDialog } from '@/context/frontend/useFrontedDialog';
 
 const transactionTypeMapping: { [key: string]: string } = {
   DEPOSIT: '儲值',
@@ -19,6 +21,7 @@ const mapTransactionType = (type: string) => {
 };
 
 const OrderHistory: React.FC = () => {
+  const { openInfoDialog, openFOrderDetailDialog } = useFrontendDialog();
   const {
     register,
     handleSubmit,
@@ -55,7 +58,7 @@ const OrderHistory: React.FC = () => {
   };
 
   const handleDetailClick = (order: any) => {
-    console.log('Order Detail:', order);
+    openFOrderDetailDialog(order);
   };
 
   return (
@@ -63,7 +66,7 @@ const OrderHistory: React.FC = () => {
       <MemberCenterCoins />
       <div className="memberCenter__orderHistoryForm">
         <div className="memberCenter__orderHistoryForm-title">
-          <p className="memberCenter__text">消費紀錄</p>
+          <p className="memberCenter__text">訂單紀錄</p>
         </div>
         <form
           className="memberCenter__orderHistoryForm-main"
@@ -129,11 +132,11 @@ const OrderHistory: React.FC = () => {
             <table>
               <thead>
                 <tr>
-                  <th className="w-25">日期</th>
-                  <th className="w-25">訂單編號</th>
-                  <th className="w-25">內容</th>
-                  <th className="w-25">狀態</th>
-                  <th className="w-25">明細</th>
+                  <th className="w-20">日期</th>
+                  <th className="w-30">訂單編號</th>
+                  <th className="w-20">內容</th>
+                  <th className="w-20">狀態</th>
+                  <th className="w-10">明細</th>
                 </tr>
               </thead>
               <tbody>
@@ -147,11 +150,10 @@ const OrderHistory: React.FC = () => {
                     </td>
                     <td>{order.orderNumber}</td>
                     <td>{order.content}</td>
-                    <td>{order.resultStatus}</td>
-
+                    <td>{getShipStatusByKey(order.resultStatus)}</td>
                     <td>
                       <button
-                        className="detail-btn"
+                        className="memberCenter__orderHistory-btn"
                         onClick={() => handleDetailClick(order)}
                       >
                         明細

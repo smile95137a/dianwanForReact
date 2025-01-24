@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 
 export interface DialogContextType {
+  openFOrderDetailDialog: (drawData: any) => Promise<boolean>;
   openDrawDialog: (drawData: any, customClass?: string) => Promise<boolean>;
   openRestPwdDialog: (customClass?: string) => Promise<boolean>;
   openConfirmDialog: (customClass?: string) => Promise<boolean>;

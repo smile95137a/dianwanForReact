@@ -77,6 +77,8 @@ const AddBannerDialog: FC<AddBannerDialogProps> = ({
           selectedProductType
         );
         if (success) {
+          console.log(data);
+
           setProductOptions([
             { value: '', label: '請選擇' },
             ...data.map((product) => ({

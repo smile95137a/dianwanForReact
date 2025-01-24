@@ -3,7 +3,7 @@ import MemberCenterCoins from '@/components/frontend/memberCenter/MemberCenterCo
 import NumberFormatter from '@/components/common/NumberFormatter';
 import { useLoading } from '@/context/frontend/LoadingContext';
 import { getTotalConsumeAmount } from '@/services/frontend/paymentService';
-
+import c1 from '@/assets/image/c1.png';
 const Rewards: React.FC = () => {
   const [cumulative, setCumulative] = useState(0);
   const [rewards, setRewards] = useState<any[]>([]);
@@ -64,7 +64,7 @@ const Rewards: React.FC = () => {
         {rewards.map((reward, index) => (
           <div className="memberCenter__rewardsCoins-item" key={index}>
             <div className="memberCenter__rewardsCoins-icon">
-              {/* <img src={c1} alt="Reward Icon" /> */}
+              <img src={c1} alt="Reward Icon" />
             </div>
 
             <div className="memberCenter__rewardsCoins-title">

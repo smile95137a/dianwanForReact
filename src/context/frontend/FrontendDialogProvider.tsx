@@ -17,6 +17,8 @@ import { useImgDialog } from './ImgDialogProvider';
 import ImgDialog from '@/components/frontend/dialog/ImgDialog';
 import { useNewsBannerDialog } from './NewsBannerDialogProvider';
 import NewsBannerDialog from '@/components/frontend/dialog/NewsBannerDialog';
+import { useFOrderDetailDialog } from './FOrderDetailDialogProvider';
+import FOrderDetailDialog from '@/components/frontend/dialog/FOrderDetailDialog';
 
 interface DialogProviderProps {
   children: ReactNode;
@@ -98,6 +100,14 @@ export const FrontendDialogProvider: FC<DialogProviderProps> = ({
     newsBannerData,
   } = useNewsBannerDialog();
 
+  const {
+    fOrderDetailDialogOpen,
+    openFOrderDetailDialog,
+    closeFOrderDetailDialog,
+    confirmFOrderDetailDialog,
+    orderData,
+  } = useFOrderDetailDialog();
+
   return (
     <FrontDialogContext.Provider
       value={{
@@ -109,6 +119,8 @@ export const FrontendDialogProvider: FC<DialogProviderProps> = ({
         openDrawStepDialog,
         openImgDialog,
         openNewsBannerDialog,
+
+        openFOrderDetailDialog,
       }}
     >
       {children}
@@ -152,6 +164,15 @@ export const FrontendDialogProvider: FC<DialogProviderProps> = ({
               onConfirm={confirmDrawDialog}
               customClass={drawCustomClass}
               drawData={drawData}
+            />
+          )}
+
+          {fOrderDetailDialogOpen && (
+            <FOrderDetailDialog
+              isOpen={fOrderDetailDialogOpen}
+              onClose={closeFOrderDetailDialog}
+              onConfirm={confirmFOrderDetailDialog}
+              orderData={orderData}
             />
           )}
 

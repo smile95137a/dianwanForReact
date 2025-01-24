@@ -24,19 +24,8 @@ $root-block-name: '.profileEditInvoiceForm';
   }
 
   &__form {
-    flex: 50%;
-    max-width: 342px;
-    @include screen(md) {
-      flex: 100%;
-      max-width: none;
-    }
-    &--other {
-      margin-left: 80px;
-      @include screen(md) {
-        margin: 0;
-      }
-    }
     &__inputs {
+      flex: 1;
     }
     #{$p__text} {
       min-height: 22px;

@@ -13,6 +13,10 @@ import { useLoading } from '@/context/frontend/LoadingContext';
 import { registerUser } from '@/services/frontend/userService';
 import { useFrontendDialog } from '@/context/frontend/useFrontedDialog';
 
+import noticeImg from '@/assets/image/notice.png';
+import noticeMImg from '@/assets/image/notice-m.png';
+import { MdVisibilityOff, MdVisibility } from 'react-icons/md';
+
 const schema = yup.object({
   username: yup.string().required('請輸入用戶名'),
   password: yup.string().required('請輸入密碼').min(6, '密碼長度至少6位'),
@@ -37,6 +41,17 @@ const schema = yup.object({
 });
 
 const Register = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword((prev) => !prev);
+  };
+
   const navigate = useNavigate();
   const { openInfoDialog } = useFrontendDialog();
   const { setLoading } = useLoading();
@@ -156,33 +171,6 @@ const Register = () => {
                 </p>
               </div>
               <div className="register__form-inputs m-t-20">
-                <p className="register__text register__text--required">密碼</p>
-                <input
-                  type="password"
-                  className={`register__form-input ${
-                    errors.password ? 'input-error' : ''
-                  }`}
-                  {...register('password')}
-                />
-                <p className="register__text register__text--error">
-                  {errors.password?.message}
-                </p>
-              </div>
-              <div className="register__form-inputs m-t-20">
-                <p className="register__text register__text--required">
-                  確認密碼
-                </p>
-                <input
-                  className={`register__form-input ${
-                    errors.confirmPassword ? 'input-error' : ''
-                  }`}
-                  {...register('confirmPassword')}
-                />
-                <p className="register__text register__text--error">
-                  {errors.confirmPassword?.message}
-                </p>
-              </div>
-              <div className="register__form-inputs m-t-20">
                 <p className="register__text register__text--required">手機</p>
                 <input
                   className={`register__form-input ${
@@ -192,6 +180,56 @@ const Register = () => {
                 />
                 <p className="register__text register__text--error">
                   {errors.phoneNumber?.message}
+                </p>
+              </div>
+              <div className="register__form-inputs m-t-20">
+                <p className="register__text register__text--required">密碼</p>
+                <div className="register__input-group">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    className={`register__form-input ${
+                      errors.password ? 'input-error' : ''
+                    }`}
+                    {...register('password')}
+                  />
+                  <button
+                    type="button"
+                    className="register__icon-btn"
+                    onClick={togglePasswordVisibility}
+                  >
+                    {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+                  </button>
+                </div>
+                <p className="register__text register__text--error">
+                  {errors.password?.message}
+                </p>
+              </div>
+              <div className="register__form-inputs m-t-20">
+                <p className="register__text register__text--required">
+                  確認密碼
+                </p>
+                <div className="register__input-group">
+                  <input
+                    type={showConfirmPassword ? 'text' : 'password'} // 切換密碼顯示
+                    className={`register__form-input ${
+                      errors.confirmPassword ? 'input-error' : ''
+                    }`}
+                    {...register('confirmPassword')}
+                  />
+                  <button
+                    type="button"
+                    className="register__icon-btn"
+                    onClick={toggleConfirmPasswordVisibility}
+                  >
+                    {showConfirmPassword ? (
+                      <MdVisibilityOff />
+                    ) : (
+                      <MdVisibility />
+                    )}
+                  </button>
+                </div>
+                <p className="register__text register__text--error">
+                  {errors.confirmPassword?.message}
                 </p>
               </div>
             </div>
@@ -289,6 +327,12 @@ const Register = () => {
               </div>
             </div>
           </div>
+          <div className="register__notice">
+            <img src={noticeImg} />
+          </div>
+          <div className="register__notice register__notice--m">
+            <img src={noticeMImg} />
+          </div>
           <div className="register__other">
             <div className="register__checkbox">
               <input
@@ -322,7 +366,7 @@ const Register = () => {
                 disabled={isSubmitting}
                 className="register__btn"
               >
-                {isSubmitting ? '提交中...' : '註冊'}
+                {isSubmitting ? '提交中...' : '註冊成為會員'}
               </button>
             </div>
           </div>

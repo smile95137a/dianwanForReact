@@ -72,6 +72,12 @@ const navItems = [
     label: '購物車',
     class: 'orange',
   },
+  {
+    to: '/deposit',
+    icon: <IoCartOutline />,
+    label: '購買代幣',
+    class: 'orange',
+  },
 ];
 
 const Header = () => {

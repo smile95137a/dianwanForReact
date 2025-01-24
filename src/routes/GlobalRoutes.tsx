@@ -68,6 +68,7 @@ const FrontendRoutes: RouteObject[] = [
       { path: 'cart', element: <Cart /> },
       { path: 'prizeBox', element: <PrizeBox /> },
       { path: 'orderSuccess', element: <OrderSuccess /> },
+      { path: 'deposit', element: <Deposit /> },
       {
         path: 'member-center',
         element: <MemberCenter />,
@@ -77,7 +78,6 @@ const FrontendRoutes: RouteObject[] = [
           { path: 'profile-edit', element: <ProfileEdit /> },
           { path: 'purchase-history', element: <PurchaseHistory /> },
           { path: 'rewards', element: <Rewards /> },
-          { path: 'deposit', element: <Deposit /> },
         ],
       },
       { path: 'news', element: <News /> },

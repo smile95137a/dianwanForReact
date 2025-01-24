@@ -224,6 +224,8 @@ $root-block-name: '.fproduct';
     display: flex;
     gap: 12px;
     position: relative;
+    box-shadow: 0px 12px 25px 0px #00000040;
+    border-radius: 8px;
     @include screen(lg) {
       flex-direction: column;
     }

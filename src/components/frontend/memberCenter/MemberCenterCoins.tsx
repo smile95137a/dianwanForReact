@@ -2,7 +2,8 @@ import NumberFormatter from '@/components/common/NumberFormatter';
 import { getUserInfo } from '@/services/frontend/userService';
 import React, { useEffect, useState } from 'react';
 import { FaDollarSign, FaGift } from 'react-icons/fa';
-
+import iconG from '@/assets/image/di-icon-g.png';
+import iconS from '@/assets/image/di-icon-s.png';
 const MemberCenterCoins = () => {
   const [userBalance, setUserBalance] = useState(0);
   const [userBonus, setUserBonus] = useState(0);
@@ -34,9 +35,11 @@ const MemberCenterCoins = () => {
       <div className="memberCenter__coins">
         <div className="memberCenter__coins-item memberCenter__coins-item--gold">
           <div className="memberCenter__coins-info">
-            <div className="memberCenter__coins-icon">G</div>
+            <div className="memberCenter__coins-icon">
+              <img src={iconG} alt="Gold Icon" />
+            </div>
             <div className="memberCenter__coins-title">
-              <p className="memberCenter__text">金幣</p>
+              <p className="memberCenter__text">代幣</p>
             </div>
           </div>
           <div className="memberCenter__coins-num">
@@ -47,9 +50,11 @@ const MemberCenterCoins = () => {
         </div>
         <div className="memberCenter__coins-item memberCenter__coins-item--sliver">
           <div className="memberCenter__coins-info">
-            <div className="memberCenter__coins-icon">S</div>
+            <div className="memberCenter__coins-icon">
+              <img src={iconS} alt="Silver Icon" />
+            </div>
             <div className="memberCenter__coins-title">
-              <p className="memberCenter__text">銀幣</p>
+              <p className="memberCenter__text">點數</p>
             </div>
           </div>
           <div className="memberCenter__coins-num">

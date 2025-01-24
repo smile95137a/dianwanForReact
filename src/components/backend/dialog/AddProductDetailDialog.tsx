@@ -333,6 +333,8 @@ const AddProductDetailDialog: FC<AddProductDetailDialogProps> = ({
                       src={getImageUrl(image)}
                       alt="商品圖片"
                       className="preview-image"
+                      width={40}
+                      height={40}
                     />
                   ) : (
                     <p>{image.name}</p>

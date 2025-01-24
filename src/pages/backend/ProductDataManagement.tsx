@@ -26,17 +26,13 @@ const productStatusOptions: Record<ProductStatus, string> = {
 const ProductDataManagement = () => {
   enum ProductType {
     PRIZE = 'PRIZE',
-    GACHA = 'GACHA',
-    BLIND_BOX = 'BLIND_BOX',
     CUSTMER_PRIZE = 'CUSTMER_PRIZE',
   }
 
   const productTypeOptions = [
     { value: '', label: '請選擇' },
     { value: ProductType.PRIZE, label: '一番賞' },
-    { value: ProductType.GACHA, label: '扭蛋' },
-    { value: ProductType.BLIND_BOX, label: '盲盒' },
-    { value: ProductType.CUSTMER_PRIZE, label: '自製獎品' },
+    { value: ProductType.CUSTMER_PRIZE, label: '優惠賞' },
   ];
 
   const prizeCategoryOptions = [
@@ -44,7 +40,7 @@ const ProductDataManagement = () => {
     { value: PrizeCategory.FIGURE, label: '官方電玩賞' },
     { value: PrizeCategory.C3, label: '3C賞' },
     { value: PrizeCategory.BONUS, label: '紅利賞' },
-    { value: PrizeCategory.PRIZESELF, label: '優惠賞' },
+    { value: PrizeCategory.PRIZESELF, label: '自製賞' },
     { value: PrizeCategory.NONE, label: '無' },
   ];
 
@@ -213,7 +209,7 @@ const ProductDataManagement = () => {
       case PrizeCategory.BONUS:
         return '紅利賞';
       case PrizeCategory.PRIZESELF:
-        return '優惠賞';
+        return '自製賞';
       case PrizeCategory.NONE:
       default:
         return '無';
@@ -231,8 +227,6 @@ const ProductDataManagement = () => {
 
   const productTypeTranslations: Record<ProductType, string> = {
     [ProductType.PRIZE]: '一番賞',
-    [ProductType.GACHA]: '扭蛋',
-    [ProductType.BLIND_BOX]: '盲盒',
     [ProductType.CUSTMER_PRIZE]: '自製獎品',
   };
 

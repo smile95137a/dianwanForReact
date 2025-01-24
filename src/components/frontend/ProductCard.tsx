@@ -3,9 +3,9 @@ import { getImageUrl } from '@/utils/ImageUtils';
 import { MdOutlineOfflineBolt } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import MoneyCard from './MoneyCard';
-import { PrizeCategory } from '@/interfaces/product';
+import { PrizeCategory, ProductType } from '@/interfaces/product';
 import NumberFormatter from '../common/NumberFormatter';
-
+import soldOutImg from '@/assets/image/di-soldout.png';
 const ProductCard = ({ isMall = false, product, className = '' }: any) => {
   const navigate = useNavigate();
   const handleClick = () => {
@@ -34,6 +34,13 @@ const ProductCard = ({ isMall = false, product, className = '' }: any) => {
         {Array.isArray(product?.imageUrls) && product.imageUrls.length > 0 && (
           <img src={getImageUrl(product.imageUrls[0])} />
         )}
+
+        {product.status === 'NOT_AVAILABLE_YET' && (
+          <div className="productCard__soldoutImg">
+            <img src={soldOutImg} />
+          </div>
+        )}
+
         {isMall ? (
           <div className="productCard__moneys">
             <span className="productCard__text">特價</span>
@@ -52,28 +59,34 @@ const ProductCard = ({ isMall = false, product, className = '' }: any) => {
           </div>
         ) : (
           <div className="productCard__moneys">
-            {product?.prizeCategory !== PrizeCategory.BONUS ? (
+            {product.productType !== ProductType.CUSTMER_PRIZE ? (
               <>
-                <MoneyCard
-                  className="productCard__money--gold"
-                  logoText="G"
-                  price={product.price}
-                  suffixText="/抽"
-                />
-                <MoneyCard
-                  className="productCard__money--silver"
-                  logoText="S"
-                  price={product.sliverPrice}
-                  suffixText="/抽"
-                />
+                {product?.prizeCategory !== PrizeCategory.BONUS ? (
+                  <>
+                    <MoneyCard
+                      className="productCard__money--gold"
+                      logoText="G"
+                      price={product.price}
+                      suffixText="/抽"
+                    />
+                    <MoneyCard
+                      className="productCard__money--silver"
+                      logoText="S"
+                      price={product.sliverPrice}
+                      suffixText="/抽"
+                    />
+                  </>
+                ) : (
+                  <MoneyCard
+                    className="productCard__money--bonus"
+                    logoText="B"
+                    price={product.bonusPrice}
+                    suffixText="/抽"
+                  />
+                )}
               </>
             ) : (
-              <MoneyCard
-                className="productCard__money--bonus"
-                logoText="B"
-                price={product.bonusPrice}
-                suffixText="/抽"
-              />
+              <></>
             )}
           </div>
         )}

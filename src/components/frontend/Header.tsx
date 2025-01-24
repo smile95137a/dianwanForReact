@@ -15,6 +15,7 @@ import {
   FaBars,
   FaUserCircle,
   FaGift,
+  FaDollarSign,
 } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store';
@@ -61,6 +62,12 @@ const navItems = [
     class: 'red',
   },
   {
+    to: '/deposit',
+    icon: <FaDollarSign />,
+    label: '儲值',
+    class: 'orange',
+  },
+  {
     to: '/mallProduct',
     icon: <RiShoppingBagLine />,
     label: '商城',
@@ -70,12 +77,6 @@ const navItems = [
     to: '/cart',
     icon: <IoCartOutline />,
     label: '購物車',
-    class: 'orange',
-  },
-  {
-    to: '/deposit',
-    icon: <IoCartOutline />,
-    label: '儲值',
     class: 'orange',
   },
 ];

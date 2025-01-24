@@ -22,7 +22,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { useLoading } from '@/context/frontend/LoadingContext';
 import { PrizeCategory } from '@/interfaces/product';
-import { delay } from '@/utils/DelayUtils';
 import ticketImages from '@/data/ticketImagesData';
 import NumberFormatter from '@/components/common/NumberFormatter';
 import productContactImg from '@/assets/image/product-contact.png';
@@ -176,7 +175,7 @@ const ProductDetail = () => {
           drawItemList: data,
         });
         await fetchData();
-        await openDrawDialog({ remainingQuantity: qu, data });
+        await openDrawDialog({ remainingQuantity: qu, data, product: product });
       }
     } catch (error: any) {
       const { message } = error.response.data;
@@ -258,8 +257,8 @@ const ProductDetail = () => {
         </div>
       </div>
       {isCustmerPrize && (
-        <div className="productDetail__inputCode">
-          <label htmlFor="inputCode" className="productDetail__label">
+        <div className="productDetail__inputCode m-y-12">
+          <label htmlFor="inputCode" className="productDetail__inputCode-text">
             請輸入代碼：
           </label>
           <input
@@ -267,7 +266,7 @@ const ProductDetail = () => {
             type="text"
             value={inputCode}
             onChange={(e) => setInputCode(e.target.value)}
-            className="productDetail__input"
+            className="productDetail__inputCode-input"
             placeholder="輸入您的代碼"
           />
         </div>

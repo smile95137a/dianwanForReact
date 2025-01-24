@@ -26,6 +26,13 @@ import {
   checkQuantity,
 } from '@/services/frontend/cartItemService';
 import { useLoading } from '@/context/frontend/LoadingContext';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import ProductCard from '@/components/frontend/ProductCard';
+import { genRandom } from '@/utils/RandomUtils';
 
 const MallProductDetail = () => {
   const { id } = useParams();
@@ -76,6 +83,18 @@ const MallProductDetail = () => {
           ...prevItems,
           { name: data.productName },
         ]);
+      }
+
+      if (likedResponse?.success) {
+        setLikedProducts(likedResponse.data);
+      }
+
+      if (recommendedResponse?.success) {
+        setRecommendedProducts(recommendedResponse.data);
+      }
+
+      if (hotProductsRes?.success) {
+        setHotProducts(hotProductsRes.data);
       }
     } catch (err) {
       console.error(err);
@@ -213,14 +232,7 @@ const MallProductDetail = () => {
                   </button>
                 </div>
               </div>
-              <div className="mall-product__detail-otherPreOrder">
-                <div className="mall-product__detail-otherPreOrder-title">
-                  預購
-                </div>
-                <div className="mall-product__detail-otherPreOrder-other-text">
-                  即日起 ~ 2024/11/30，商品預計將於 2024/11/30 陸續發貨
-                </div>
-              </div>
+
               <div className="mall-product__detail-otherLogistics">
                 <div className="mall-product__detail-otherLogistics-title">
                   物流
@@ -228,7 +240,7 @@ const MallProductDetail = () => {
                 <div className="mall-product__detail-otherLogistics-other">
                   <i className="fa-solid fa-truck"></i>
                   <div className="mall-product__detail-otherLogistics-other-text">
-                    <FaTruck /> $160 ~ {product?.shippingPrice}
+                    <FaTruck /> $0 ~ {product?.shippingPrice}$160
                   </div>
                   <div className="mall-product__detail-otherLogistics-other-icon">
                     <img src={se} alt="711 logo" />
@@ -335,6 +347,53 @@ const MallProductDetail = () => {
               </div>
             </div>
           )}
+        </div>
+
+        <div className="mall-product__slider m-y-24">
+          <div className="mall-product__sliderTitle">
+            <div className="mall-product__sliderTitle-text">你可能會喜歡</div>
+          </div>
+          <div className="mall-product__slider-list">
+            <div className="mall-product__slider-main">
+              <Swiper
+                slidesPerView={3}
+                spaceBetween={10}
+                navigation
+                autoplay={{
+                  delay: 3000,
+                  disableOnInteraction: false,
+                }}
+                pagination={{ clickable: true }}
+                modules={[Navigation, Pagination, Autoplay]}
+                loop={true}
+              >
+                {likedProducts.map((product, index) => (
+                  <SwiperSlide key={index}>
+                    <ProductCard
+                      key={genRandom(24)}
+                      product={product}
+                      isMall={true}
+                      className="productCard--mall"
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+          </div>
+        </div>
+
+        <div className="mall-product__recommendations">
+          <p className="mall-product__text">店長推薦</p>
+          <div className="mall-product__recommendations-list">
+            {recommendedProducts.slice(0, 6).map((product) => (
+              <ProductCard
+                key={genRandom(24)}
+                product={product}
+                isMall={true}
+                className="productCard--mall"
+              />
+            ))}
+          </div>
         </div>
       </div>
     </>

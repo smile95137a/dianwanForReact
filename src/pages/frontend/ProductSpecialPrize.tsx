@@ -266,11 +266,11 @@ const Product = () => {
                     <div className="fproduct__item-infoDetail">
                       <p className="fproduct__text">
                         每抽：
-                        <NumberFormatter number={product.price} />元
+                        <NumberFormatter number={0} />元
                       </p>
                       <p className="fproduct__text">
                         10 抽
-                        <NumberFormatter number={product.price * 10} />元
+                        <NumberFormatter number={0} />元
                       </p>
                     </div>
                   </div>

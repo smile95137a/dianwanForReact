@@ -320,4 +320,34 @@ $root-block-name: '.productDetail';
       }
     }
   }
+
+  &__inputCode {
+  }
+
+  &__inputCode {
+    width: 100%;
+    height: 48px;
+    position: relative;
+    &-text {
+      position: absolute;
+      left: 0;
+      width: 204px;
+      height: 100%;
+      border-radius: 90px;
+      background: #2a88cb;
+      color: #fff;
+      @include flex(center, center);
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    &-input {
+      width: 100%;
+      height: 100%;
+      padding-left: calc(204px + 24px);
+      padding-right: 24px;
+      border: 1px solid #2a88cb;
+      border-radius: 90px;
+    }
+  }
 }

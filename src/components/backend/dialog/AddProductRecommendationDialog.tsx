@@ -92,34 +92,17 @@ const AddProductRecommendationDialog: FC<
     const fetchProductsByType = async () => {
       if (!selectedRecommendationId) return;
 
-      const isGacha = storeProductRecommendationOptions.some(
-        (option) =>
-          option.value === selectedRecommendationId &&
-          option.label === '扭蛋推薦'
-      );
-
       try {
         let products = [];
-        if (isGacha) {
-          const { success, data } = await getAllProducts();
-          if (success) {
-            products =
-              data.filter(
-                (product) => product.productType === ProductType.GACHA
-              ) || [];
 
-            console.log(products);
-          }
-        } else {
-          const { success, data } = await getAllStoreProducts();
-          if (success) {
-            products = data || [];
-          }
+        const { success, data } = await getAllStoreProducts();
+        if (success) {
+          products = data || [];
         }
 
         if (products.length > 0) {
           const options = products.map((product: any) => ({
-            value: isGacha ? product.productId : product.storeProductId,
+            value: product.storeProductId,
             label: product.productName,
           }));
           setStoreProductOptions([{ value: '', label: '請選擇' }, ...options]);

@@ -24,8 +24,6 @@ export enum ProductStatus {
 
 export enum ProductType {
   PRIZE = 'PRIZE',
-  GACHA = 'GACHA',
-  BLIND_BOX = 'BLIND_BOX',
   CUSTMER_PRIZE = 'CUSTMER_PRIZE',
 }
 
@@ -153,9 +151,7 @@ const AddBannerDialog: FC<AddBannerDialogProps> = ({
   const productTypeOptions = [
     { value: '', label: '請選擇' },
     { value: ProductType.PRIZE, label: '一番賞' },
-    { value: ProductType.GACHA, label: '扭蛋' },
-    { value: ProductType.BLIND_BOX, label: '盲盒' },
-    { value: ProductType.CUSTMER_PRIZE, label: '自製獎品' },
+    { value: ProductType.CUSTMER_PRIZE, label: '優惠賞' },
   ];
 
   const prizeCategoryOptions = [
@@ -163,7 +159,7 @@ const AddBannerDialog: FC<AddBannerDialogProps> = ({
     { value: PrizeCategory.FIGURE, label: '官方電玩賞' },
     { value: PrizeCategory.C3, label: '3C賞' },
     { value: PrizeCategory.BONUS, label: '紅利賞' },
-    { value: PrizeCategory.PRIZESELF, label: '優惠賞' },
+    { value: PrizeCategory.PRIZESELF, label: '自製賞' },
     { value: PrizeCategory.NONE, label: '無' },
   ];
 

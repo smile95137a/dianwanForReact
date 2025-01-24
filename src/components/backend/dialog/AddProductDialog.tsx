@@ -69,8 +69,6 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
   const [bannerImages, setBannerImages] = useState<any[]>([]);
   enum ProductType {
     PRIZE = 'PRIZE',
-    GACHA = 'GACHA',
-    BLIND_BOX = 'BLIND_BOX',
     CUSTMER_PRIZE = 'CUSTMER_PRIZE',
   }
 
@@ -83,9 +81,7 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
 
   const productTypeOptions: Record<ProductType, string> = {
     [ProductType.PRIZE]: '一番賞',
-    [ProductType.GACHA]: '扭蛋',
-    [ProductType.BLIND_BOX]: '盲盒',
-    [ProductType.CUSTMER_PRIZE]: '客製化抽獎',
+    [ProductType.CUSTMER_PRIZE]: '優惠賞',
   };
 
   const productStatusOptions: Record<ProductStatus, string> = {
@@ -100,7 +96,7 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
     { value: PrizeCategory.FIGURE, label: '官方電玩賞' },
     { value: PrizeCategory.C3, label: '3C賞' },
     { value: PrizeCategory.BONUS, label: '紅利賞' },
-    { value: PrizeCategory.PRIZESELF, label: '優惠賞' },
+    { value: PrizeCategory.PRIZESELF, label: '自製賞' },
     { value: PrizeCategory.NONE, label: '無' },
   ];
 

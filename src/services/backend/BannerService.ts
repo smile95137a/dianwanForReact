@@ -102,7 +102,5 @@ export interface BannerFormData {
 
 export enum ProductType {
   PRIZE = 'PRIZE',
-  GACHA = 'GACHA',
-  BLIND_BOX = 'BLIND_BOX',
   CUSTMER_PRIZE = 'CUSTMER_PRIZE',
 }

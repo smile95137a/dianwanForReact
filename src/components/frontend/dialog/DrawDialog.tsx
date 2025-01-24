@@ -22,6 +22,9 @@ const DrawDialog: FC<DrawDialogProps> = ({
     (sum: number, item: any) => sum + item.amount,
     0
   );
+
+  const isCustomer = drawData.product.productType === 'CUSTMER_PRIZE';
+
   return (
     <Dialog isOpen={isOpen} onClose={onClose} className={customClass}>
       <div className="drawDialog">
@@ -70,7 +73,7 @@ const DrawDialog: FC<DrawDialogProps> = ({
               <p className="drawDialog__text ">
                 共花費
                 <span className="drawDialog__text  drawDialog__text--red drawDialog__text--bold">
-                  <NumberFormatter number={total} />
+                  <NumberFormatter number={isCustomer ? 0 : total} />
                 </span>
               </p>
             </div>

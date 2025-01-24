@@ -9,7 +9,7 @@ $root-block-name: '.mall-product';
 
   &__sliderTitle {
     @include flex;
-    font-size: 35px;
+    font-size: 24px;
     font-weight: 700;
     color: #2a88cb;
     gap: 8px;
@@ -23,7 +23,6 @@ $root-block-name: '.mall-product';
   }
 
   &__slider {
-    padding: 40px;
     position: relative;
     &-list {
       width: 100%;
@@ -79,7 +78,7 @@ $root-block-name: '.mall-product';
       }
     }
     &-other {
-      @include flex(null, space-between);
+      @include flex(null);
       gap: 16px;
       margin: 16px 0;
     }
@@ -408,6 +407,23 @@ $root-block-name: '.mall-product';
         gap: 12px;
         letter-spacing: 1px;
       }
+    }
+  }
+
+  &__recommendations {
+    #{$p__text} {
+      font-size: 24px;
+      font-weight: 700;
+      color: #2a88cb;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    &-list {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 48px;
     }
   }
 }

@@ -61,6 +61,7 @@ const AddBannerDialog: FC<AddBannerDialogProps> = ({
   const [productOptions, setProductOptions] = useState<
     { value: string; label: string }[]
   >([{ value: '', label: '請選擇' }]);
+
   const selectedProductType = watch('productType');
 
   useEffect(() => {
@@ -79,10 +80,12 @@ const AddBannerDialog: FC<AddBannerDialogProps> = ({
 
           setProductOptions([
             { value: '', label: '請選擇' },
-            ...data.map((product) => ({
-              value: product.productId,
-              label: product.productName,
-            })),
+            ...data
+              .filter((x) => x.status === 'AVAILABLE')
+              .map((product) => ({
+                value: product.productId,
+                label: product.productName,
+              })),
           ]);
         }
       } catch (err) {

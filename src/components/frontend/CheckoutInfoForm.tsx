@@ -106,7 +106,9 @@ const CheckoutInfoForm = () => {
       setValue('shippingEmail', billingEmail);
       setValue('shippingPhone', billingPhone);
       setValue('shippingCity', billingCity);
-      setValue('shippingArea', billingArea);
+      setTimeout(() => {
+        setValue('shippingArea', billingArea);
+      }, 100);
       setValue('shippingAddress', billingAddress);
     }
   }, [isSameAsBuyer]);

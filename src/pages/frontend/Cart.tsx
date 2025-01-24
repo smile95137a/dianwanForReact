@@ -254,8 +254,38 @@ const Cart = () => {
   };
 
   useEffect(() => {
-    loadCartItems();
-  }, []);
+    const initializeForm = async () => {
+      // Load cart items
+      loadCartItems();
+
+      try {
+        const { data: userInfo } = await getUserInfo();
+
+        if (userInfo) {
+          // Set individual field values
+          if (userInfo.vehicle) methods.setValue('vehicle', userInfo.vehicle);
+          if (userInfo.username)
+            methods.setValue('billingEmail', userInfo.username);
+          if (userInfo.addressName)
+            methods.setValue('billingName', userInfo.addressName);
+          if (userInfo.phoneNumber)
+            methods.setValue('billingPhone', userInfo.phoneNumber);
+          if (userInfo.address)
+            methods.setValue('billingAddress', userInfo.address);
+          if (userInfo.zipCode)
+            methods.setValue('billingZipCode', userInfo.zipCode);
+          if (userInfo.city) methods.setValue('billingCity', userInfo.city);
+          setTimeout(() => {
+            if (userInfo.area) methods.setValue('billingArea', userInfo.area);
+          }, 100);
+        }
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
+    };
+
+    initializeForm();
+  }, [methods]);
 
   const increaseQuantity = (item: any) => async () => {
     const cartItem = {
@@ -388,7 +418,7 @@ const Cart = () => {
         <p className="cart__text cart__text--title m-b-24">商品資訊</p>
         <div className="cart__products">
           {cartItems.map((item: any, index) => (
-            <div key={genRandom(32)} className="cart__product">
+            <div key={index} className="cart__product">
               <div className="cart__product-item cart__product-item--selected">
                 <input
                   type="checkbox"
@@ -440,8 +470,8 @@ const Cart = () => {
               <p className="cart__text">寄送</p>
             </div>
             <div className="cart__main-content">
-              {shippingMethods.map((option) => (
-                <div key={genRandom(32)} className="cart__content">
+              {shippingMethods.map((option, index) => (
+                <div key={index} className="cart__content">
                   <div className="cart__content-main">
                     <input
                       type="radio"
@@ -489,7 +519,7 @@ const Cart = () => {
                     className="checkoutInfoForm__select"
                   >
                     {invoiceInfoOptions.map((option) => (
-                      <option key={genRandom(32)} value={option.value}>
+                      <option key={option.label} value={option.value}>
                         {option.label}
                       </option>
                     ))}
@@ -540,8 +570,8 @@ const Cart = () => {
               <p className="cart__text">付款</p>
             </div>
             <div className="cart__main-content">
-              {paymentOptions.map((option) => (
-                <div className="cart__content" key={genRandom(32)}>
+              {paymentOptions.map((option, index) => (
+                <div className="cart__content" key={index}>
                   <div className="cart__content-main">
                     <input
                       type="radio"

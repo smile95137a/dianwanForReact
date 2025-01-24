@@ -247,8 +247,38 @@ const Cart = () => {
   };
 
   useEffect(() => {
-    loadCartItems();
-  }, []);
+    const initializeForm = async () => {
+      // Load cart items
+      loadCartItems();
+
+      try {
+        const { data: userInfo } = await getUserInfo();
+
+        if (userInfo) {
+          // Set individual field values
+          if (userInfo.vehicle) methods.setValue('vehicle', userInfo.vehicle);
+          if (userInfo.username)
+            methods.setValue('billingEmail', userInfo.username);
+          if (userInfo.addressName)
+            methods.setValue('billingName', userInfo.addressName);
+          if (userInfo.phoneNumber)
+            methods.setValue('billingPhone', userInfo.phoneNumber);
+          if (userInfo.address)
+            methods.setValue('billingAddress', userInfo.address);
+          if (userInfo.zipCode)
+            methods.setValue('billingZipCode', userInfo.zipCode);
+          if (userInfo.city) methods.setValue('billingCity', userInfo.city);
+          setTimeout(() => {
+            if (userInfo.area) methods.setValue('billingArea', userInfo.area);
+          }, 100);
+        }
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
+    };
+
+    initializeForm();
+  }, [methods]);
 
   const handleCheckboxChange = (item: any) => {
     setSelectedItems((prevSelected) => {

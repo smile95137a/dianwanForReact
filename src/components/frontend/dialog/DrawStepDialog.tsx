@@ -29,6 +29,7 @@ const DrawStepDialog: FC<DrawStepDialogProps> = ({
     confirmAnimateDialog,
     drawData: animateDialogData,
   } = useAnimateDialog();
+
   const {
     drawProductDialogOpen,
     customClass: drawProductDialogCustomClass,
@@ -46,16 +47,19 @@ const DrawStepDialog: FC<DrawStepDialogProps> = ({
     const handleDrawDataUpdate = async () => {
       if (drawData) {
         if (Array.isArray(drawData.drawItemList)) {
-          for (const [index, x] of drawData.drawItemList.entries()) {
+          const withoutLASTList = drawData.drawItemList.filter((x) => x.level);
+
+          for (const [index, x] of withoutLASTList.entries()) {
             await openAnimateDialog({
               drawData,
               item: x,
               index,
-              totalLength: drawData.drawItemList.length,
+              totalLength: withoutLASTList.length,
+              endTimes: drawData.endTimes,
             });
-            await delay(300);
+            await delay(100);
             await openDrawProductDialog(x);
-            await delay(300);
+            await delay(100);
           }
           onClose();
         }

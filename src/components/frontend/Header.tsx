@@ -269,6 +269,12 @@ const Header = () => {
                 key={index}
                 className={`fheader__nav-item fheader__nav-item--${item.class}`}
                 to={item.to}
+                onClick={(e) => {
+                  if (window.location.pathname === item.to) {
+                    e.preventDefault();
+                    window.location.reload();
+                  }
+                }}
               >
                 <div
                   className={`fheader__nav-item-icon fheader__nav-item-icon--${item.class}`}

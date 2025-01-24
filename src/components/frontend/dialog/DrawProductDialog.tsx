@@ -17,6 +17,9 @@ const DrawProductDialog: FC<DrawProductDialogProps> = ({
   customClass,
   drawData,
 }) => {
+  setTimeout(() => {
+    onClose();
+  }, 1000);
   return (
     <Dialog
       isOpen={isOpen}

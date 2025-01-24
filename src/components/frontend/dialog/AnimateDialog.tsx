@@ -4,6 +4,7 @@ import ticketImages from '@/data/ticketImagesData';
 import { BsHandIndex } from 'react-icons/bs';
 import ticketAnimateImages from '@/data/tickeAnimatetImagesData';
 import { getImageUrl } from '@/utils/ImageUtils';
+import ProductCountdown from '../ProductCountdown';
 
 interface AnimateDialogProps {
   isOpen: boolean;
@@ -36,8 +37,8 @@ const AnimateDialog: FC<AnimateDialogProps> = ({
 
     const deltaX = x - startX;
     const newIndex = Math.min(
-      Math.max(1, baseIndex + Math.floor(deltaX / 20)),
-      30
+      Math.max(1, baseIndex + Math.floor(deltaX / 5)),
+      24
     );
 
     if (newIndex !== animateIndex) {
@@ -111,13 +112,9 @@ const AnimateDialog: FC<AnimateDialogProps> = ({
             <p className="animateDialog__text">
               剩餘{drawData.totalLength - drawData.index}張獎籤
             </p>
-            <p className="animateDialog__text">
-              保護還有
-              <span className="animateDialog__text animateDialog__text--red">
-                297
-              </span>
-              秒
-            </p>
+            {drawData.endTimes && (
+              <ProductCountdown endTime={drawData.endTimes} />
+            )}
           </div>
         </div>
         <div className="animateDialog__imgs">

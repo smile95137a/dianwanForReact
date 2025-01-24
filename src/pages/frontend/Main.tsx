@@ -115,6 +115,11 @@ const Main = () => {
       console.error('Error fetching display news:', error);
     }
   };
+  const goToProductDetail = (banner: any) => {
+    if (banner && banner.productId) {
+      navigate(`/product/${banner.productId}`);
+    }
+  };
 
   return (
     <>
@@ -139,7 +144,10 @@ const Main = () => {
             }}
           >
             {banners.map((banner, index) => (
-              <SwiperSlide key={index}>
+              <SwiperSlide
+                key={index}
+                onClick={() => goToProductDetail(banner)}
+              >
                 <div className="slider__item">
                   {Array.isArray(banner?.imageUrls) &&
                     banner.imageUrls.length > 0 && (

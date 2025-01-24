@@ -50,7 +50,7 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
   children,
 }) => {
   const {
-    productId,
+    productData,
     productDetail,
     isProductDetailEdit,
     addProductDetailDialogOpen,
@@ -278,7 +278,7 @@ export const BackendDialogProvider: FC<DialogProviderProps> = ({
           )}
           {addProductDetailDialogOpen && (
             <AddProductDetailDialog
-              productId={productId}
+              productData={productData}
               productDetail={productDetail}
               isEdit={isProductDetailEdit}
               isOpen={addProductDetailDialogOpen}

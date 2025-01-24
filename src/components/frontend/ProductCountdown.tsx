@@ -27,7 +27,11 @@ const ProductCountdown = ({ endTime }: { endTime: string }) => {
 
   return (
     <p className="product-detail-one__countdown">
-      剩餘時間: {Math.floor(countdown / 60)} 分 {countdown % 60} 秒
+      保護還有{' '}
+      <span className="product-detail-one__text product-detail-one__text--red">
+        {countdown}
+      </span>
+      秒
     </p>
   );
 };

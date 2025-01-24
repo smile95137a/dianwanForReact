@@ -17,7 +17,7 @@ interface AddProductDetailDialogProps {
   isOpen: boolean;
   onClose: (result: boolean) => void;
   isEdit?: boolean;
-  productId: any;
+  productData: any;
   productDetail?: any;
 }
 
@@ -25,7 +25,7 @@ const AddProductDetailDialog: FC<AddProductDetailDialogProps> = ({
   isOpen,
   onClose,
   isEdit = false,
-  productId,
+  productData,
   productDetail,
 }) => {
   const gradeOptions = [
@@ -166,6 +166,11 @@ const AddProductDetailDialog: FC<AddProductDetailDialogProps> = ({
       ) {
         throw new Error('機率必須為介於 0.0001 和 0.9999 之間的有效數字！');
       }
+
+      if (isEdit && productData.status === 'AVAILABLE') {
+        throw new Error('上架產品無法更新');
+      }
+
       return true;
     } catch (error) {
       if (error instanceof Error) {
@@ -183,11 +188,11 @@ const AddProductDetailDialog: FC<AddProductDetailDialogProps> = ({
         const { success, message, data } = isEdit
           ? await updateProductDetail2({
               productDetailId: productDetail.productDetailId,
-              productId: productId,
+              productId: productData.productId,
               ...values,
             })
           : await createProductDetail2({
-              productId: productId,
+              productId: productData.productId,
               ...values,
             });
 

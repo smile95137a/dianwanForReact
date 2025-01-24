@@ -57,41 +57,44 @@ const ProductDetail = () => {
     return ticketList.filter((x: any) => !x.isDrawn).length;
   }, [ticketList]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const [productRes, productDetailRes, drawStatusRes] = await Promise.all(
-          [getProductById(id), getProductDetailById(id), getDrawStatus(id)]
-        );
-        setLoading(false);
-        if (productRes.success) {
-          setProduct(productRes.data);
-          const isCustomer = productRes.data.productType === 'CUSTMER_PRIZE';
-          const isBonus = productRes.data.prizeCategory === 'BONUS';
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const [productRes, productDetailRes, drawStatusRes] = await Promise.all([
+        getProductById(id),
+        getProductDetailById(id),
+        getDrawStatus(id),
+      ]);
+      setLoading(false);
+      if (productRes.success) {
+        setProduct(productRes.data);
+        const isCustomer = productRes.data.productType === 'CUSTMER_PRIZE';
+        const isBonus = productRes.data.prizeCategory === 'BONUS';
 
-          setIsCustmerPrize(isCustomer);
-          setShowBouns(isBonus);
-        }
-
-        if (productDetailRes.success) {
-          setProductDetail(productDetailRes.data);
-        }
-
-        if (drawStatusRes.success) {
-          setTicketList(drawStatusRes.data.prizeNumberList);
-          if (productRes.data.productType === 'PRIZE') {
-            const endTime = drawStatusRes.data.endTimes || null;
-            if (endTime) setEndTimes(endTime);
-          }
-        }
-      } catch (error) {
-        setLoading(false);
-        console.error('失敗:', error);
-        await openInfoDialog('系統消息', '系統問題，請稍後再嘗試。');
-        navigate('/main');
+        setIsCustmerPrize(isCustomer);
+        setShowBouns(isBonus);
       }
-    };
+
+      if (productDetailRes.success) {
+        setProductDetail(productDetailRes.data);
+      }
+
+      if (drawStatusRes.success) {
+        setTicketList(drawStatusRes.data.prizeNumberList);
+        if (productRes.data.productType === 'PRIZE') {
+          const endTime = drawStatusRes.data.endTimes || null;
+          if (endTime) setEndTimes(endTime);
+        }
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error('失敗:', error);
+      await openInfoDialog('系統消息', '系統問題，請稍後再嘗試。');
+      navigate('/main');
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, [id]);
 
@@ -172,27 +175,8 @@ const ProductDetail = () => {
           productDetail: productDetail,
           drawItemList: data,
         });
-        await fetchDrawStatus();
+        await fetchData();
         await openDrawDialog({ remainingQuantity: qu, data });
-      }
-    } catch (error: any) {
-      const { message } = error.response.data;
-      openInfoDialog('系統消息', message);
-    }
-  };
-
-  const fetchDrawStatus = async () => {
-    try {
-      const { success, data } = await getDrawStatus(product.productId);
-
-      if (success) {
-        setTicketList(data.prizeNumberList);
-        if (product?.productType === 'PRIZE') {
-          const endTime = data.endTimes || null;
-          if (endTime) setEndTimes(endTime);
-        }
-      } else {
-        openInfoDialog('系統消息', '系統錯誤');
       }
     } catch (error: any) {
       const { message } = error.response.data;
@@ -268,6 +252,10 @@ const ProductDetail = () => {
             <p className="productDetail__text">關於本店</p>
           </div>
         </div>
+
+        <div className="productDetail__endTime">
+          {endTimes && <ProductCountdown endTime={endTimes} />}
+        </div>
       </div>
       {isCustmerPrize && (
         <div className="productDetail__inputCode">
@@ -300,16 +288,22 @@ const ProductDetail = () => {
                       />
                     )}
                 </div>
-                <div className="productDetail__awardItem-grade">
-                  <p className="productDetail__text">{detail.grade}賞</p>
-                </div>
-                <div className="productDetail__awardItem-name">
-                  <p className="productDetail__text">{detail.productName}</p>
-                </div>
-                <div className="productDetail__awardItem-num">
-                  <p className="productDetail__text">
-                    {detail.quantity}/{detail.stockQuantity}
-                  </p>
+                <div className="productDetail__awardItem-box">
+                  <div className="productDetail__awardItem-grade">
+                    <p className="productDetail__text">{detail.grade}賞</p>
+                  </div>
+                  <div className="productDetail__awardItem-infos">
+                    <div className="productDetail__awardItem-name">
+                      <p className="productDetail__text">
+                        {detail.productName}
+                      </p>
+                    </div>
+                    <div className="productDetail__awardItem-num">
+                      <p className="productDetail__text">
+                        {detail.quantity}/{detail.stockQuantity}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))
@@ -332,9 +326,10 @@ const ProductDetail = () => {
       <TitleBar icon={BsHandbag} titleText="籤桶" showMore={false} />
       <div className="productDetail__remainingQuantity">
         <div className="productDetail__text">
-          剩餘數量：{~~remainingQuantity} / 總數量：{ticketList?.length || 0}
+          剩餘數量：
+          <NumberFormatter number={~~remainingQuantity} /> / 總數量：
+          <NumberFormatter number={~~ticketList?.length || 0} />
         </div>
-        {endTimes && <ProductCountdown endTime={endTimes} />}
       </div>
       <div
         className="productDetail__sign"

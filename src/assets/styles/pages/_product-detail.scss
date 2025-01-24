@@ -35,6 +35,13 @@ $root-block-name: '.productDetail';
     background: linear-gradient(90deg, #7897ba 0%, #cbeded 99%);
     border-radius: 20px;
     margin: 48px 0;
+    position: relative;
+  }
+
+  &__endTime {
+    position: absolute;
+    bottom: 88px;
+    right: 16px;
   }
 
   &__infoHeader {
@@ -137,6 +144,15 @@ $root-block-name: '.productDetail';
     align-items: center;
     gap: 12px;
 
+    &-box {
+      display: flex;
+      flex-direction: column;
+    }
+    &-infos {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
     &-img {
       width: 84px;
       height: 60px;
@@ -189,6 +205,13 @@ $root-block-name: '.productDetail';
     column-gap: 24px;
     row-gap: 48px;
     @include screen(lg) {
+      padding-top: 24px;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      column-gap: 24px;
+      row-gap: 2px;
+    }
+
+    @include screen(md) {
       padding-top: 24px;
       grid-template-columns: 1fr 1fr 1fr;
       column-gap: 24px;

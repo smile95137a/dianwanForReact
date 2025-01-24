@@ -75,7 +75,7 @@ const navItems = [
   {
     to: '/deposit',
     icon: <IoCartOutline />,
-    label: '購買代幣',
+    label: '儲值',
     class: 'orange',
   },
 ];

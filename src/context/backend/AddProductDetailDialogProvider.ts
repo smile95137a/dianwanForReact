@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 export const useAddProductDetailDialog = () => {
-  const [productId, setProductId] = useState<any>(null);
+  const [productData, setProductData] = useState<any>(null);
   const [productDetail, setProductDetail] = useState<any>(null);
   const [isProductDetailEdit, setIsProductDetailEdit] = useState(false);
   const [addProductDetailDialogOpen, setAddProductDetailDialogOpen] =
@@ -11,12 +11,12 @@ export const useAddProductDetailDialog = () => {
   >(null);
 
   const openAddProductDetailDialog = (
-    pId: any,
+    pData: any,
     isEdit = false,
     detail = null
   ): Promise<boolean> => {
     setIsProductDetailEdit(isEdit);
-    setProductId(pId);
+    setProductData(pData);
     setProductDetail(detail);
     setAddProductDetailDialogOpen(true);
 
@@ -28,7 +28,7 @@ export const useAddProductDetailDialog = () => {
   const closeAddProductDetailDialog = (result: boolean) => {
     setIsProductDetailEdit(false);
     setProductDetail(null);
-    setProductId(null);
+    setProductData(null);
     setAddProductDetailDialogOpen(false);
     if (addProductDetailResolve) addProductDetailResolve(result);
   };
@@ -36,12 +36,12 @@ export const useAddProductDetailDialog = () => {
   const confirmAddProductDetailDialog = () => {
     setAddProductDetailDialogOpen(false);
     setProductDetail(null);
-    setProductId(null);
+    setProductData(null);
     if (addProductDetailResolve) addProductDetailResolve(true);
   };
 
   return {
-    productId,
+    productData,
     productDetail,
     isProductDetailEdit,
     addProductDetailDialogOpen,

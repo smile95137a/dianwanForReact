@@ -1,0 +1,13 @@
+$root-block-name: '.product-detail-one';
+
+#{$root-block-name} {
+  $p: &;
+  $p__text: #{$p}__text;
+  $p__icon: #{$p}__icon;
+
+  &__text {
+    &--red {
+      color: #eb4335;
+    }
+  }
+}

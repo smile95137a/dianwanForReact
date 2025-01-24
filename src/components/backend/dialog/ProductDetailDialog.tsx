@@ -43,11 +43,7 @@ const ProductDetailDialog: FC<ProductDetailDialogProps> = ({
   const { setLoading } = useLoading();
 
   const handleEdit = async (data: any) => {
-    const result = await openAddProductDetailDialog(
-      product.productId,
-      true,
-      data
-    );
+    const result = await openAddProductDetailDialog(product, true, data);
     if (result) {
       fetchProductDetails();
     }
@@ -101,7 +97,7 @@ const ProductDetailDialog: FC<ProductDetailDialogProps> = ({
   }, []);
 
   const handelAddPDialog = async () => {
-    const result = await openAddProductDetailDialog(product.productId);
+    const result = await openAddProductDetailDialog(product);
     if (result) {
       fetchProductDetails();
     }

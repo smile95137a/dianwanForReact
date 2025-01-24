@@ -190,7 +190,9 @@ const ProductDataManagement = () => {
   };
 
   const handlePDetail = async (data: any) => {
-    openProductDetailDialog(data);
+    const result = await openProductDetailDialog(data);
+    fetchProductList();
+    fetchCategories();
   };
 
   useEffect(() => {

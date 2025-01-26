@@ -2,6 +2,7 @@ import React from 'react';
 import NumberFormatter from '../common/NumberFormatter';
 import iconG from '@/assets/image/di-icon-g.png';
 import iconS from '@/assets/image/di-icon-s.png';
+import iconB from '@/assets/image/di-icon-b.png';
 type MoneyCardProps = {
   className: string;
   logoText: string;
@@ -21,9 +22,7 @@ const MoneyCard: React.FC<MoneyCardProps> = ({
         <div className="productCard__money-logo">
           {logoText === 'G' && <img src={iconG} alt="Gold Icon" />}
           {logoText === 'S' && <img src={iconS} alt="Silver Icon" />}
-          {logoText === 'B' && (
-            <div className="productCard__money-text">{logoText}</div>
-          )}
+          {logoText === 'B' && <img src={iconB} alt="Bouns Icon" />}
         </div>
         <div className="productCard__money-price">
           <div className="productCard__money-text">

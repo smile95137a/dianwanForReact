@@ -1,9 +1,9 @@
 import NumberFormatter from '@/components/common/NumberFormatter';
 import { getUserInfo } from '@/services/frontend/userService';
 import React, { useEffect, useState } from 'react';
-import { FaDollarSign, FaGift } from 'react-icons/fa';
 import iconG from '@/assets/image/di-icon-g.png';
 import iconS from '@/assets/image/di-icon-s.png';
+import iconB from '@/assets/image/di-icon-b.png';
 const MemberCenterCoins = () => {
   const [userBalance, setUserBalance] = useState(0);
   const [userBonus, setUserBonus] = useState(0);
@@ -65,7 +65,9 @@ const MemberCenterCoins = () => {
         </div>
         <div className="memberCenter__coins-item memberCenter__coins-item--bonus">
           <div className="memberCenter__coins-info">
-            <div className="memberCenter__coins-icon">利</div>
+            <div className="memberCenter__coins-icon">
+              <img src={iconB} alt="Bouns Icon" />
+            </div>
             <div className="memberCenter__coins-title">
               <p className="memberCenter__text">紅利</p>
             </div>

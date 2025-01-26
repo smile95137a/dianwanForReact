@@ -40,7 +40,6 @@ const ProductDataManagement = () => {
     { value: PrizeCategory.FIGURE, label: '官方電玩賞' },
     { value: PrizeCategory.C3, label: '3C賞' },
     { value: PrizeCategory.BONUS, label: '紅利賞' },
-    { value: PrizeCategory.PRIZESELF, label: '自製賞' },
     { value: PrizeCategory.NONE, label: '無' },
   ];
 
@@ -208,8 +207,6 @@ const ProductDataManagement = () => {
         return '3C賞';
       case PrizeCategory.BONUS:
         return '紅利賞';
-      case PrizeCategory.PRIZESELF:
-        return '自製賞';
       case PrizeCategory.NONE:
       default:
         return '無';

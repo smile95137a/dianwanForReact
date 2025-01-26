@@ -37,7 +37,7 @@ const Rewards: React.FC = () => {
 
       <div className="memberCenter__rewardsConsume">
         <div className="memberCenter__rewardsConsume-title">
-          <p className="memberCenter__text">消費獎勵</p>
+          <p className="memberCenter__text">消費代幣</p>
         </div>
         <div className="memberCenter__rewardsConsume-subTitle">
           儲值獎勵計算方式

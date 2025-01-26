@@ -18,6 +18,14 @@ $root-block-name: '.dropdown-menu';
       align-items: center;
       justify-content: center;
       gap: 12px;
+      transition: color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+
+      &:hover {
+        border-color: #2a88cb;
+        transform: scale(1.05);
+        color: #2a88cb;
+      }
+
       &-icon {
         display: flex;
         align-items: center;
@@ -25,6 +33,7 @@ $root-block-name: '.dropdown-menu';
         font-size: 28px;
       }
     }
+
     #{$p__content} {
       display: flex;
       flex-direction: column;
@@ -38,10 +47,17 @@ $root-block-name: '.dropdown-menu';
       display: flex;
       align-items: center;
       gap: 8px;
+      transition: transform 0.3s ease, color 0.3s ease;
+
+      &:hover {
+        color: #2a88cb;
+        transform: scale(1.05);
+      }
 
       &-icon {
         font-size: 28px;
       }
+
       &--coins {
         border-bottom: none;
 
@@ -54,25 +70,61 @@ $root-block-name: '.dropdown-menu';
           justify-content: center;
           color: #fff;
           font-size: 16px;
+          transition: transform 0.3s ease, color 0.3s ease;
         }
       }
 
       &--gold {
         color: #fbbc05;
+        transition: color 0.3s ease;
+
         #{ $p__item-icon} {
           background: #fbbc05;
+          transition: background-color 0.3s ease;
+
+          &:hover {
+            background-color: #e6a700; // 懸停時背景變為深金色
+          }
+        }
+
+        &:hover {
+          color: #e6a700; // 懸停時文字變為深金色
         }
       }
+
       &--sliver {
         color: #aeaeb2;
+        transition: color 0.3s ease;
+
         #{ $p__item-icon} {
           background: #aeaeb2;
+          transition: background-color 0.3s ease;
+
+          &:hover {
+            background-color: #8d8d92; // 懸停時背景變為深灰色
+          }
+        }
+
+        &:hover {
+          color: #8d8d92; // 懸停時文字變為深灰色
         }
       }
+
       &--bonus {
         color: #fe4206;
+        transition: color 0.3s ease;
+
         #{ $p__item-icon} {
           background: #fe4206;
+          transition: background-color 0.3s ease;
+
+          &:hover {
+            background-color: #d23605; // 懸停時背景變為深紅色
+          }
+        }
+
+        &:hover {
+          color: #d23605; // 懸停時文字變為深紅色
         }
       }
 

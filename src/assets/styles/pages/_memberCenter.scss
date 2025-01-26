@@ -35,6 +35,7 @@ $root-block-name: '.memberCenter';
     gap: 24px;
     width: 210px;
     margin-right: 64px;
+
     @include screen(md) {
       @include flex(null, null, row);
       width: 100%;
@@ -42,19 +43,33 @@ $root-block-name: '.memberCenter';
       margin-bottom: 24px;
       flex-wrap: wrap;
     }
+
     &-item {
       @include flex(null, null);
       width: 100%;
       height: 58px;
       border-bottom: 1px solid #2a88cb;
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: scale(1.02);
+      }
+
       @include screen(md) {
         width: auto;
         flex: calc(50% - 24px);
         height: 40px;
       }
+
       #{$p__text} {
         font-size: 24px;
         font-weight: 400;
+        transition: color 0.3s ease; // 平滑文字顏色變化
+
+        &:hover {
+          color: #1d5e91; // 懸停時文字變深藍色
+        }
+
         @include screen(md) {
           font-size: 18px;
         }
@@ -63,6 +78,12 @@ $root-block-name: '.memberCenter';
 
     &-link {
       @include flex;
+      transition: color 0.3s ease, transform 0.3s ease; // 添加過渡效果
+
+      &:hover {
+        color: #1d5e91; // 懸停時變深藍色
+        transform: scale(1.05); // 輕微放大效果
+      }
 
       &--active {
         #{$p__text} {
@@ -70,10 +91,18 @@ $root-block-name: '.memberCenter';
         }
       }
     }
+
     &-icon {
       color: #2a88cb;
       font-size: 24px;
       margin-right: 20px;
+      transition: color 0.3s ease, transform 0.3s ease;
+
+      &:hover {
+        color: #1d5e91;
+        transform: scale(1.1);
+      }
+
       @include screen(md) {
         font-size: 25px;
       }

@@ -72,24 +72,36 @@ $root-block-name: '.fproduct';
 
     &-category {
       position: relative;
+
       &--red {
         #{$p__header-category} {
+          transition: all 0.3s ease;
         }
 
         #{$p__header-category__trigger} {
+          transition: all 0.3s ease;
         }
+
         #{$p__header-category__content} {
+          transition: all 0.3s ease;
         }
+
         #{$p__header-category__item} {
           border: 2px solid #eb4335;
           color: #eb4335;
+          transition: all 0.3s ease;
+
           &.checked,
           &:hover {
             background-color: #eb4335;
             border-color: #eb4335;
+            color: #fff;
+            transform: scale(1.1); // 放大效果
+            transition: all 0.3s ease; // 平滑過渡
           }
         }
       }
+
       &__trigger {
         cursor: pointer;
         min-width: 149px;
@@ -100,6 +112,14 @@ $root-block-name: '.fproduct';
         align-items: center;
         justify-content: center;
         border-radius: 50px;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background-color: #2a88cb;
+          color: #fff;
+          transform: translateY(-2px); // 微小上移效果
+          box-shadow: 0px 4px 10px rgba(42, 136, 203, 0.5); // 添加陰影
+        }
       }
 
       &__content {
@@ -130,13 +150,17 @@ $root-block-name: '.fproduct';
         justify-content: center;
         border: 2px solid #2a88cb;
         color: #2a88cb;
+        transition: all 0.3s ease;
+
         &.checked,
         &:hover {
           background-color: #2a88cb;
           border-color: #2a88cb;
           color: #fff;
           cursor: pointer;
+          transform: scale(1.1); // 放大效果
         }
+
         input {
           display: none;
         }
@@ -188,19 +212,28 @@ $root-block-name: '.fproduct';
   &__sort {
     display: flex;
     gap: 36px;
+
     &-btn {
       font-size: 18px;
       font-weight: 700;
-
       color: #2a88cb;
+      transition: transform 0.3s ease, color 0.3s ease;
+
+      &:hover {
+        transform: scale(1.1);
+        color: #1d5e91;
+      }
+
       &--active {
         color: #7c7c7c;
       }
+
       @include screen(lg) {
         order: 3;
         font-size: 12px;
       }
     }
+
     @include screen(lg) {
       gap: 12px;
     }

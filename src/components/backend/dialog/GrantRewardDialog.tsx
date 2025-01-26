@@ -24,6 +24,7 @@ const GrantRewardDialog: FC<GrantRewardDialogProps> = ({
 }) => {
   const { control, getValues, reset } = useForm({
     defaultValues: {
+      balanceAmount: 0,
       silverAmount: 0,
       bonusAmount: 0,
     },
@@ -33,8 +34,11 @@ const GrantRewardDialog: FC<GrantRewardDialogProps> = ({
   const { setLoading } = useLoading();
 
   const validateForm = () => {
-    const { silverAmount, bonusAmount } = getValues();
+    const { balanceAmount, silverAmount, bonusAmount } = getValues();
     try {
+      if (~~balanceAmount <= 0) {
+        throw new Error('代幣必須為非負數！');
+      }
       if (~~silverAmount <= 0) {
         throw new Error('銀幣數量必須為非負數！');
       }
@@ -53,29 +57,30 @@ const GrantRewardDialog: FC<GrantRewardDialogProps> = ({
   };
 
   const handleSubmit = async () => {
-    const { silverAmount, bonusAmount } = getValues();
+    const { balanceAmount, silverAmount, bonusAmount } = getValues();
     const result = await openConfirmDialog(
       '系統提示',
-      `確定要發放 ${silverAmount} 銀幣和 ${bonusAmount} 紅利點數給 ${memberList.length} 位會員嗎？`
+      `確定要發放 ${balanceAmount} 代幣、${silverAmount} 銀幣和 ${bonusAmount} 紅利點數給 ${memberList.length} 位會員嗎？`
     );
 
     if (result) {
       if (validateForm()) {
         try {
-          const sliverUpdate = {
+          const rewardUpdate = {
             userId: memberList.map((x) => x.id),
+            balance: balanceAmount,
             sliverCoin: silverAmount,
             bonus: bonusAmount,
           };
 
           setLoading(true);
-          const { success, message } = await updateSliver(sliverUpdate);
+          const { success, message } = await updateSliver(rewardUpdate);
           setLoading(false);
 
           if (success) {
             await openInfoDialog(
               '系統提示',
-              `已成功發放 ${silverAmount} 銀幣和 ${bonusAmount} 紅利點數給 ${memberList.length} 位會員。`
+              `已成功發放 ${balanceAmount} 代幣、${silverAmount} 銀幣和 ${bonusAmount} 紅利點數給 ${memberList.length} 位會員。`
             );
             onClose(true);
             onConfirm();
@@ -113,6 +118,18 @@ const GrantRewardDialog: FC<GrantRewardDialogProps> = ({
         </p>
 
         <div className="grantRewardDialog__main">
+          <div className="flex">
+            <div className="w-100">
+              <p className="grantRewardDialog__text">代幣數量:</p>
+            </div>
+            <FormInput
+              name="balanceAmount"
+              control={control}
+              type="number"
+              placeholder="輸入代幣數量"
+              rules={{ min: 0, required: '請輸入代幣數量' }}
+            />
+          </div>
           <div className="flex">
             <div className="w-100">
               <p className="grantRewardDialog__text">銀幣數量:</p>

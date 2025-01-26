@@ -196,39 +196,84 @@ $root-block-name: '.productDetail';
     &-box {
       display: flex;
       flex-direction: column;
+      transition: transform 0.3s ease; // 平滑過渡效果
+
+      &:hover {
+        transform: translateY(-2px); // 懸停時輕微上移
+      }
     }
+
     &-infos {
       display: flex;
       align-items: center;
       gap: 16px;
+      transition: transform 0.3s ease; // 添加過渡效果
+
+      &:hover {
+        transform: scale(1.05); // 懸停時放大
+      }
     }
+
     &-img {
       width: 84px;
       height: 60px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease; // 過渡效果
+
+      &:hover {
+        transform: scale(1.1); // 懸停時放大
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); // 添加陰影
+      }
+
       img {
         width: 100%;
         height: 100%;
         object-fit: contain;
+        transition: opacity 0.3s ease; // 添加圖片透明度過渡
+
+        &:hover {
+          opacity: 0.9; // 懸停時稍微減少透明度
+        }
       }
     }
+
     &-grade {
       min-width: 38px;
+      transition: color 0.3s ease; // 平滑過渡
+
+      &:hover {
+        color: #1d5e91; // 懸停時文字變深藍色
+      }
+
       #{$p__text} {
         font-size: 16px;
         font-weight: 500;
         color: #2a88cb;
       }
     }
+
     &-name {
       @include screen(lg) {
         flex: 1;
       }
+      transition: color 0.3s ease; // 平滑過渡
+
+      &:hover {
+        color: #1d5e91; // 懸停時文字變深藍色
+      }
+
       #{$p__text} {
         font-size: 24px;
         font-weight: 500;
       }
     }
+
     &-num {
+      transition: color 0.3s ease; // 平滑過渡
+
+      &:hover {
+        color: #ff5722; // 懸停時文字變為橙色
+      }
+
       #{$p__text} {
         font-size: 16px;
         font-weight: 500;
@@ -341,7 +386,8 @@ $root-block-name: '.productDetail';
 
     @include screen(md) {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
     }
 
     &-btn {
@@ -364,12 +410,57 @@ $root-block-name: '.productDetail';
         height: 39px;
       }
 
-      &--confirm {
+      &--buy {
+        @include screen(md) {
+          grid-column: span 2;
+          grid-row: 2/3;
+        }
+      }
+
+      &--code {
+        @include screen(md) {
+          grid-column: 1/-1;
+          grid-row: 1/2;
+        }
+      }
+
+      &--g {
+        @include screen(md) {
+          grid-column: 1/4;
+          grid-row: 1/2;
+        }
+      }
+
+      &--s {
+        @include screen(md) {
+          grid-column: 4/-1;
+          grid-row: 1/2;
+        }
+      }
+
+      &--b {
+        @include screen(md) {
+          grid-column: 1/-1;
+          grid-row: 1/2;
+        }
+      }
+
+      &--red {
         background: #f74343;
 
         &:hover {
           background: #e03131;
           box-shadow: 0 4px 10px rgba(247, 67, 67, 0.6);
+        }
+      }
+
+      &--b-w {
+        background: #fff;
+        color: #000;
+        border: 1px solid #000;
+        &:hover {
+          background: #fff;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
         }
       }
 
@@ -380,6 +471,10 @@ $root-block-name: '.productDetail';
           background: #e06f2d;
           box-shadow: 0 4px 10px rgba(255, 127, 53, 0.6);
         }
+        @include screen(md) {
+          grid-column: span 2;
+          grid-row: 2/3;
+        }
       }
 
       &--rest {
@@ -388,6 +483,16 @@ $root-block-name: '.productDetail';
         &:hover {
           background: #206fad;
           box-shadow: 0 4px 10px rgba(42, 136, 203, 0.6);
+        }
+        @include screen(md) {
+          grid-column: span 3;
+          grid-row: 2/3;
+        }
+      }
+      &--span3 {
+        @include screen(md) {
+          grid-column: span 3;
+          grid-row: 2/3;
         }
       }
     }

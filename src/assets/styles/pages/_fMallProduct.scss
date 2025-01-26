@@ -206,19 +206,28 @@ $root-block-name: '.fMallProduct';
   &__sort {
     display: flex;
     gap: 36px;
+
     &-btn {
       font-size: 18px;
       font-weight: 700;
-
       color: #2a88cb;
+      transition: transform 0.3s ease, color 0.3s ease;
+
+      &:hover {
+        transform: scale(1.1);
+        color: #1d5e91;
+      }
+
       &--active {
         color: #7c7c7c;
       }
+
       @include screen(lg) {
         order: 3;
         font-size: 12px;
       }
     }
+
     @include screen(lg) {
       gap: 12px;
     }

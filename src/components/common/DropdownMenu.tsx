@@ -6,6 +6,7 @@ import { clearAuthData } from '@/store/slices/frontend/authSlice';
 import NumberFormatter from './NumberFormatter';
 import iconG from '@/assets/image/di-icon-g.png';
 import iconS from '@/assets/image/di-icon-s.png';
+import iconB from '@/assets/image/di-icon-b.png';
 interface DropdownItem {
   label: string;
   link: string;
@@ -105,8 +106,15 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
     >
       <div onClick={toggleDropdown} className="dropdown-menu__trigger">
         {icon && <span className="dropdown-menu__trigger-icon">{icon}</span>}
-        <span>{user?.nickname}</span>
+        <span>
+          {user?.nickname
+            ? user.nickname.length > 3
+              ? `${user.nickname.substring(0, 3)}...`
+              : user.nickname
+            : '...'}
+        </span>
       </div>
+
       {isOpen && (
         <div className="dropdown-menu__content" style={positionStyle}>
           {coins.map((item, index) => (
@@ -134,7 +142,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                   )}
                   {item.icon === 'B' && (
                     <img
-                      src={iconS}
+                      src={iconB}
                       className="dropdown-menu__item-icon"
                       alt="Silver Icon"
                     />

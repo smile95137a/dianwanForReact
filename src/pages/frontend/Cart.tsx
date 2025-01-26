@@ -412,6 +412,29 @@ const Cart = () => {
     fetchData();
   }, [uuid]);
 
+  const handleDeleteItem = async (itemId: number) => {
+    try {
+      setLoading(true);
+      const response = await removeCartItem(itemId); // 呼叫刪除 API
+      setLoading(false);
+
+      if (response.success) {
+        await loadCartItems(); // 重新載入購物車內容
+        await openInfoDialog('系統消息', '商品已成功移除');
+      } else {
+        console.error('刪除商品失敗:', response.message);
+        await openInfoDialog('系統消息', `刪除失敗: ${response.message}`);
+      }
+    } catch (error: any) {
+      setLoading(false);
+      console.error('刪除商品時發生錯誤:', error);
+      await openInfoDialog(
+        '系統消息',
+        `刪除失敗: ${error.message || '未知錯誤'}`
+      );
+    }
+  };
+
   return (
     <FormProvider {...methods}>
       <div className="cart">
@@ -457,7 +480,10 @@ const Cart = () => {
                   $<NumberFormatter number={item.totalPrice} />
                 </p>
               </div>
-              <div className="cart__product-item cart__product-item--delete">
+              <div
+                className="cart__product-item cart__product-item--delete"
+                onClick={() => handleDeleteItem(item.cartItemId)}
+              >
                 <FaTrash />
               </div>
             </div>

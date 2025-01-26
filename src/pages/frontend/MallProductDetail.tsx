@@ -34,7 +34,8 @@ import 'swiper/css/pagination';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import ProductCard from '@/components/frontend/ProductCard';
 import { genRandom } from '@/utils/RandomUtils';
-
+import productContactImg from '@/assets/image/di-p-info.png';
+import SocialLinks from '@/components/common/SocialLinks';
 const MallProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -241,7 +242,7 @@ const MallProductDetail = () => {
                 <div className="mall-product__detail-otherLogistics-other">
                   <i className="fa-solid fa-truck"></i>
                   <div className="mall-product__detail-otherLogistics-other-text">
-                    <FaTruck /> $0 ~ {product?.shippingPrice}$160
+                    <FaTruck /> ${product?.shippingPrice} ~ $160
                   </div>
                   <div className="mall-product__detail-otherLogistics-other-icon">
                     <img src={se} alt="711 logo" />
@@ -275,37 +276,58 @@ const MallProductDetail = () => {
           </div>
         </div>
 
-        <div className="mall-product__link">
-          <div className="mall-product__linkItem">
-            <div className="mall-product__linkItem-title">分享</div>
-            <div className="mall-product__linkItem-main mall-product__linkItem-main--share">
-              <img src={lineImg} alt="Share on Line" />
-              <img src={metaImg} alt="Share on Facebook" />
-              <img src={linkImg} alt="Copy link" />
+        <div className="flex ">
+          <div className="mall-product__link flex-1">
+            <div className="mall-product__linkItem">
+              <div className="mall-product__linkItem-title">分享</div>
+              <div className="mall-product__linkItem-main mall-product__linkItem-main--share">
+                <img src={lineImg} alt="Share on Line" />
+                <img src={metaImg} alt="Share on Facebook" />
+                <img src={linkImg} alt="Copy link" />
+              </div>
             </div>
-          </div>
 
-          <div className="w-100 mall-product__linkItem">
-            <div className="mall-product__linkItem-title">分類</div>
-            <div className="mall-product__linkItem-main mall-product__linkItem-main--category">
-              主分類：{product?.categoryName}
+            <div className="w-100 mall-product__linkItem">
+              <div className="mall-product__linkItem-title">分類</div>
+              <div className="mall-product__linkItem-main mall-product__linkItem-main--category">
+                主分類：{product?.categoryName}
+              </div>
+            </div>
+            <div className="w-100 mall-product__linkItem">
+              <div className="mall-product__linkItem-title">收藏</div>
+              <div className="mall-product__linkItem-main mall-product__linkItem-main--likeIcon">
+                <FaRegHeart /> ({favoriteCount})
+              </div>
+            </div>
+            <div className="w-100 mall-product__linkItem">
+              <div className="mall-product__linkItem-title">關鍵字</div>
+              <div className="mall-product__linkItem-main mall-product__linkItem-main--hashTag">
+                {product?.keywordList?.map((keywordObj, index) => (
+                  <span key={index}>
+                    {keywordObj.keyword}
+                    {index < product.keywordList.length - 1 && '、'}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
-          <div className="w-100 mall-product__linkItem">
-            <div className="mall-product__linkItem-title">收藏</div>
-            <div className="mall-product__linkItem-main mall-product__linkItem-main--likeIcon">
-              <FaRegHeart /> ({favoriteCount})
-            </div>
-          </div>
-          <div className="w-100 mall-product__linkItem">
-            <div className="mall-product__linkItem-title">關鍵字</div>
-            <div className="mall-product__linkItem-main mall-product__linkItem-main--hashTag">
-              {product?.keywordList?.map((keywordObj, index) => (
-                <span key={index}>
-                  {keywordObj.keyword}
-                  {index < product.keywordList.length - 1 && '、'}
-                </span>
-              ))}
+          <div>
+            <div className="mall-product__linkItem--info">
+              <div className="productDetail__contact">
+                <div className="productDetail__contact-img">
+                  <img src={productContactImg} />
+                </div>
+
+                <div className="productDetail__contact-title">客服資訊</div>
+                <div className="productDetail__contact-content">
+                  平台操作或抽獎問題
+                  <br />
+                  聯繫官方資訊
+                </div>
+                <div className="productDetail__contact-social">
+                  <SocialLinks />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -348,7 +370,7 @@ const MallProductDetail = () => {
               </div>
             </div>
           )}
-          {!expanded && (
+          {expanded && (
             <div className="mall-product__tab-more" onClick={toggleExpand}>
               <div className="mall-product__tab-more-btn">
                 <span>收合</span>

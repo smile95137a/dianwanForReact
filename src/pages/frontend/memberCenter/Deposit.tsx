@@ -32,7 +32,7 @@ const Deposit = () => {
     { id: 'deposit8', value: '5000', num: '5000' },
     { id: 'deposit9', value: '10000', num: '10000' },
     { id: 'deposit10', value: '20000', num: '20000' },
-    { id: 'deposit12', value: '30000', num: '30000' },
+    { id: 'deposit11', value: '30000', num: '30000' },
     { id: 'deposit12', value: '50000', num: '50000' },
   ];
   const payList = [
@@ -80,7 +80,7 @@ const Deposit = () => {
 
   const handleNextStep = () => {
     if (step === 1 && total === 0) {
-      alert('請選擇金額');
+      openInfoDialog('系統通知', '請選擇金額');
       return;
     }
     setStep(2);

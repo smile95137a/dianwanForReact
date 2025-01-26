@@ -6,15 +6,13 @@ $root-block-name: '.slider';
   $p__text: #{$p}__text;
   $p__item: #{$p}__item;
   margin: 24px 0;
-  margin-bottom: 96px;
   width: 100%;
-  height: 392px;
+  height: 600px;
   overflow: hidden;
   &__item {
     position: relative;
     height: 100%;
     &-img {
-      max-height: 400px;
       display: block;
       width: 100%;
       height: 100%;

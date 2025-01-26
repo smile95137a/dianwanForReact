@@ -29,55 +29,63 @@ import { getUserInfo } from '@/services/frontend/userService';
 import NumberFormatter from '../common/NumberFormatter';
 import iconG from '@/assets/image/di-icon-g.png';
 import iconS from '@/assets/image/di-icon-s.png';
-
+import iconB from '@/assets/image/di-icon-b.png';
 const navItems = [
   {
     to: '/gamePrize',
     icon: <RiShieldStarLine />,
     label: '電玩賞',
     class: 'blue',
+    isSwing: false,
   },
   {
     to: '/3cPrize',
     icon: <RiSmartphoneLine />,
     label: '3C賞',
     class: 'blue',
+    isSwing: false,
   },
   {
     to: '/redPrize',
     icon: <RiAwardLine />,
     label: '紅利賞',
     class: 'blue',
+    isSwing: false,
   },
   {
     to: '/specialPrize',
     icon: <FaCog />,
     label: '優惠賞',
     class: 'red',
+    isSwing: false,
   },
   {
     to: '/news',
     icon: <FaBullhorn />,
     label: '最新消息',
     class: 'red',
+    isSwing: false,
   },
   {
     to: '/deposit',
     icon: <FaDollarSign />,
     label: '儲值',
     class: 'orange',
+    isSwing: true,
   },
   {
     to: '/mallProduct',
     icon: <RiShoppingBagLine />,
     label: '商城',
     class: 'orange',
+    isSwing: false,
   },
   {
     to: '/cart',
     icon: <IoCartOutline />,
     label: '購物車',
     class: 'orange',
+    isSwing: false,
   },
 ];
 
@@ -267,7 +275,9 @@ const Header = () => {
             {navItems.map((item, index) => (
               <Link
                 key={index}
-                className={`fheader__nav-item fheader__nav-item--${item.class}`}
+                className={`fheader__nav-item ${
+                  item.isSwing ? 'fheader__nav-item--animated' : ''
+                } fheader__nav-item--${item.class}`}
                 to={item.to}
                 onClick={(e) => {
                   if (window.location.pathname === item.to) {
@@ -302,7 +312,7 @@ const Header = () => {
                 </div>
                 <div className="fheader__nav-item fheader__nav-item--bonus">
                   <div className="fheader__nav-item-icon">
-                    <img src={iconS} alt="Silver Icon" />
+                    <img src={iconB} alt="Silver Icon" />
                   </div>
                   <NumberFormatter number={userBonus} />
                 </div>

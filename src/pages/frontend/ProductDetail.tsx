@@ -9,6 +9,7 @@ import { getImageUrl } from '@/utils/ImageUtils';
 import ticketImg from '@/assets/image/kujiblank.png';
 import iconG from '@/assets/image/di-icon-g.png';
 import iconS from '@/assets/image/di-icon-s.png';
+import iconB from '@/assets/image/di-icon-b.png';
 import {
   FaCheck,
   FaChevronDown,
@@ -29,6 +30,8 @@ import productContactImg from '@/assets/image/di-p-info.png';
 import NoData from '@/components/frontend/NoData';
 import ProductCountdown from '@/components/frontend/ProductCountdown';
 import SocialLinks from '@/components/common/SocialLinks';
+import moment from 'moment';
+import useForceUpdate from '@/hooks/useForceUpdate';
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -49,7 +52,7 @@ const ProductDetail = () => {
     openImgDialog,
   } = useFrontendDialog();
   const { setLoading } = useLoading();
-
+  const forceUpdate = useForceUpdate();
   const isLogin = useSelector(
     (state: RootState) => state.frontend.auth.isLogin
   );
@@ -173,10 +176,13 @@ const ProductDetail = () => {
       if (data) {
         const qu = remainingQuantity - activeTickets.length;
         setActiveTickets([]);
+        const { data: drawStatus } = await getDrawStatus(id);
+
         await openDrawStepDialog({
           product: product,
           productDetail: productDetail,
           drawItemList: data,
+          endTimes: drawStatus.endTimes,
         });
         await fetchData();
         await openDrawDialog({ remainingQuantity: qu, data, product: product });
@@ -204,6 +210,20 @@ const ProductDetail = () => {
         <p>趕快加入「電玩賞」的行列，測試您的運氣，成為下一位大獎得主！</p>`
     );
   };
+
+  useEffect(() => {
+    const calculateCountdown = () => {
+      forceUpdate();
+    };
+
+    calculateCountdown();
+
+    const intervalId = setInterval(() => {
+      calculateCountdown();
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [endTimes]);
 
   return (
     <div className="productDetail">
@@ -377,6 +397,9 @@ const ProductDetail = () => {
           </label>
         ))}
       </div>
+      <div className="flex justify-center">
+        {endTimes && <ProductCountdown endTime={endTimes} />}
+      </div>
       {!expanded && (
         <div className="productDetail__more" onClick={toggleExpand}>
           <div className="productDetail__more-btn">
@@ -394,9 +417,25 @@ const ProductDetail = () => {
         </div>
       )}
       <div className="productDetail__action">
+        <>
+          <div
+            className={`productDetail__action-btn productDetail__action-btn--red productDetail__action-btn--buy ${
+              endTimes ? 'productDetail__action-btn--b-w' : ''
+            }`}
+          >
+            <FaCheck />
+
+            {endTimes ? (
+              <ProductCountdown countdownText="需等" endTime={endTimes} />
+            ) : (
+              <>可購買</>
+            )}
+          </div>
+        </>
+
         {isCustmerPrize ? (
           <div
-            className="productDetail__action-btn productDetail__action-btn--confirm"
+            className="productDetail__action-btn productDetail__action-btn--red productDetail__action-btn--code"
             onClick={handleExchange(4)}
           >
             <FaCheck />
@@ -405,14 +444,14 @@ const ProductDetail = () => {
         ) : product?.prizeCategory !== PrizeCategory.BONUS ? (
           <>
             <div
-              className="productDetail__action-btn productDetail__action-btn--confirm"
+              className="productDetail__action-btn productDetail__action-btn--red productDetail__action-btn--g"
               onClick={handleExchange(1)}
             >
               <img src={iconG} alt="Gold Icon" />
               代幣確認
             </div>
             <div
-              className="productDetail__action-btn productDetail__action-btn--confirm"
+              className="productDetail__action-btn productDetail__action-btn--red productDetail__action-btn--s"
               onClick={handleExchange(2)}
             >
               <img src={iconS} alt="Gold Icon" />
@@ -421,23 +460,23 @@ const ProductDetail = () => {
           </>
         ) : (
           <div
-            className="productDetail__action-btn productDetail__action-btn--confirm"
+            className="productDetail__action-btn productDetail__action-btn--red productDetail__action-btn--b"
             onClick={handleExchange(3)}
           >
-            <FaCheck />
+            <img src={iconB} alt="Bouns Icon" />
             紅利確認
           </div>
         )}
 
         <div
-          className="productDetail__action-btn productDetail__action-btn--all"
+          className={`productDetail__action-btn productDetail__action-btn--all `}
           onClick={handleSelectAll}
         >
           <FaCheck />
           全選
         </div>
         <div
-          className="productDetail__action-btn productDetail__action-btn--rest"
+          className={`productDetail__action-btn productDetail__action-btn--rest `}
           onClick={handleReset}
         >
           <FaTimes />

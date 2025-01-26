@@ -106,6 +106,10 @@ $root-block-name: '.fheader';
         transition: all 0.3s ease;
       }
 
+      &--animated {
+        animation: swing 1s ease-in-out infinite;
+        animation-delay: 3s;
+      }
       &--member,
       &--box,
       &--gold,
@@ -240,5 +244,23 @@ $root-block-name: '.fheader';
   }
   to {
     transform: translate3d(calc(-100% - 100vw), 0, 0);
+  }
+}
+
+@keyframes swing {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(5deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(0deg);
   }
 }

@@ -31,7 +31,6 @@ export enum PrizeCategory {
   FIGURE = 'FIGURE',
   C3 = 'C3',
   BONUS = 'BONUS',
-  PRIZESELF = 'PRIZESELF',
   NONE = 'NONE',
 }
 
@@ -162,7 +161,6 @@ const AddBannerDialog: FC<AddBannerDialogProps> = ({
     { value: PrizeCategory.FIGURE, label: '官方電玩賞' },
     { value: PrizeCategory.C3, label: '3C賞' },
     { value: PrizeCategory.BONUS, label: '紅利賞' },
-    { value: PrizeCategory.PRIZESELF, label: '自製賞' },
     { value: PrizeCategory.NONE, label: '無' },
   ];
 

@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 
-const ProductCountdown = ({ endTime }: { endTime: string }) => {
+interface ProductCountdownProps {
+  endTime: string;
+  countdownText?: string;
+  countdownTextClass?: string;
+}
+
+const ProductCountdown: React.FC<ProductCountdownProps> = ({
+  endTime,
+  countdownText = '保護還有',
+  countdownTextClass = 'product-detail-one__text--red',
+}) => {
   const [countdown, setCountdown] = useState<number>(0);
 
   useEffect(() => {
@@ -27,8 +37,8 @@ const ProductCountdown = ({ endTime }: { endTime: string }) => {
 
   return (
     <p className="product-detail-one__countdown">
-      保護還有{' '}
-      <span className="product-detail-one__text product-detail-one__text--red">
+      {countdownText}
+      <span className={`product-detail-one__text ${countdownTextClass}`}>
         {countdown}
       </span>
       秒

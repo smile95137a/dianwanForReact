@@ -23,6 +23,8 @@ import { PrizeCategory } from '@/interfaces/product';
 import { FaAngleRight } from 'react-icons/fa6';
 import { getDisplayNews } from '@/services/frontend/newsService';
 import { useFrontendDialog } from '@/context/frontend/useFrontedDialog';
+import moment from 'moment';
+
 const Main = () => {
   const navigate = useNavigate();
   const [banners, setBanners] = useState<any[]>([]);
@@ -103,18 +105,42 @@ const Main = () => {
 
   const fetchDisplayNews = async () => {
     try {
-      const { success, message, data } = await getDisplayNews();
-      if (success) {
-        if (data.length > 0) {
-          openNewsBannerDialog(data);
+      const localStorageKey = 'newsDisplayed';
+      const timestampKey = 'newsDisplayedTimestamp';
+      const currentTime = moment(); // 當前時間使用 moment.js
+
+      // 從 localStorage 取出儲存的時間戳
+      const savedTimestamp = localStorage.getItem(timestampKey);
+      if (
+        savedTimestamp &&
+        currentTime.diff(moment(savedTimestamp), 'days') >= 1
+      ) {
+        // 如果超過一天，自動清除 localStorage
+        localStorage.removeItem(localStorageKey);
+        localStorage.removeItem(timestampKey);
+      }
+
+      const isNewsDisplayed = localStorage.getItem(localStorageKey);
+
+      if (!isNewsDisplayed) {
+        const { success, message, data } = await getDisplayNews();
+        if (success) {
+          if (data.length > 0) {
+            openNewsBannerDialog(data);
+
+            // 將標記和時間戳存入 localStorage
+            localStorage.setItem(localStorageKey, 'true');
+            localStorage.setItem(timestampKey, moment().toISOString()); // 儲存 ISO 格式時間
+          }
+        } else {
+          console.log(message);
         }
-      } else {
-        console.log(message);
       }
     } catch (error) {
       console.error('Error fetching display news:', error);
     }
   };
+
   const goToProductDetail = (banner: any) => {
     if (banner && banner.productId) {
       navigate(`/product/${banner.productId}`);
@@ -166,7 +192,11 @@ const Main = () => {
       <div className="fhome">
         <Marquee />
 
-        <TitleBar icon={BsHandbag} titleText="電玩賞" />
+        <TitleBar
+          icon={BsHandbag}
+          titleText="電玩賞"
+          titleClickRoute="/gamePrize"
+        />
         {figureProducts.length > 0 ? (
           <>
             <div className="fhome__list">
@@ -184,7 +214,11 @@ const Main = () => {
           </>
         )}
 
-        <TitleBar icon={BsHandbag} titleText="3C賞" />
+        <TitleBar
+          icon={BsHandbag}
+          titleText="3C賞"
+          titleClickRoute="/3cPrize"
+        />
 
         {c3Products.length > 0 ? (
           <>
@@ -203,7 +237,11 @@ const Main = () => {
           </>
         )}
 
-        <TitleBar icon={BsHandbag} titleText="商城" />
+        <TitleBar
+          icon={BsHandbag}
+          titleText="商城"
+          titleClickRoute="/mallProduct"
+        />
 
         {mallProducts.length > 0 ? (
           <>
@@ -224,7 +262,11 @@ const Main = () => {
             <NoData text="查無資料！" />
           </>
         )}
-        <TitleBar icon={BsHandbag} titleText="紅利賞" />
+        <TitleBar
+          icon={BsHandbag}
+          titleText="紅利賞"
+          titleClickRoute="/redPrize"
+        />
 
         {bonusProducts.length > 0 ? (
           <>

@@ -191,6 +191,14 @@ $root-block-name: '.fheader';
           font-size: 22px;
         }
       }
+      &-text {
+        display: inline-block;
+        line-height: 0;
+
+        &--orange {
+          color: #ff7f35;
+        }
+      }
     }
   }
   &__btns {

@@ -80,7 +80,7 @@ const Rewards: React.FC = () => {
               <p className="memberCenter__text">
                 領取
                 <span className="memberCenter__text memberCenter__text--red">
-                  <NumberFormatter number={reward.sliver} /> 銀幣
+                  <NumberFormatter number={reward.sliver} /> 點數
                 </span>
               </p>
             </div>

@@ -37,7 +37,7 @@ const NewsBannerDialog: FC<NewsBannerDialogProps> = ({
       className={`dialog--newsBanner ${customClass}`}
     >
       <div className="newsBannerDialog">
-        <div className="slider">
+        <div className="news-banner-slider">
           <Swiper
             slidesPerView={1}
             navigation
@@ -46,13 +46,13 @@ const NewsBannerDialog: FC<NewsBannerDialogProps> = ({
           >
             {newsBannerData.map((news, index) => (
               <SwiperSlide key={index} onClick={() => goToNews(news)}>
-                <div className="slider__item">
+                <div className="news-banner-slider__item">
                   {Array.isArray(news?.imageUrls) &&
                     news.imageUrls.length > 0 && (
                       <img
                         src={getImageUrl(news.imageUrls[0])}
                         alt="圖片"
-                        className="slider__item-img"
+                        className="news-banner-slider__item-img"
                       />
                     )}
                 </div>

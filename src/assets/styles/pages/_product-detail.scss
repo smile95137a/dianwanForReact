@@ -156,6 +156,12 @@ $root-block-name: '.productDetail';
     height: 428px;
     position: relative;
     padding: 32px;
+    &-icon {
+      width: 32px;
+      height: 32px;
+      display: inline-block;
+      vertical-align: middle;
+    }
     &-img {
       position: absolute;
       inset: 0;
@@ -182,6 +188,8 @@ $root-block-name: '.productDetail';
       font-weight: 900;
       z-index: 2;
       position: relative;
+      display: inline-block;
+      vertical-align: middle;
     }
     &-social {
       z-index: 2;

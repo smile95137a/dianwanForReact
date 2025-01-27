@@ -279,12 +279,31 @@ $root-block-name: '.mall-product';
         font-weight: 900;
         @include flex(center, center);
 
+        &:hover {
+          background: darken(#2a88cb, 10%); // 背景顏色變深
+          color: #e6e6e6; // 文字顏色變為更淺的灰白
+          transform: translateY(-2px); // 輕微上移
+          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); // 添加陰影
+          transition: all 0.3s ease; // 添加過渡效果
+        }
+
         &--red {
           background: #fe4206;
+
+          &:hover {
+            background: darken(#fe4206, 10%);
+          }
         }
+
         &-icon {
           font-size: 24px;
+          transition: transform 0.3s ease;
+
+          &:hover {
+            transform: scale(1.2);
+          }
         }
+
         &-text {
           font-size: 24px;
           font-weight: 900;

@@ -37,6 +37,7 @@ const navItems = [
     label: '電玩賞',
     class: 'blue',
     isSwing: false,
+    isSameIconColor: false,
   },
   {
     to: '/3cPrize',
@@ -44,6 +45,7 @@ const navItems = [
     label: '3C賞',
     class: 'blue',
     isSwing: false,
+    isSameIconColor: false,
   },
   {
     to: '/redPrize',
@@ -51,6 +53,7 @@ const navItems = [
     label: '紅利賞',
     class: 'blue',
     isSwing: false,
+    isSameIconColor: false,
   },
   {
     to: '/specialPrize',
@@ -58,6 +61,7 @@ const navItems = [
     label: '優惠賞',
     class: 'red',
     isSwing: false,
+    isSameIconColor: false,
   },
   {
     to: '/news',
@@ -65,6 +69,7 @@ const navItems = [
     label: '最新消息',
     class: 'red',
     isSwing: false,
+    isSameIconColor: false,
   },
   {
     to: '/deposit',
@@ -72,6 +77,7 @@ const navItems = [
     label: '儲值',
     class: 'orange',
     isSwing: true,
+    isSameIconColor: true,
   },
   {
     to: '/mallProduct',
@@ -79,6 +85,7 @@ const navItems = [
     label: '商城',
     class: 'orange',
     isSwing: false,
+    isSameIconColor: false,
   },
   {
     to: '/cart',
@@ -86,6 +93,7 @@ const navItems = [
     label: '購物車',
     class: 'orange',
     isSwing: false,
+    isSameIconColor: false,
   },
 ];
 
@@ -291,7 +299,15 @@ const Header = () => {
                 >
                   {item.icon}
                 </div>
-                {item.label}
+                <span
+                  className={`fheader__nav-item-text ${
+                    item.isSameIconColor
+                      ? `fheader__nav-item-text--${item.class}`
+                      : ''
+                  }`}
+                >
+                  {item.label}
+                </span>
               </Link>
             ))}
 

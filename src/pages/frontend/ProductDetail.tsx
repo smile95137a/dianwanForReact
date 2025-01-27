@@ -32,6 +32,31 @@ import ProductCountdown from '@/components/frontend/ProductCountdown';
 import SocialLinks from '@/components/common/SocialLinks';
 import moment from 'moment';
 import useForceUpdate from '@/hooks/useForceUpdate';
+import facebookLogo from '@/assets/image/fb-link.png';
+import instagramLogo from '@/assets/image/ig-link.png';
+import lineLogo from '@/assets/image/line-link.png';
+
+const socialLinks = [
+  {
+    href: 'https://www.facebook.com',
+    icon: facebookLogo,
+    class: 'social-links__item--facebook',
+    label: 'Facebook',
+  },
+  {
+    href: 'https://www.instagram.com',
+    icon: instagramLogo,
+    class: 'social-links__item--instagram',
+    label: 'Instagram',
+  },
+  {
+    href: 'https://line.me',
+    icon: lineLogo,
+    class: 'social-links__item--line',
+    label: 'Line',
+  },
+];
+
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -342,12 +367,19 @@ const ProductDetail = () => {
 
             <div className="productDetail__contact-title">客服資訊</div>
             <div className="productDetail__contact-content">
-              平台操作或抽獎問題
-              <br />
-              聯繫官方資訊
-            </div>
-            <div className="productDetail__contact-social">
-              <SocialLinks />
+              平台操作或抽獎問題 聯繫官方資訊
+              {socialLinks.map((link, index) => (
+                <a
+                  key={index}
+                  href={link.href}
+                  className={`productDetail__contact-icon ${link.class}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={link.label}
+                >
+                  <img src={link.icon} alt={link.label} />
+                </a>
+              ))}
             </div>
           </div>
         </div>

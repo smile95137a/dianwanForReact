@@ -30,32 +30,42 @@ const AnimateDialog: FC<AnimateDialogProps> = ({
   const audioRef1 = useRef<HTMLAudioElement | null>(null);
   const audioRef2 = useRef<HTMLAudioElement | null>(null);
   const { setLoading } = useLoading();
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.height = '100%';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.height = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.height = '';
+    };
+  }, [isOpen]);
 
   useEffect(() => {
-    const loadAudio = async () => {
-      const audio1 = new Audio(music1);
-      const audio2 = new Audio(music2);
+    audioRef1.current = new Audio(music1);
+    audioRef2.current = new Audio(music2);
+    audioRef1.current.preload = 'auto';
+    audioRef2.current.preload = 'auto';
 
-      audioRef1.current = audio1;
-      audioRef2.current = audio2;
-
-      const loadPromise1 = new Promise<void>((resolve) => {
-        audio1.addEventListener('canplaythrough', () => resolve(), {
-          once: true,
-        });
-      });
-
-      const loadPromise2 = new Promise<void>((resolve) => {
-        audio2.addEventListener('canplaythrough', () => resolve(), {
-          once: true,
-        });
-      });
-      setLoading(true);
-      await Promise.all([loadPromise1, loadPromise2]);
-      setLoading(false);
+    return () => {
+      if (audioRef1.current) {
+        audioRef1.current.pause();
+        audioRef1.current.src = '';
+      }
+      if (audioRef2.current) {
+        audioRef2.current.pause();
+        audioRef2.current.src = '';
+      }
     };
-
-    loadAudio();
   }, []);
 
   const handleMoveUpdate = (e) => {
@@ -65,13 +75,12 @@ const AnimateDialog: FC<AnimateDialogProps> = ({
         if (currentX === 0) return;
 
         const deltaX = currentX - startX.current;
-        if (audioRef1.current) {
-          audioRef1.current.currentTime = 0;
-          audioRef1.current
-            .play()
-            .catch((error) => console.error('播放音效失败:', error));
-        }
+
         if (deltaX > 10) {
+          const audio = new Audio(music1);
+          audio.preload = 'auto';
+          audio.currentTime = 0;
+          audio.play().catch(() => {});
           setAnimateIndex((prev) => (prev === null ? 1 : prev + 1));
           startX.current = currentX;
         }
@@ -80,7 +89,10 @@ const AnimateDialog: FC<AnimateDialogProps> = ({
   };
 
   useEffect(() => {
-    if (animateIndex >= 22) {
+    if (animateIndex % 4 === 0) {
+      console.log(`animateIndex 是 4 的倍數: ${animateIndex}`);
+    }
+    if (animateIndex === 22) {
       if (audioRef2.current) {
         audioRef2.current.currentTime = 0;
         audioRef2.current
@@ -158,7 +170,7 @@ const AnimateDialog: FC<AnimateDialogProps> = ({
   }, []);
 
   const handleImageClick = () => {
-    if (animateIndex >= 16) {
+    if (animateIndex >= 22) {
       onClose();
     }
   };

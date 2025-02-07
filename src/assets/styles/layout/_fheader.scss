@@ -187,6 +187,9 @@ $root-block-name: '.fheader';
         &--orange {
           color: #ff7f35;
         }
+        &--oblue {
+          color: #8d5524;
+        }
         @include screen(lg) {
           font-size: 22px;
         }
@@ -195,8 +198,8 @@ $root-block-name: '.fheader';
         display: inline-block;
         line-height: 0;
 
-        &--orange {
-          color: #ff7f35;
+        &--oblue {
+          color: #8d5524;
         }
       }
     }

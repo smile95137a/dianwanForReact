@@ -58,7 +58,7 @@ const navItems = [
   {
     to: '/specialPrize',
     icon: <FaCog />,
-    label: '優惠賞',
+    label: '集單賞',
     class: 'red',
     isSwing: false,
     isSameIconColor: false,
@@ -75,8 +75,8 @@ const navItems = [
     to: '/deposit',
     icon: <FaDollarSign />,
     label: '儲值',
-    class: 'orange',
-    isSwing: true,
+    class: 'oblue',
+    isSwing: false,
     isSameIconColor: true,
   },
   {

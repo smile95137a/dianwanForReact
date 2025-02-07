@@ -1,11 +1,13 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import Dialog from './Dialog';
 import ticketImages from '@/data/ticketImagesData';
 import { BsHandIndex } from 'react-icons/bs';
 import ticketAnimateImages from '@/data/tickeAnimatetImagesData';
 import { getImageUrl } from '@/utils/ImageUtils';
 import ProductCountdown from '../ProductCountdown';
-
+import music1 from '@/assets/sounds/iot-music-1.mp3';
+import music2 from '@/assets/sounds/iot-music-2.mp3';
+import { useLoading } from '@/context/frontend/LoadingContext';
 interface AnimateDialogProps {
   isOpen: boolean;
   onClose: () => void;
@@ -23,59 +25,93 @@ const AnimateDialog: FC<AnimateDialogProps> = ({
 }) => {
   const [animateIndex, setAnimateIndex] = useState(1);
   const [finalImageSrc, setFinalImageSrc] = useState('');
-  const [startX, setStartX] = useState(0);
-  const [isSwiping, setIsSwiping] = useState(false);
-  const [baseIndex, setBaseIndex] = useState(1);
+  const startX = useRef(0);
+  const isScrubbing = useRef(false);
+  const audioRef1 = useRef<HTMLAudioElement | null>(null);
+  const audioRef2 = useRef<HTMLAudioElement | null>(null);
+  const { setLoading } = useLoading();
 
-  const handleStart = (x: number) => {
-    setStartX(x);
-    setIsSwiping(true);
+  useEffect(() => {
+    const loadAudio = async () => {
+      const audio1 = new Audio(music1);
+      const audio2 = new Audio(music2);
+
+      audioRef1.current = audio1;
+      audioRef2.current = audio2;
+
+      const loadPromise1 = new Promise<void>((resolve) => {
+        audio1.addEventListener('canplaythrough', () => resolve(), {
+          once: true,
+        });
+      });
+
+      const loadPromise2 = new Promise<void>((resolve) => {
+        audio2.addEventListener('canplaythrough', () => resolve(), {
+          once: true,
+        });
+      });
+      setLoading(true);
+      await Promise.all([loadPromise1, loadPromise2]);
+      setLoading(false);
+    };
+
+    loadAudio();
+  }, []);
+
+  const handleMoveUpdate = (e) => {
+    if (isScrubbing.current) {
+      requestAnimationFrame(() => {
+        const currentX = e.clientX;
+        if (currentX === 0) return;
+
+        const deltaX = currentX - startX.current;
+        if (audioRef1.current) {
+          audioRef1.current.currentTime = 0;
+          audioRef1.current
+            .play()
+            .catch((error) => console.error('播放音效失败:', error));
+        }
+        if (deltaX > 10) {
+          setAnimateIndex((prev) => (prev === null ? 1 : prev + 1));
+          startX.current = currentX;
+        }
+      });
+    }
   };
 
-  const handleMove = (x: number) => {
-    if (!isSwiping) return;
-
-    const deltaX = x - startX;
-    const newIndex = Math.min(
-      Math.max(1, baseIndex + Math.floor(deltaX / 5)),
-      24
-    );
-
-    if (newIndex !== animateIndex) {
-      setAnimateIndex(newIndex);
+  useEffect(() => {
+    if (animateIndex >= 22) {
+      if (audioRef2.current) {
+        audioRef2.current.currentTime = 0;
+        audioRef2.current
+          .play()
+          .catch((error) => console.error('播放音效失败:', error));
+      }
     }
+  }, [animateIndex]);
 
-    if (newIndex === 24) {
-      setIsSwiping(true);
-      setTimeout(() => {
-        onClose();
-      }, 1000);
-    }
-  };
-
-  const handleEnd = () => {
-    setIsSwiping(false);
-    setBaseIndex(animateIndex); // 将当前索引作为新的起点
+  const toggleScrubbing = (e) => {
+    handleMoveUpdate(e);
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    handleStart(e.clientX);
+    startX.current = e.clientX;
+    isScrubbing.current = true;
+    toggleScrubbing(e);
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    handleMove(e.clientX);
+    handleMoveUpdate(e);
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    handleStart(e.touches[0].clientX);
+    isScrubbing.current = true;
+    toggleScrubbing(e.touches[0]);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    handleMove(e.touches[0].clientX);
+    handleMoveUpdate(e.touches[0]);
   };
-
-  const handleTouchEnd = handleEnd;
-  const handleMouseUp = handleEnd;
 
   useEffect(() => {
     const gradeKey =
@@ -88,6 +124,44 @@ const AnimateDialog: FC<AnimateDialogProps> = ({
 
     setFinalImageSrc(gradeKey ? ticketImages[gradeKey] : '');
   }, [drawData.item]);
+
+  useEffect(() => {
+    const fun = (e) => {
+      if (isScrubbing.current) {
+        isScrubbing.current = false;
+      }
+      startX.current = 0;
+    };
+
+    document.addEventListener('mouseup', fun);
+    document.addEventListener('touchend', fun);
+    return () => {
+      document.removeEventListener('mouseup', fun);
+      document.removeEventListener('touchend', fun);
+    };
+  }, []);
+
+  useEffect(() => {
+    const fun = (e) => {
+      if (isScrubbing.current) {
+        handleMoveUpdate(e);
+      }
+    };
+
+    document.addEventListener('mousemove', fun);
+    document.addEventListener('touchmove', fun);
+
+    return () => {
+      document.removeEventListener('mousemove', fun);
+      document.removeEventListener('touchmove', fun);
+    };
+  }, []);
+
+  const handleImageClick = () => {
+    if (animateIndex >= 16) {
+      onClose();
+    }
+  };
 
   return (
     <Dialog
@@ -122,15 +196,12 @@ const AnimateDialog: FC<AnimateDialogProps> = ({
             className="animateDialog__img"
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
           >
             <div
               className={`animateDialog__icon ${
-                isSwiping ? 'animateDialog--hide' : ''
+                isScrubbing.current ? 'animateDialog--hide' : ''
               }`}
             >
               <BsHandIndex />
@@ -138,12 +209,18 @@ const AnimateDialog: FC<AnimateDialogProps> = ({
             <img
               src={finalImageSrc}
               className="animateDialog__img-ticket animateDialog__img-ticket--final"
+              onClick={handleImageClick}
             />
-            <img
-              src={ticketAnimateImages[`kujiAnimate${animateIndex}`]}
-              alt={`Animation Frame ${animateIndex}`}
-              className="animateDialog__img-animate"
-            />
+            {Object.keys(ticketAnimateImages).map((key, index) => (
+              <img
+                key={index}
+                src={ticketAnimateImages[key]}
+                alt={`Animation Frame ${index + 1}`}
+                className={`animateDialog__img-animate ${
+                  animateIndex === index + 1 ? '' : 'animateDialog__img-hide'
+                }`}
+              />
+            ))}
           </div>
         </div>{' '}
       </div>

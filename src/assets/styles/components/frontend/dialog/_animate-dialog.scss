@@ -81,6 +81,9 @@ $root-block-name: '.animateDialog';
       width: 652px;
       max-width: max-content;
     }
+    &-hide {
+      display: none;
+    }
   }
   &__icon {
     width: 100%;

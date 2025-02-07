@@ -80,7 +80,7 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
 
   const productTypeOptions: Record<ProductType, string> = {
     [ProductType.PRIZE]: '一番賞',
-    [ProductType.CUSTMER_PRIZE]: '優惠賞',
+    [ProductType.CUSTMER_PRIZE]: '集單賞',
   };
 
   const productStatusOptions: Record<ProductStatus, string> = {
@@ -222,7 +222,7 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
           isNaN(Number(sliverPrice)) ||
           Number(sliverPrice) < 0
         ) {
-          throw new Error('銀幣價格必須為非負數字！');
+          throw new Error('點數價格必須為非負數字！');
         }
       }
 
@@ -358,7 +358,7 @@ const AddProductDialog: FC<AddProductDialogProps> = ({
               </div>
               <div className="flex">
                 <div className="w-100">
-                  <p className="addMemberDialog__text">銀幣價格:</p>
+                  <p className="addMemberDialog__text">點數價格:</p>
                 </div>
                 <FormInput name="sliverPrice" control={control} />
               </div>

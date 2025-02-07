@@ -17,9 +17,9 @@ const reportNameMap: { [key: string]: string } = {
   DRAW_AMOUNT: '開獎金額報表',
   TOTAL_CONSUMPTION: '消費總額報表',
   TOTAL_DEPOSIT: '儲值總額報表',
-  USER_UPDATE_LOG: '發放銀幣紅利報表',
+  USER_UPDATE_LOG: '發放點數紅利報表',
   DAILY_SIGN_IN: '每日簽到報表',
-  SLIVER_COIN_RECYCLE: '銀幣回收報表',
+  SLIVER_COIN_RECYCLE: '點數回收報表',
   PRIZE_RECYCLE_REPORT: '獎品回收報表',
   DRAW_RESULT_SUMMARY: '開獎結果報表',
 };

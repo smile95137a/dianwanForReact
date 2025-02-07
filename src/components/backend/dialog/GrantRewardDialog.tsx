@@ -40,7 +40,7 @@ const GrantRewardDialog: FC<GrantRewardDialogProps> = ({
         throw new Error('代幣必須為非負數！');
       }
       if (~~silverAmount <= 0) {
-        throw new Error('銀幣數量必須為非負數！');
+        throw new Error('點數數量必須為非負數！');
       }
       if (~~bonusAmount <= 0) {
         throw new Error('紅利數量必須為非負數！');
@@ -60,7 +60,7 @@ const GrantRewardDialog: FC<GrantRewardDialogProps> = ({
     const { balanceAmount, silverAmount, bonusAmount } = getValues();
     const result = await openConfirmDialog(
       '系統提示',
-      `確定要發放 ${balanceAmount} 代幣、${silverAmount} 銀幣和 ${bonusAmount} 紅利點數給 ${memberList.length} 位會員嗎？`
+      `確定要發放 ${balanceAmount} 代幣、${silverAmount} 點數和 ${bonusAmount} 紅利點數給 ${memberList.length} 位會員嗎？`
     );
 
     if (result) {
@@ -80,7 +80,7 @@ const GrantRewardDialog: FC<GrantRewardDialogProps> = ({
           if (success) {
             await openInfoDialog(
               '系統提示',
-              `已成功發放 ${balanceAmount} 代幣、${silverAmount} 銀幣和 ${bonusAmount} 紅利點數給 ${memberList.length} 位會員。`
+              `已成功發放 ${balanceAmount} 代幣、${silverAmount} 點數和 ${bonusAmount} 紅利點數給 ${memberList.length} 位會員。`
             );
             onClose(true);
             onConfirm();
@@ -132,14 +132,14 @@ const GrantRewardDialog: FC<GrantRewardDialogProps> = ({
           </div>
           <div className="flex">
             <div className="w-100">
-              <p className="grantRewardDialog__text">銀幣數量:</p>
+              <p className="grantRewardDialog__text">點數數量:</p>
             </div>
             <FormInput
               name="silverAmount"
               control={control}
               type="number"
-              placeholder="輸入銀幣數量"
-              rules={{ min: 0, required: '請輸入銀幣數量' }}
+              placeholder="輸入點數數量"
+              rules={{ min: 0, required: '請輸入點數數量' }}
             />
           </div>
           <div className="flex">

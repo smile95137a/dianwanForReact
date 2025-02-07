@@ -8,10 +8,19 @@ $root-block-name: '.productCard';
   $p__infos: #{$p}__infos;
   $p__money: #{$p}__money;
   $p__money-text: #{$p}__money-text;
+
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   border-radius: 10px;
   overflow: hidden;
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+  }
 
   &--mall {
+    #{ $p__img} {
+      height: 330px;
+    }
   }
 
   &__moneys {

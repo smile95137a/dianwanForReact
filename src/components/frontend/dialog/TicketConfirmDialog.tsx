@@ -109,6 +109,36 @@ const TicketConfirmDialog: FC<TicketConfirmDialogProps> = ({
 
   const { logoText, price, className } = getPaymentDetails(payType);
 
+  const handleReadNotice = async () => {
+    await openInfoDialog(
+      '閱讀文字',
+      `
+      <p>⚠ 購買須知 ⚠</p>
+      <p>購買前請務必詳細閱讀以下規範，若無法接受，請勿購買！</p>
+    
+      <p><strong>購物車數量限制</strong></p>
+      <p>每位買家賞品盒上限為 150 樣商品，請確認您的購物額度與空間充足。</p>
+    
+      <p><strong>抽獎型商品規則</strong></p>
+      <p>本商城所有抽獎商品均屬【線上機率型】商品，抽選完成後不接受退換貨，請謹慎下單。</p>
+    
+      <p><strong>商品狀況與原廠標準</strong></p>
+      <p>出貨商品存在原廠允許範圍內的輕微瑕疵，如塗裝不均、外盒擠壓痕跡等，均屬正常範疇，不屬於瑕疵退貨範圍。</p>
+    
+      <p><strong>退貨與開箱證明</strong></p>
+      <p>若商品確實有嚴重瑕疵，可申請更換相同商品；若為限量或無備品，則視情況取消訂單。</p>
+      <p>拆封前請全程錄影，且影片需完整無剪輯，否則將無法受理退貨申請。</p>
+    
+      <p><strong>中獎機制與獎勵</strong></p>
+      <p>虛擬遊戲帳號獎賞皆不保留 7 天退換貨，如獎品抽出後續有問題，除本身帳號資料無法全移交，否則一概無退貨。</p>
+    
+      <p>請確認填寫的個人資訊無誤，如因填錯資訊導致配送失敗或損失，將由買方自行承擔責任。</p>
+    
+      <p>📌 購買即代表同意上述規範，請理性消費！</p>
+      `
+    );
+  };
+
   return (
     <Dialog
       isOpen={isOpen}
@@ -180,14 +210,12 @@ const TicketConfirmDialog: FC<TicketConfirmDialogProps> = ({
                 <span className="ticketConfirmDialog__text">
                   我已詳閱購買須知
                 </span>
-                <a
-                  href="#"
+                <span
+                  onClick={handleReadNotice}
                   className="ticketConfirmDialog__link"
-                  target="_blank"
-                  rel="noopener noreferrer"
                 >
                   閱讀
-                </a>
+                </span>
                 {errors.terms && (
                   <p className="error-text">{errors.terms.message}</p>
                 )}

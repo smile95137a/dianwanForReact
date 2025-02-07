@@ -6,8 +6,10 @@ $root-block-name: '.drawStepDialog';
 
   &__text {
     font-size: 36px;
-    color: #2a88cb;
+    color: #eb4335;
     font-weight: 400;
+    letter-spacing: 2px;
+    animation: shake 2s ease-in-out infinite;
   }
 
   &__skip {
@@ -26,5 +28,42 @@ $root-block-name: '.drawStepDialog';
       height: 100%;
       object-fit: cover;
     }
+  }
+}
+
+// 更完整的左右 + 上下搖動動畫
+@keyframes shake {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  10% {
+    transform: translate(-5px, -5px) rotate(-2deg);
+  }
+  20% {
+    transform: translate(5px, 5px) rotate(2deg);
+  }
+  30% {
+    transform: translate(-5px, 5px) rotate(-2deg);
+  }
+  40% {
+    transform: translate(5px, -5px) rotate(2deg);
+  }
+  50% {
+    transform: translate(-3px, 3px) rotate(-1deg);
+  }
+  60% {
+    transform: translate(3px, -3px) rotate(1deg);
+  }
+  70% {
+    transform: translate(-3px, -3px) rotate(-1deg);
+  }
+  80% {
+    transform: translate(3px, 3px) rotate(1deg);
+  }
+  90% {
+    transform: translate(-2px, 2px) rotate(0deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
   }
 }

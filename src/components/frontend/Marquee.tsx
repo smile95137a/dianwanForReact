@@ -10,14 +10,8 @@ interface MarqueeMessage {
   shouldDisplay: boolean;
   username: string;
 }
-
 const Marquee = () => {
-  const messages = [
-    '歡迎光臨！',
-    '促銷活動進行中！',
-    '立即註冊獲得優惠！',
-    '感謝您的支持！',
-  ];
+  const messages = ['高價收購遊戲帳號', '請聯繫官方賴、IG洽談'];
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [animate, setAnimate] = useState(false);

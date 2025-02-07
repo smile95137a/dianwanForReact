@@ -8,6 +8,7 @@ $root-block-style: '.downDialog';
   overflow: hidden;
   $p: &;
   $p__main: #{$p}__main;
+  $p__overlay: #{$p}__overlay;
 
   &--lg {
     #{$p__main} {
@@ -24,6 +25,10 @@ $root-block-style: '.downDialog';
     #{$p__main} {
       background: transparent;
       border-radius: 0;
+    }
+
+    #{$p__overlay} {
+      background-color: rgba(0, 0, 0, 0.7);
     }
   }
 

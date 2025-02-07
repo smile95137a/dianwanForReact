@@ -32,7 +32,7 @@ const ProductDataManagement = () => {
   const productTypeOptions = [
     { value: '', label: '請選擇' },
     { value: ProductType.PRIZE, label: '一番賞' },
-    { value: ProductType.CUSTMER_PRIZE, label: '優惠賞' },
+    { value: ProductType.CUSTMER_PRIZE, label: '集單賞' },
   ];
 
   const prizeCategoryOptions = [
@@ -49,6 +49,7 @@ const ProductDataManagement = () => {
   const [filterProductType, setFilterProductType] = useState('');
   const [filterPrizeCategory, setFilterPrizeCategory] = useState('');
   const [categoryNameMap, setCategoryNameMap] = useState<any>(new Map());
+  const [searchTerm, setSearchTerm] = useState('');
 
   const pagination = usePagination({
     list: filteredProducts,
@@ -230,6 +231,17 @@ const ProductDataManagement = () => {
   const getProductTypeName = (productType: ProductType): string => {
     return productTypeTranslations[productType] || '未知類型';
   };
+
+  useEffect(() => {
+    setFilteredProducts(
+      products.filter(
+        (product) =>
+          product.productId.toString().includes(searchTerm) ||
+          product.productName.includes(searchTerm)
+      )
+    );
+  }, [searchTerm, products]);
+
   return (
     <div className="productDataManagement">
       <p className="productDataManagement__title">產品系列管理</p>
@@ -246,6 +258,15 @@ const ProductDataManagement = () => {
         >
           管理商品類別
         </button>
+      </div>
+      <div className="flex m-y-8">
+        <input
+          type="text"
+          placeholder="搜尋箱號或名稱"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="productDataManagement__search"
+        />
       </div>
       <div className="productDataManagement__productFilter">
         篩選產品：
@@ -283,12 +304,13 @@ const ProductDataManagement = () => {
           <div className="productDataManagement__list-content">
             <BTable
               headers={[
+                { text: '箱號', className: '' },
                 { text: '圖片', className: '' },
                 { text: '產品名稱', className: '' },
                 { text: '類型', className: '' },
                 { text: '電玩賞類別', className: '' },
                 { text: '金幣價格', className: '' },
-                { text: '銀幣價格', className: '' },
+                { text: '點數價格', className: '' },
                 { text: '紅利價格', className: '' },
                 { text: '庫存', className: '' },
                 { text: '狀態', className: '' },
@@ -300,6 +322,10 @@ const ProductDataManagement = () => {
                 <BTableRow
                   key={index}
                   data={[
+                    {
+                      content: <>{x.productId}</>,
+                      dataTitle: '箱號',
+                    },
                     {
                       content: (
                         <>
@@ -344,7 +370,7 @@ const ProductDataManagement = () => {
                           <NumberFormatter number={~~x.sliverPrice} />
                         </>
                       ),
-                      dataTitle: '銀幣價格',
+                      dataTitle: '點數價格',
                     },
                     {
                       content: (

@@ -168,17 +168,17 @@ const AddStoreProductDialog: FC<AddStoreProductDialogProps> = ({
       }
 
       // 寬度 (Width) - 必填且為正數
-      if (!width || isNaN(Number(width)) || Number(width) <= 0) {
+      if (!width || isNaN(Number(width)) || Number(width) < 0) {
         throw new Error('寬度為必填項，且必須為正數！');
       }
 
       // 高度 (Height) - 必填且為正數
-      if (!height || isNaN(Number(height)) || Number(height) <= 0) {
+      if (!height || isNaN(Number(height)) || Number(height) < 0) {
         throw new Error('高度為必填項，且必須為正數！');
       }
 
       // 深度 (Length) - 必填且為正數
-      if (!length || isNaN(Number(length)) || Number(length) <= 0) {
+      if (!length || isNaN(Number(length)) || Number(length) < 0) {
         throw new Error('深度為必填項，且必須為正數！');
       }
 

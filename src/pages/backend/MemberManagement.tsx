@@ -157,7 +157,7 @@ const MemberManagement = () => {
                 { text: '電話', className: '' },
                 { text: '居住地址', className: '' },
                 { text: '金幣', className: '' },
-                { text: '銀幣', className: '' },
+                { text: '點數', className: '' },
                 { text: '紅利點數', className: '' },
                 { text: '修改時間', className: '' },
                 { text: '操作', className: '' },
@@ -196,7 +196,7 @@ const MemberManagement = () => {
                       content: (
                         <>{<NumberFormatter number={member.sliverCoin} />}</>
                       ),
-                      dataTitle: '銀幣',
+                      dataTitle: '點數',
                     },
                     {
                       content: <>{<NumberFormatter number={member.bonus} />}</>,

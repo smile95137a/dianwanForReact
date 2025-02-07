@@ -153,7 +153,7 @@ const AddBannerDialog: FC<AddBannerDialogProps> = ({
   const productTypeOptions = [
     { value: '', label: '請選擇' },
     { value: ProductType.PRIZE, label: '一番賞' },
-    { value: ProductType.CUSTMER_PRIZE, label: '優惠賞' },
+    { value: ProductType.CUSTMER_PRIZE, label: '集單賞' },
   ];
 
   const prizeCategoryOptions = [

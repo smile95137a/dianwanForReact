@@ -147,7 +147,7 @@ const AddProductDetailDialog: FC<AddProductDetailDialogProps> = ({
         isNaN(Number(sliverPrice)) ||
         Number(sliverPrice) <= 0
       ) {
-        throw new Error('銀幣價格必須為正數！');
+        throw new Error('點數價格必須為正數！');
       }
 
       if (!specification.trim()) {
@@ -279,7 +279,7 @@ const AddProductDetailDialog: FC<AddProductDetailDialogProps> = ({
 
             <div className="flex">
               <div className="w-100">
-                <p className="addProductDetailDialog__text">銀幣價格:</p>
+                <p className="addProductDetailDialog__text">點數價格:</p>
               </div>
               <FormInput name="sliverPrice" control={control} type="number" />
             </div>

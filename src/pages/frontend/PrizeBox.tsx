@@ -425,7 +425,7 @@ const Cart = () => {
               <div className="prizeBox__product-item cart__product-item--quantity">
                 <div className="flex flex-column text-right">
                   <p className="prizeBox__text prizeBox__text--blue">
-                    可回收銀幣
+                    可回收點數
                   </p>
                   <p className="prizeBox__text">
                     $<NumberFormatter number={~~item.sliverPrice} />
